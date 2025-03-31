@@ -1,0 +1,59 @@
+/* Header.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4a6cf7;
+    height: 80px;
+    padding: 0 40px;
+    color: white;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+}
+
+.nav-item {
+    margin: 0 15px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.nav-item:hover {
+    opacity: 0.8;
+}
+
+.auth-buttons {
+    display: flex;
+}
+
+.btn-login,
+.btn-signup {
+    background-color: white;
+    color: #4a6cf7;
+    border-radius: 15px;
+    padding: 8px 20px;
+    margin-left: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-signup {
+    opacity: 0.8;
+}
+
+.btn-login:hover,
+.btn-signup:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
