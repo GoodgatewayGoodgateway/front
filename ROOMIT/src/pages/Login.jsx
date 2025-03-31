@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
+import { useLocation } from "react-router-dom";
 import { User, Lock, Mail, } from 'lucide-react';
 import { FaGoogle, FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa';
 import './css/Login.css';
 const Login = () => {
-    const [isActive, setIsActive] = useState(false);
 
-    const handleRegisterClick = () => {
-        setIsActive(true);
-    };
+    const location = useLocation();
+    const isRegisterMode = location.state?.register ?? false;
+    const [isActive, setIsActive] = useState(isRegisterMode);
 
-    const handleLoginClick = () => {
-        setIsActive(false);
-    };
+    const handleRegisterClick = () => setIsActive(true);
+    const handleLoginClick = () => setIsActive(false);
 
     return (
         <div className='container_main'>
-            <div className={`container ${isActive ? 'active' : ''}`}>
+            <div className={`login_container ${isActive ? 'active' : ''}`}>
                 <div className="form-box login">
                     <form action="#">
                         <h1>Login</h1>

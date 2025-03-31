@@ -10,8 +10,7 @@
                     background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
                 }
 
-                .container {
-
+                .login_container {
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -25,12 +24,12 @@
                     overflow: hidden;
                 }
 
-                .container h1 {
+                .login_container h1 {
                     font-size: 36px;
                     margin: -10px 0;
                 }
 
-                .container p {
+                .login_container p {
                     font-size: 14.5px;
                     margin: 15px 0;
                 }
@@ -54,7 +53,7 @@
                     transition: .6s ease-in-out 1.2s, visibility 0s 1s;
                 }
 
-                .container.active .form-box {
+                .login_container.active .form-box {
                     right: 50%;
                 }
 
@@ -62,7 +61,7 @@
                     visibility: hidden;
                 }
 
-                .container.active .form-box.register {
+                .login_container.active .form-box.register {
                     visibility: visible;
                 }
 
@@ -152,7 +151,7 @@
                     transition: 1.8s ease-in-out;
                 }
 
-                .container.active .toggle-box::before {
+                .login_container.active .toggle-box::before {
                     left: 50%;
                 }
 
@@ -174,7 +173,7 @@
                     transition-delay: 1.2s;
                 }
 
-                .container.active .toggle-panel.toggle-left {
+                .login_container.active .toggle-panel.toggle-left {
                     left: -50%;
                     transition-delay: .6s;
                 }
@@ -184,7 +183,7 @@
                     transition-delay: .6s;
                 }
 
-                .container.active .toggle-panel.toggle-right {
+                .login_container.active .toggle-panel.toggle-right {
                     right: 0;
                     transition-delay: 1.2s;
                 }
@@ -202,7 +201,7 @@
                 }
 
                 @media screen and (max-width: 650px) {
-                    .container {
+                    .login_container {
                         height: calc(100vh - 40px);
                     }
 
@@ -212,7 +211,7 @@
                         height: 70%;
                     }
 
-                    .container.active .form-box {
+                    .login_container.active .form-box {
                         right: 0;
                         bottom: 30%;
                     }
@@ -225,12 +224,12 @@
                         border-radius: 20vw;
                     }
 
-                    .container.active .toggle-box::before {
+                    .login_container.active .toggle-box::before {
                         left: 0;
                         top: 70%;
                     }
 
-                    .container.active .toggle-panel.toggle-left {
+                    .login_container.active .toggle-panel.toggle-left {
                         left: 0;
                         top: -30%;
                     }
@@ -249,7 +248,7 @@
                         bottom: -30%;
                     }
 
-                    .container.active .toggle-panel.toggle-right {
+                    .login_container.active .toggle-panel.toggle-right {
                         bottom: 0;
                     }
                 }

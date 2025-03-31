@@ -13,7 +13,7 @@ const ProfileCard = (userdata) => {
     };
 
     return (
-        <div className="profile-card" onClick={handleDetailClick} style={{ cursor: 'pointer' }}>
+        <div className="profile-card" style={{ cursor: 'pointer' }}>
             <div className="profile-image-container">
                 <div className="profile-image"></div>
             </div>
