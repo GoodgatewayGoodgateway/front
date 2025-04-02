@@ -16,7 +16,7 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/meeting" element={<Meeting users={userData} />} />
-          <Route path="/meeting/:id" element={<MeetingDetail users={userData} />} />
+          <Route path="/meeting/:id" element={<MeetingDetail userData={userData} />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
       </div>
