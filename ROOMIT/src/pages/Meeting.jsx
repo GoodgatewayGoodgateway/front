@@ -33,7 +33,7 @@ const Meeting = ({ users }) => {
                         </select>
                     </label>                    <label>
                         음주 여부:
-                        <select name="activityTime">
+                        <select name="drinking">
                             <option value="morning">O</option>
                             <option value="night">X</option>
                         </select>

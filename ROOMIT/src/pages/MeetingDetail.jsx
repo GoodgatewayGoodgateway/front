@@ -2,8 +2,23 @@ import React from 'react';
 import { MapPin, Briefcase, Calendar, Star } from 'lucide-react';
 import './css/MeetingDetail.css';
 import Header from '../components/Header';
-const MeetingDetail = ({ users }) => {
-    if (!users) {
+
+const MeetingDetail = ({
+    id,
+    name = '이름 없음',
+    age = 'N/A',
+    job = '직업 미정',
+    location = '위치 미정',
+    introduction = '설명 없음',
+    interests = [],
+    idealRoommate = '설명 없음',
+    mbti = '미정',
+    lifestyle = {},
+    smoking = '정보 없음',
+    drinking = '정보 없음'
+}) => {
+
+    if (!id) {
         return <div>사용자를 찾을 수 없습니다.</div>;
     }
 
@@ -14,15 +29,15 @@ const MeetingDetail = ({ users }) => {
                 <div className="profile-header">
                     <div className="profile-image-large"></div>
                     <div className="profile-basic-info">
-                        <h1>{users.name}, {users.age}</h1>
+                        <h1>{name}, {age}</h1>
                         <div className="profile-job-location">
                             <div className="profile-job">
                                 <Briefcase size={16} />
-                                <span>{users.job}</span>
+                                <span>{job}</span>
                             </div>
                             <div className="profile-location">
                                 <MapPin size={16} />
-                                <span>{users.location}</span>
+                                <span>{location}</span>
                             </div>
                         </div>
                     </div>
@@ -30,14 +45,14 @@ const MeetingDetail = ({ users }) => {
 
                 <section className="profile-section">
                     <h2>자기소개</h2>
-                    <p>{users.introduction}</p>
+                    <p>{introduction}</p>
                 </section>
 
                 <section className="profile-section">
                     <h2>관심사</h2>
                     <div className="interests-list">
-                        {users.interests?.length > 0 ? (
-                            users.interests.map((interest, index) => (
+                        {interests.length > 0 ? (
+                            interests.map((interest, index) => (
                                 <span key={index} className="interest-tag">{interest}</span>
                             ))
                         ) : (
@@ -48,7 +63,7 @@ const MeetingDetail = ({ users }) => {
 
                 <section className="profile-section">
                     <h2>이상적인 룸메이트</h2>
-                    <p>{users.idealRoommate}</p>
+                    <p>{idealRoommate}</p>
                 </section>
 
                 <section className="profile-section lifestyle-details">
@@ -57,32 +72,32 @@ const MeetingDetail = ({ users }) => {
                         <div className="lifestyle-item">
                             <Star size={16} />
                             <span>MBTI</span>
-                            <strong>{users.mbti}</strong>
+                            <strong>{mbti}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Calendar size={16} />
                             <span>기상 시간</span>
-                            <strong>{users.lifestyle?.wakeUpTime}</strong>
+                            <strong>{lifestyle?.wakeUpTime || '미정'}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Calendar size={16} />
                             <span>취침 시간</span>
-                            <strong>{users.lifestyle?.sleepTime}</strong>
+                            <strong>{lifestyle?.sleepTime || '미정'}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Star size={16} />
                             <span>흡연 여부</span>
-                            <strong>{users.smoking}</strong>
+                            <strong>{smoking}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Star size={16} />
                             <span>음주</span>
-                            <strong>{users.drinking}</strong>
+                            <strong>{drinking}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Star size={16} />
                             <span>청결 수준</span>
-                            <strong>{users.lifestyle?.cleanLevel}</strong>
+                            <strong>{lifestyle?.cleanLevel || '미정'}</strong>
                         </div>
                     </div>
                 </section>

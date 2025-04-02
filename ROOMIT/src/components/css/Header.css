@@ -62,3 +62,18 @@
     opacity: 1;
     transform: scale(1.05);
 }
+
+
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile_image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
