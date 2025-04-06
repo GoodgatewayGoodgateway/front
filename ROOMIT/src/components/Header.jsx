@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './css/Header.css';
 
 function Header() {
-    const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태 (테스트용)
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 (테스트용)
 
     const handleLogout = () => {
         setIsLoggedIn(false); // 로그아웃 처리

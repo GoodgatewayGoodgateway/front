@@ -18,11 +18,11 @@ const ProfileCard = (userdata) => {
                 <div className="profile-image"></div>
             </div>
             <div className="profile-info">
-                <div className="profile-header">
+                <div className="Cardprofile-header">
                     <span className="profile-name">{name}</span>
                     <span className="profile-age">{age}세</span>
                 </div>
-                <div className="profile-job">{job}</div>
+                <div className="Cardprofile-job">{job}</div>
                 <div className="profile-description">{idealRoommate}</div>
                 <button className="profile-detail-button" onClick={handleDetailClick}>
                     프로필 상세보기

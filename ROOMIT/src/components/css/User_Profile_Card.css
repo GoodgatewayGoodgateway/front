@@ -12,59 +12,76 @@
 
 .profile-image-container {
     flex-shrink: 0;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-image {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background-color: #E0E0E0;
+    font-size: 60px;
+    text-align: center;
 }
 
 .profile-info {
     flex-grow: 1;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.profile-header {
+.Cardprofile-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .profile-name {
-    font-size: 18px;
+    font-size: 1.4rem;
     font-weight: 600;
+    color: #333;
 }
 
 .profile-age {
-    font-size: 16px;
+    font-size: 1rem;
     color: #666;
 }
 
-.profile-job {
-    font-size: 14px;
-    color: #888;
+.Cardprofile-job {
+    color: #4A90E2;
+    font-weight: 500;
+    margin-bottom: 15px;
 }
 
 .profile-description {
-    font-size: 14px;
+    font-size: 0.95rem;
     color: #555;
-    line-height: 1.4;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.profile-description p {
+    margin: 5px 0;
 }
 
 .profile-detail-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #4173EF;
+    width: 280px;
+    padding: 10px 0;
+    background-color: #4A90E2;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 6px;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s;
+    margin-top: auto;
 }
 
 .profile-detail-button:hover {
