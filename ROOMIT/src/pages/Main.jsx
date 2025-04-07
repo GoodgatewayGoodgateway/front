@@ -5,10 +5,11 @@ import FeatureSection from '../components/FeatureSection';
 import RoommateSection from '../components/RoommateSection';
 import HousingSection from '../components/HousingSection';
 import Footer from '../components/Footer';
-const Main = () => {
+
+const Main = ({ currentUser, setCurrentUser }) => {
     return (
         <div>
-            <Header />
+            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
             <HeroBanner />
             <FeatureSection />
             <RoommateSection />

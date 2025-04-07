@@ -1,16 +1,16 @@
 const userData = [
     {
         id: 1,
-        name: "이서연",
+        name: "박건형",
         age: 23,
-        job: "마케팅 디자이너",
+        job: "프론트엔드 개발자",
         introduction: "창의적이고 활발한 성격의 직장인입니다.",
         location: "서울시 강남구",
-        mbti: "ENFP",
+        mbti: "intj",
         interests: ["여행", "영화감상", "요리", "전시회"],
         idealRoommate: "서로 존중하고 배려하는 룸메이트를 원해요.",
-        smoking: "비흡연",
-        drinking: "가끔 음주",
+        smoking: "흡연",
+        drinking: "음주",
         lifestyle: {
             wakeUpTime: "오전 7시",
             sleepTime: "오후 11시",
@@ -21,7 +21,7 @@ const userData = [
     {
         id: 2,
         name: "김민서",
-        age: 18,
+        age: 28,
         job: "프론트엔드 개발자",
         introduction: "활발하고 적극적인 성격, 새로운 기술을 배우는 것을 좋아함.",
         location: "서울시 송파구",
@@ -173,7 +173,7 @@ const userData = [
     {
         id: 10,
         name: "한지후",
-        age: 19,
+        age: 32,
         job: "대학생",
         introduction: "게임과 기술에 관심 많은 공대생입니다.",
         location: "서울시 종로구",
@@ -231,7 +231,7 @@ const userData = [
     {
         id: 13,
         name: "배윤아",
-        age: 19,
+        age: 23,
         job: "미디어학과 학생",
         introduction: "말수가 적지만 친해지면 정 많아요!",
         location: "서울시 중랑구",

@@ -1,0 +1,126 @@
+/* Filter.css */
+.filter-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.selected-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter-tag {
+    background-color: #e6ecff;
+    color: #4a6cf7;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    border: 1px solid #4a6cf7;
+    transition: all 0.2s ease;
+}
+
+.filter-tag:hover {
+    background-color: #d6e0ff;
+}
+
+.remove-icon {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.search-button {
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-button:hover {
+    background-color: #3a5bd9;
+}
+
+.filter-dropdowns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-button {
+    background-color: white;
+    color: #4a6cf7;
+    border: 1px solid #4a6cf7;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-button:hover,
+.dropdown-button.active {
+    background-color: #4a6cf7;
+    color: white;
+}
+
+.dropdown-icon {
+    font-size: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    width: 150px;
+    margin-top: 5px;
+}
+
+.dropdown-item {
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f5f7ff;
+}
+
+.dropdown-item.selected {
+    background-color: #e6ecff;
+    color: #4a6cf7;
+    font-weight: 500;
+}

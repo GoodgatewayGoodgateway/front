@@ -1,44 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import './css/Header.css';
+import profileImage from '../Data/profile.png';
 
-function Header() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 (테스트용)
+function Header({ currentUser, setCurrentUser }) {
+    const isLoggedIn = !!currentUser;
 
     const handleLogout = () => {
-        setIsLoggedIn(false); // 로그아웃 처리
-        // 실제 로그아웃 로직 추가 (예: localStorage.clear() 또는 API 호출)
+        setCurrentUser(null);
+        localStorage.removeItem('currentUser');  // 로그인 상태 정보 제거
+        localStorage.removeItem('registeredUser');  // 회원가입 정보까지 제거
     };
 
     return (
         <header className="header">
             <div className="logo">RoomIT</div>
+
             <nav className="nav">
                 <ul className="nav-menu">
-                    <li className="nav-item">
-                        <Link to="/">홈</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/meeting">매칭</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/housing">주거공간</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/community">커뮤니티</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/mypage">마이페이지</Link>
-                    </li>
+                    <li className="nav-item"><Link to="/">홈</Link></li>
+                    <li className="nav-item"><Link to="/meeting">매칭</Link></li>
+                    <li className="nav-item"><Link to="/housing">주거공간</Link></li>
+                    <li className="nav-item"><Link to="/community">커뮤니티</Link></li>
+                    <li className="nav-item"><Link to="/mypage">마이페이지</Link></li>
                 </ul>
             </nav>
 
             <div className="auth-buttons">
                 {isLoggedIn ? (
-                    <div className="profile-section">
+                    <div className="header-profile-section">
                         <Link to="/mypage">
                             <img
-                                src="https://via.placeholder.com/40"
+                                src={profileImage}
                                 alt="프로필"
                                 className="profile_image"
                             />
@@ -49,14 +42,14 @@ function Header() {
                         <button className="btn-logout" onClick={handleLogout}>로그아웃</button>
                     </div>
                 ) : (
-                    <>
+                    <div className="header-login-section">
                         <Link to="/login" state={{ register: false }}>
                             <button className="btn-login">로그인</button>
                         </Link>
                         <Link to="/login" state={{ register: true }}>
                             <button className="btn-signup">가입</button>
                         </Link>
-                    </>
+                    </div>
                 )}
             </div>
         </header>

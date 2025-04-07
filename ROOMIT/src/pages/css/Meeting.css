@@ -1,6 +1,10 @@
 /* Meeting.css */
 
 .roommates-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     margin: 0 auto;
     font-family: 'Noto Sans KR', sans-serif;
 }
@@ -30,6 +34,7 @@
 
 
 .roommate-list {
+    max-width: 1500px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;

@@ -2,31 +2,24 @@ import React from 'react';
 import {
     MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart, Utensils, Moon, Sun
 } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../pages/css/MeetingDetail.css';
 import Header from '../components/Header';
 
-const UserProfile = () => {
-    // 🧑‍💻 유저 기본 데이터
-    const user = {
-        id: 1,
-        name: "김민서",
-        age: 18,
-        job: "프론트엔드 개발자",
-        location: "서울시 송파구",
-        introduction: "활발하고 적극적인 성격, 새로운 기술을 배우는 것을 좋아함.",
-        interests: ["프로그래밍", "운동", "게임", "음악"],
-        idealRoommate: "서로 배우고 성장할 수 있는 룸메이트를 찾고 있어요.",
-        mbti: "ESTP",
-        smoking: "비흡연",
-        drinking: "사회적 음주",
-        lifestyle: {
-            wakeUpTime: "오전 8시",
-            sleepTime: "오전 12시",
-            cleanLevel: "상",
-            dayNightType: "낮형", // ⛅ 추가된 필드
-        }
-    };
 
+
+const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
+    const { id } = useParams();
+    const user = userData.find((u) => u.id === parseInt(id));
+
+    const navigate = useNavigate();
+    const currentUserId = 99;
+
+    // user가 없을 경우 처리 (예외 대응)
+    if (!user) {
+        return <div>해당 유저를 찾을 수 없습니다.</div>;
+    }
+    // 🧑‍💻 유저 기본 데이터
     // 🧼 라이프스타일 카테고리
     const lifestyleCategories = [
         {
@@ -58,9 +51,15 @@ const UserProfile = () => {
         }
     ];
 
+    const handleChatClick = () => {
+        const sortedIds = [currentUserId, user.id].sort((a, b) => a - b);
+        const roomId = `${sortedIds[0]}-${sortedIds[1]}`;
+        navigate(`/chat/${roomId}`);
+    };
+
     return (
         <>
-            <Header />
+            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
             <div className="meeting-user-detail">
 
@@ -81,26 +80,26 @@ const UserProfile = () => {
                     </div>
                 </div>
 
-                <section className="profile-section">
+                <section className="meetprofile-section">
                     <h2>자기소개</h2>
                     <p>{user.introduction}</p>
                 </section>
 
-                <section className="profile-section">
+                <section className="meetprofile-section">
                     <h2>관심사</h2>
                     <div className="interests-list">
-                        {user.interests.map((interest, index) => (
+                        {(user.interests || []).map((interest, index) => (
                             <span key={index} className="interest-tag">{interest}</span>
                         ))}
                     </div>
                 </section>
 
-                <section className="profile-section">
+                <section className="meetprofile-section">
                     <h2>이상적인 룸메이트</h2>
                     <p>{user.idealRoommate}</p>
                 </section>
 
-                <section className="profile-section lifestyle-details">
+                <section className="meetprofile-section lifestyle-details">
                     <h2>기본 정보</h2>
                     <div className="lifestyle-grid">
                         <div className="lifestyle-item">
@@ -111,17 +110,18 @@ const UserProfile = () => {
                         <div className="lifestyle-item">
                             <Sun size={40} />
                             <span>기상 시간</span>
-                            <strong>{user.lifestyle.wakeUpTime}</strong>
+                            <strong>{user.lifestyle?.wakeUpTime}</strong>
+
                         </div>
                         <div className="lifestyle-item">
                             <Moon size={40} />
                             <span>취침 시간</span>
-                            <strong>{user.lifestyle.sleepTime}</strong>
+                            <strong>{user.lifestyle?.sleepTime}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Calendar size={40} />
                             <span>밤낮 성향</span>
-                            <strong>{user.lifestyle.dayNightType}</strong>
+                            <strong>{user.lifestyle?.dayNightType}</strong>
                         </div>
                         <div className="lifestyle-item">
                             <Coffee size={40} />
@@ -137,7 +137,7 @@ const UserProfile = () => {
                 </section>
 
                 {lifestyleCategories.map((category, index) => (
-                    <section key={index} className="profile-section lifestyle-category">
+                    <section key={index} className="meetprofile-section lifestyle-category">
                         <h2>{category.title}</h2>
                         <div className="lifestyle-detail-grid">
                             {category.items.map((item, itemIndex) => (
@@ -156,7 +156,7 @@ const UserProfile = () => {
                         <Heart size={40} />
                         좋아요
                     </button>
-                    <button className="chat-button">
+                    <button className="chat-button" onClick={handleChatClick}>
                         <MessageCircle size={40} />
                         채팅하기
                     </button>
