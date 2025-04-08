@@ -3,8 +3,8 @@ import {
     MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart, Utensils, Moon, Sun
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../pages/css/MeetingDetail.css';
-import Header from '../components/Header';
+import '../Pages/css/MeetingDetail.css';
+import Header from '../Components/Header';
 
 
 

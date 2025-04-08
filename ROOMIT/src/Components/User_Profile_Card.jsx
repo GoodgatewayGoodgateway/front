@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../components/css/User_Profile_Card.css';
+import '../Components/css/User_Profile_Card.css';
 
 const ProfileCard = (userdata) => {
     const { id, name = '이름 없음', age = 'N/A', job = '직업 미정', idealRoommate = '설명 없음' } = userdata;

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import ProfileCard from '../components/User_Profile_Card';
-import Header from '../components/Header';
-import FilterBar from '../components/filter';
-import '../pages/css/Meeting.css';
+import ProfileCard from '../Components/User_Profile_Card';
+import Header from '../Components/Header';
+import FilterBar from '../Components/Filter';
+import '../Pages/css/Meeting.css';
 
 const Meeting = ({ users, currentUser, setCurrentUser }) => {
     const [filteredUsers, setFilteredUsers] = useState(users);  // 초기 값은 전체 사용자 목록

@@ -4,8 +4,8 @@ import {
     MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart, Utensils, Moon, Sun
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import '../pages/css/MyPages.css';
-import Header from '../components/Header';
+import '../Pages/css/MyPages.css';
+import Header from '../Components/Header';
 
 const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     const navigate = useNavigate();

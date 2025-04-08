@@ -1,14 +1,14 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
-import Notfound from './pages/Notfound';
-import Meeting from './pages/Meeting';
-import Main from './pages/Main';
-import Login from './pages/Login';
-import userData from './data/userData';  // 유저 데이터 import
-import MeetingDetail from './pages/MeetingDetail';
-import ChatRoom from "./pages/ChatRoom";
-import MyPages from './pages/MyPages';
+import Notfound from './Pages/Notfound';
+import Meeting from './Pages/Meeting';
+import Main from './Pages/Main';
+import Login from './Pages/Login';
+import userData from './Data/UserData';  // 유저 데이터 import
+import MeetingDetail from './Pages/MeetingDetail';
+import ChatRoom from "./Pages/ChatRoom";
+import MyPages from './Pages/MyPages';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);

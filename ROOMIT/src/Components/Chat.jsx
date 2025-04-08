@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../pages/css/ChatRoom.css';
+import '../Pages/css/ChatRoom.css';
 
-const ChatRoom = () => {
+const Chat = () => {
     const { roomId } = useParams();
     const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
@@ -122,4 +122,4 @@ const ChatRoom = () => {
     );
 };
 
-export default ChatRoom;
+export default Chat;

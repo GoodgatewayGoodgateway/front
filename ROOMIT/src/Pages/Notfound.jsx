@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../pages/css/Notfound.css';
+import '../Pages/css/Notfound.css';
 
 const NotFoundPage = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
