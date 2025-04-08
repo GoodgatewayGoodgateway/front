@@ -42,3 +42,9 @@
     margin-top: 15px;
     padding: 8px 0;
 }
+
+.roommate-lifestyle p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}

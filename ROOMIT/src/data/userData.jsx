@@ -2,6 +2,8 @@ const userData = [
     {
         id: 1,
         name: "박건형",
+        sex: "남",
+        avatar: "👨",
         age: 23,
         job: "프론트엔드 개발자",
         introduction: "창의적이고 활발한 성격의 직장인입니다.",
@@ -21,6 +23,8 @@ const userData = [
     {
         id: 2,
         name: "김민서",
+        sex: "남",
+        avatar: "👩",
         age: 28,
         job: "프론트엔드 개발자",
         introduction: "활발하고 적극적인 성격, 새로운 기술을 배우는 것을 좋아함.",
@@ -41,6 +45,7 @@ const userData = [
         id: 3,
         name: "이준혁",
         age: 21,
+        avatar: "👩",
         job: "백엔드 개발자",
         introduction: "논리적이고 분석적인 사고로 문제 해결에 강함.",
         location: "서울시 마포구",
@@ -59,7 +64,9 @@ const userData = [
     {
         id: 4,
         name: "박지수",
+        sex: "남",
         age: 20,
+        avatar: "👩",
         job: "UX/UI 디자이너",
         introduction: "창의적인 아이디어로 사용자 경험을 향상시키는 데 집중.",
         location: "서울시 용산구",
@@ -79,6 +86,7 @@ const userData = [
         id: 5,
         name: "정우진",
         age: 22,
+        avatar: "👩",
         job: "데이터 분석가",
         introduction: "데이터 기반 의사결정을 좋아합니다.",
         location: "서울시 강서구",
@@ -97,6 +105,7 @@ const userData = [
     {
         id: 6,
         name: "최서현",
+        sex: "남",
         age: 24,
         job: "기획자",
         introduction: "계획을 잘 세우고 조직적인 걸 좋아해요.",
@@ -116,6 +125,7 @@ const userData = [
     {
         id: 7,
         name: "윤아람",
+        sex: "남",
         age: 20,
         job: "패션디자인 전공",
         introduction: "자유롭고 감각적인 스타일을 좋아해요.",
@@ -154,6 +164,7 @@ const userData = [
     {
         id: 9,
         name: "조민규",
+        sex: "남",
         age: 26,
         job: "헬스트레이너",
         introduction: "규칙적인 생활, 건강한 습관을 중시합니다.",
@@ -193,6 +204,7 @@ const userData = [
     {
         id: 11,
         name: "김수빈",
+        sex: "남",
         age: 22,
         job: "간호학과 학생",
         introduction: "사람을 잘 챙기고 공감 능력이 뛰어난 편입니다.",
@@ -231,6 +243,7 @@ const userData = [
     {
         id: 13,
         name: "배윤아",
+        sex: "남",
         age: 23,
         job: "미디어학과 학생",
         introduction: "말수가 적지만 친해지면 정 많아요!",
@@ -269,6 +282,7 @@ const userData = [
     {
         id: 15,
         name: "이하린",
+        sex: "남",
         age: 21,
         job: "애니메이션 학생",
         introduction: "그림 그리고 애니 감상하는 게 일상입니다.",
@@ -288,6 +302,7 @@ const userData = [
     {
         id: 16,
         name: "정시우",
+        sex: "여",
         age: 28,
         job: "세무사",
         introduction: "정리정돈과 청결에 매우 신경 씁니다.",
@@ -307,6 +322,7 @@ const userData = [
     {
         id: 17,
         name: "문하늘",
+        sex: "남",
         age: 24,
         job: "대학원생",
         introduction: "공부와 연구가 일상이지만 여유도 중요하게 생각해요.",
@@ -326,7 +342,9 @@ const userData = [
     {
         id: 18,
         name: "이태영",
+        sex: "남",
         age: 26,
+        avatar: "👨",
         job: "영업 사원",
         introduction: "에너지가 넘치고 사람 만나는 걸 좋아합니다.",
         location: "서울시 서대문구",
@@ -345,6 +363,7 @@ const userData = [
     {
         id: 19,
         name: "강서영",
+        sex: "여",
         age: 22,
         job: "문예창작학과 학생",
         introduction: "글 쓰는 걸 좋아하고 감성적인 편이에요.",
@@ -364,6 +383,7 @@ const userData = [
     {
         id: 20,
         name: "노지훈",
+        sex: "남",
         age: 34,
         job: "사진 작가",
         introduction: "거리 풍경과 사람을 담는 걸 좋아합니다.",
@@ -379,7 +399,61 @@ const userData = [
             cleanLevel: "중간",
             noise: "보통"
         }
-    }
+    }, {
+        title: "🍽️ 식생활 & 주방 관련",
+        items: [
+            { label: "식사 시간", value: "규칙적" },
+            { label: "식사 시간", value: "불규칙" },
+            { label: "주방 사용", value: "자주 사용" },
+            { label: "주방 사용", value: "가끔 사용" },
+            { label: "주방 사용", value: "거의 안함" },
+            { label: "요리 빈도", value: "주 5회 이상" },
+            { label: "요리 빈도", value: "주 3-4회" },
+            { label: "요리 빈도", value: "주 1-2회" },
+            { label: "요리 빈도", value: "안 함" }
+        ],
+    },
+    {
+        title: "🧹 청결 및 정리 습관",
+        items: [
+            { label: "청결 수준", value: "상" },
+            { label: "청결 수준", value: "중" },
+            { label: "청결 수준", value: "하" },
+            { label: "청소 주기", value: "매일" },
+            { label: "청소 주기", value: "주 3회 이상" },
+            { label: "청소 주기", value: "거의 안 함" },
+            { label: "공용공간 관리", value: "적극적" },
+            { label: "공용공간 관리", value: "보통" },
+            { label: "공용공간 관리", value: "소극적" }
+        ],
+    },
+    {
+        title: "🔊 소음 민감도",
+        items: [
+            { label: "소음 민감도", value: "높음" },
+            { label: "소음 민감도", value: "보통" },
+            { label: "소음 민감도", value: "낮음" },
+            { label: "취침시 소음", value: "아무 소리도 싫음" },
+            { label: "취침시 소음", value: "조용한 환경 선호" },
+            { label: "취침시 소음", value: "어느 정도 허용" },
+            { label: "음악/TV 볼륨", value: "매우 작게" },
+            { label: "음악/TV 볼륨", value: "적당히" },
+            { label: "음악/TV 볼륨", value: "크게" }
+        ],
+    },
+    {
+        title: "🐾 반려동물 허용",
+        items: [
+            { label: "반려동물 허용 여부", value: "허용" },
+            { label: "반려동물 허용 여부", value: "부분 허용" },
+            { label: "반려동물 허용 여부", value: "불허" },
+            { label: "반려동물 종류", value: "강아지" },
+            { label: "반려동물 종류", value: "고양이" },
+            { label: "반려동물 종류", value: "기타" },
+            { label: "반려동물 알레르기", value: "있음" },
+            { label: "반려동물 알레르기", value: "없음" }
+        ],
+    },
 ];
 
 export default userData;

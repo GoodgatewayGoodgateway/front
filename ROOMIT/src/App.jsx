@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import userData from './data/userData';  // 유저 데이터 import
 import MeetingDetail from './pages/MeetingDetail';
 import ChatRoom from "./pages/ChatRoom";
+import MyPages from './pages/MyPages';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -23,11 +24,12 @@ const App = () => {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Main currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
+          <Route path="/" element={<Main userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
           <Route path="/meeting" element={<Meeting users={userData} currentUser={currentUser} />} />
           <Route path="/meeting/:id" element={<MeetingDetail userData={userData} currentUser={currentUser} />} />
           <Route path="/chat/:roomId" element={<ChatRoom />} />
+          <Route path="/mypages" element={<MyPages currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="*" element={<Notfound />} />
         </Routes>
       </div>

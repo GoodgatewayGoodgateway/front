@@ -22,7 +22,7 @@ function Header({ currentUser, setCurrentUser }) {
                     <li className="nav-item"><Link to="/meeting">매칭</Link></li>
                     <li className="nav-item"><Link to="/housing">주거공간</Link></li>
                     <li className="nav-item"><Link to="/community">커뮤니티</Link></li>
-                    <li className="nav-item"><Link to="/mypage">마이페이지</Link></li>
+                    <li className="nav-item"><Link to="/mypages">마이페이지</Link></li>
                 </ul>
             </nav>
 
@@ -36,7 +36,7 @@ function Header({ currentUser, setCurrentUser }) {
                                 className="profile_image"
                             />
                         </Link>
-                        <Link to="/mypage">
+                        <Link to="/mypages">
                             <button className="btn-profile">프로필 관리</button>
                         </Link>
                         <button className="btn-logout" onClick={handleLogout}>로그아웃</button>
