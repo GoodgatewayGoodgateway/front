@@ -21,7 +21,7 @@ function Header({ currentUser, setCurrentUser }) {
                     <li className="nav-item"><Link to="/">홈</Link></li>
                     <li className="nav-item"><Link to="/meeting">매칭</Link></li>
                     <li className="nav-item"><Link to="/housing">주거공간</Link></li>
-                    <li className="nav-item"><Link to="/community">커뮤니티</Link></li>
+                    <li className="nav-item"><Link to="/chat">채팅</Link></li>
                     <li className="nav-item"><Link to="/mypages">마이페이지</Link></li>
                 </ul>
             </nav>

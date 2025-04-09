@@ -54,7 +54,9 @@ const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
     const handleChatClick = () => {
         const sortedIds = [currentUserId, user.id].sort((a, b) => a - b);
         const roomId = `${sortedIds[0]}-${sortedIds[1]}`;
-        navigate(`/chat/${roomId}`);
+        if (!roomId.startsWith(':')) {
+            navigate(`/chat/${roomId}`);
+        }
     };
 
     return (

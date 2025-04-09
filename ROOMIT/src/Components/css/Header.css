@@ -16,15 +16,25 @@
 .logo {
     font-size: 28px;
     font-weight: 700;
+    width: 150px;
+    /* 로고 영역 고정 너비 설정 */
 }
 
 .nav {
-    margin-left: 15%;
+    flex: 1;
+    /* 네비게이션이 가능한 공간 모두 차지 */
+    display: flex;
+    justify-content: center;
+    /* 중앙 정렬 */
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    /* 내부 항목들도 중앙 정렬 */
 }
 
 .nav-item {
@@ -36,6 +46,8 @@
 .nav-item a {
     text-decoration: none;
     color: inherit;
+    display: block;
+    padding: 5px 10px;
 }
 
 .nav-item:hover {
@@ -44,16 +56,30 @@
 
 .auth-buttons {
     display: flex;
+    width: 250px;
+    /* 프로필 영역 너비 증가 */
+    justify-content: flex-end;
+    /* 오른쪽 정렬 */
 }
 
+.header-login-section,
+.header-profile-section {
+    display: flex;
+    align-items: center;
+}
+
+/* 로그인/가입 버튼 스타일 */
 .btn-login,
 .btn-signup {
     background-color: white;
     color: #4a6cf7;
+    border: none;
     border-radius: 15px;
+    width: 90px;
     padding: 8px 20px;
     margin-left: 10px;
     font-weight: 500;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
@@ -67,19 +93,21 @@
     transform: scale(1.05);
 }
 
-/* ProfileSection.css */
-/* ProfileSection.css */
+/* 프로필 섹션 스타일 */
 .header-profile-section {
-    z-index: 100;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
+    /* 요소 간격 증가 */
     margin-bottom: 152px;
-    padding: 16px 24px 12px 24px;
+    padding: 16px 30px 12px 30px;
+    /* 좌우 패딩 증가 */
     background-color: white;
     border-radius: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    min-width: 340px;
+    /* 최소 너비 설정 */
 }
 
 .header-profile-section:hover {
@@ -99,7 +127,8 @@
 
 .btn-profile,
 .btn-logout {
-    padding: 8px 14px;
+    padding: 8px 20px;
+    /* 버튼 패딩 증가 */
     border: none;
     border-radius: 12px;
     margin-top: 19px;
@@ -108,6 +137,9 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-width: 110px;
+    /* 버튼 최소 너비 설정 */
+    text-align: center;
 }
 
 .btn-profile {
@@ -132,4 +164,31 @@
 .btn-logout:hover {
     background-color: #fa5252;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 20px;
+    }
+
+    .nav-menu {
+        display: none;
+        /* 모바일에서는 네비게이션 메뉴 숨김 - 필요시 햄버거 메뉴로 대체 */
+    }
+
+    .auth-buttons {
+        width: auto;
+    }
+
+    .header-profile-section {
+        min-width: auto;
+        padding: 12px 20px;
+    }
+
+    .btn-profile,
+    .btn-logout {
+        min-width: 90px;
+        padding: 6px 12px;
+    }
 }

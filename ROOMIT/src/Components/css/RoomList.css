@@ -7,6 +7,7 @@
     background-color: #ffffff;
     border-right: 1px solid #e5e7eb;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .room-list-header {

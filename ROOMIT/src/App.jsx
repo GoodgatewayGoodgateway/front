@@ -28,6 +28,7 @@ const App = () => {
           <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
           <Route path="/meeting" element={<Meeting users={userData} currentUser={currentUser} />} />
           <Route path="/meeting/:id" element={<MeetingDetail userData={userData} currentUser={currentUser} />} />
+          <Route path="/chat" element={<ChatRoom />} />
           <Route path="/chat/:roomId" element={<ChatRoom />} />
           <Route path="/mypages" element={<MyPages currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="*" element={<Notfound />} />

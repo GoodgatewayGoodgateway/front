@@ -14,6 +14,19 @@ const RoomList = () => {
         { id: 5, name: "프로젝트 팀", unread: 0, online: true, lastMessage: "다음 주 일정 확인해주세요", avatar: "👥", type: "work" },
         { id: 6, name: "홍길동", unread: 7, online: false, lastMessage: "자료 검토 부탁드립니다", avatar: "👨", type: "work" },
         { id: 7, name: "이수진", unread: 0, online: true, lastMessage: "오늘 저녁에 시간 되세요?", avatar: "👩", type: "friend" },
+        { id: 8, name: "정우성", unread: 1, online: false, lastMessage: "회의 자료 준비 완료했습니다.", avatar: "👨", type: "work" },
+        { id: 9, name: "친구 그룹", unread: 4, online: true, lastMessage: "다음 주 여행 계획 세웠나요?", avatar: "👫", type: "friend" },
+        { id: 10, name: "김민지", unread: 0, online: false, lastMessage: "오늘 날씨 정말 좋네요!", avatar: "👩", type: "friend" },
+        { id: 11, name: "이현우", unread: 2, online: true, lastMessage: "프로젝트 진행 상황 공유 부탁드립니다.", avatar: "👨", type: "work" },
+        { id: 12, name: "스터디 그룹", unread: 3, online: false, lastMessage: "다음 주 스터디 주제는 무엇인가요?", avatar: "📚", type: "work" },
+        { id: 13, name: "박지훈", unread: 0, online: true, lastMessage: "오늘 저녁에 운동 갈래요?", avatar: "👨", type: "friend" },
+        { id: 14, name: "이유진", unread: 6, online: false, lastMessage: "회의 시간 변경됐습니다.", avatar: "👩", type: "work" },
+        { id: 15, name: "가족 채팅방", unread: 1, online: true, lastMessage: "주말에 가족 모임 있어요.", avatar: "👪", type: "family" },
+        { id: 16, name: "최민호", unread: 0, online: false, lastMessage: "다음 주에 시간 괜찮으세요?", avatar: "👨", type: "friend" },
+        { id: 17, name: "프로젝트 A", unread: 5, online: true, lastMessage: "마감일이 다가오고 있습니다.", avatar: "📁", type: "work" },
+        { id: 18, name: "김하늘", unread: 0, online: true, lastMessage: "오늘 점심 뭐 드실래요?", avatar: "👩", type: "friend" },
+        { id: 19, name: "동아리 채팅방", unread: 2, online: false, lastMessage: "다음 모임 일정 확인해주세요.", avatar: "🎉", type: "friend" },
+        { id: 20, name: "이정민", unread: 3, online: true, lastMessage: "새로운 프로젝트 제안서 확인 부탁드립니다.", avatar: "👨", type: "work" },
     ];
 
     // 룸 아이콘 결정 함수

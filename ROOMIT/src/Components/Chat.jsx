@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './css/Chat.css';
 
 const Chat = () => {
     const { roomId } = useParams();
-    const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const messagesEndRef = useRef(null);
@@ -72,16 +71,10 @@ const Chat = () => {
         return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    const handleBack = () => {
-        navigate(-1);
-    };
-
     return (
         <div className="chat-room">
             <div className="chat-header">
-                <button onClick={handleBack} className="back-button">
-                    ←
-                </button>
+
                 <h3>{otherUserInfo.avatar} {otherUserInfo.name}</h3>
                 <div className="chat-actions">
                     <button aria-label="정보">ℹ️</button>
