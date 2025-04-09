@@ -8,14 +8,17 @@ const ChatRoom = () => {
     return (
         <div>
             <Header />
-            <div className="chat-room-container">
+            <div className="">
                 <div className="room-list">
                     <RoomList />
                 </div>
-                <div className="chat-window">
-                    <Chat />
+                <div className="chat-room-container">
+                    <div className="chat-window">
+                        <Chat />
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 };

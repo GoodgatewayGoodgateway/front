@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../Pages/css/ChatRoom.css';
+import './css/Chat.css';
 
 const Chat = () => {
     const { roomId } = useParams();
