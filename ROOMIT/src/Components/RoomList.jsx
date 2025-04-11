@@ -2,53 +2,58 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MessageSquare, ChevronRight, Users, Star } from 'lucide-react';
 import './css/RoomList.css'; // 외부 CSS 파일 import
-
 // RoomList 컴포넌트 
 const RoomList = () => {
     // 샘플 데이터
     const chatRooms = [
-        { id: 1, name: "김지영", unread: 3, online: true, lastMessage: "안녕하세요! 룸메이트에 관해 궁금한 점이 있으신가요?", avatar: "👩", type: "friend" },
-        { id: 2, name: "이민준", unread: 0, online: true, lastMessage: "내일 미팅 준비는 다 됐나요?", avatar: "👨", type: "work" },
-        { id: 3, name: "박소희", unread: 5, online: false, lastMessage: "주말에 같이 영화 볼래요?", avatar: "👩", type: "friend" },
-        { id: 4, name: "가족 그룹", unread: 2, online: true, lastMessage: "저녁 식사 계획이 있나요?", avatar: "👪", type: "family" },
-        { id: 5, name: "프로젝트 팀", unread: 0, online: true, lastMessage: "다음 주 일정 확인해주세요", avatar: "👥", type: "work" },
-        { id: 6, name: "홍길동", unread: 7, online: false, lastMessage: "자료 검토 부탁드립니다", avatar: "👨", type: "work" },
-        { id: 7, name: "이수진", unread: 0, online: true, lastMessage: "오늘 저녁에 시간 되세요?", avatar: "👩", type: "friend" },
-        { id: 8, name: "정우성", unread: 1, online: false, lastMessage: "회의 자료 준비 완료했습니다.", avatar: "👨", type: "work" },
-        { id: 9, name: "친구 그룹", unread: 4, online: true, lastMessage: "다음 주 여행 계획 세웠나요?", avatar: "👫", type: "friend" },
-        { id: 10, name: "김민지", unread: 0, online: false, lastMessage: "오늘 날씨 정말 좋네요!", avatar: "👩", type: "friend" },
-        { id: 11, name: "이현우", unread: 2, online: true, lastMessage: "프로젝트 진행 상황 공유 부탁드립니다.", avatar: "👨", type: "work" },
-        { id: 12, name: "스터디 그룹", unread: 3, online: false, lastMessage: "다음 주 스터디 주제는 무엇인가요?", avatar: "📚", type: "work" },
-        { id: 13, name: "박지훈", unread: 0, online: true, lastMessage: "오늘 저녁에 운동 갈래요?", avatar: "👨", type: "friend" },
-        { id: 14, name: "이유진", unread: 6, online: false, lastMessage: "회의 시간 변경됐습니다.", avatar: "👩", type: "work" },
-        { id: 15, name: "가족 채팅방", unread: 1, online: true, lastMessage: "주말에 가족 모임 있어요.", avatar: "👪", type: "family" },
-        { id: 16, name: "최민호", unread: 0, online: false, lastMessage: "다음 주에 시간 괜찮으세요?", avatar: "👨", type: "friend" },
-        { id: 17, name: "프로젝트 A", unread: 5, online: true, lastMessage: "마감일이 다가오고 있습니다.", avatar: "📁", type: "work" },
-        { id: 18, name: "김하늘", unread: 0, online: true, lastMessage: "오늘 점심 뭐 드실래요?", avatar: "👩", type: "friend" },
-        { id: 19, name: "동아리 채팅방", unread: 2, online: false, lastMessage: "다음 모임 일정 확인해주세요.", avatar: "🎉", type: "friend" },
-        { id: 20, name: "이정민", unread: 3, online: true, lastMessage: "새로운 프로젝트 제안서 확인 부탁드립니다.", avatar: "👨", type: "work" },
+        { id: 1, name: "김지영", unread: 3, online: true, lastMessage: "안녕하세요! 룸메이트에 관해 궁금한 점이 있으신가요?", avatar: "/vite.svg", type: "friend", readtime: "2025-04-10T11:00:00Z" }, // 1시간 전
+        { id: 2, name: "이민준", unread: 0, online: true, lastMessage: "내일 미팅 준비는 다 됐나요?", avatar: "/vite.svg", type: "work", readtime: "2025-04-10T07:00:00Z" }, // 5시간 전
+        { id: 3, name: "박소희", unread: 5, online: false, lastMessage: "주말에 같이 영화 볼래요?", avatar: "/vite.svg", type: "friend", readtime: "2025-04-10T00:30:00Z" }, // 오늘
+        { id: 4, name: "프로젝트 팀", unread: 0, online: true, lastMessage: "다음 주 일정 확인해주세요", avatar: "/vite.svg", type: "work", readtime: "2025-04-09T23:50:00Z" }, // 어제
+        { id: 5, name: "홍길동", unread: 7, online: false, lastMessage: "자료 검토 부탁드립니다", avatar: "/vite.svg", type: "work", readtime: "2025-04-08T15:20:00Z" }, // 어제
+        { id: 6, name: "이수진", unread: 0, online: true, lastMessage: "오늘 저녁에 시간 되세요?", avatar: "/vite.svg", type: "friend", readtime: "2025-04-05T10:00:00Z" }, // 오래전
+        { id: 7, name: "정우성", unread: 1, online: false, lastMessage: "회의 자료 준비 완료했습니다.", avatar: "/vite.svg", type: "friend", readtime: "2025-03-25T14:00:00Z" }, // 오래전
+        { id: 9, name: "김민지", unread: 0, online: false, lastMessage: "오늘 날씨 정말 좋네요!", avatar: "/vite.svg", type: "friend", readtime: "2025-04-10T03:00:00Z" }, // 오늘
+        { id: 10, name: "이현우", unread: 2, online: true, lastMessage: "프로젝트 진행 상황 공유 부탁드립니다.", avatar: "/vite.svg", type: "work", readtime: "2024-12-01T12:00:00Z" }, // 오래전
     ];
 
-    // 룸 아이콘 결정 함수
-    const getRoomIcon = (type) => {
-        switch (type) {
-            case "work":
-                return <ChevronRight size={18} className="text-blue-500" />;
-            case "family":
-                return <Users size={18} className="text-green-500" />;
-            case "important":
-                return <Star size={18} className="text-yellow-500" />;
-            default:
-                return <MessageSquare size={18} className="text-gray-500" />;
+    const formatReadTime = (readtime) => {
+        const now = new Date();
+        const readDate = new Date(readtime);
+
+        // KST 기준으로 변환 (UTC → 한국 시간)
+        const nowKST = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+        const readDateKST = new Date(readDate.getTime() + 9 * 60 * 60 * 1000);
+
+        // 시간 차이 계산
+        const diffMs = nowKST - readDateKST;
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+        // 날짜 비교 (KST 기준)
+        const nowDate = nowKST.toISOString().split("T")[0]; // yyyy-MM-dd 형식
+        const readDateFormatted = readDateKST.toISOString().split("T")[0]; // yyyy-MM-dd 형식
+
+        if (diffHours < 6) {
+            return `${diffHours}시간 전`;
+        } else if (nowDate === readDateFormatted) {
+            return "오늘";
+        } else if (diffDays === 1) {
+            return "어제";
+        } else {
+            return "오래전";
         }
     };
+
+
 
     return (
         <div className="room-list">
             {chatRooms.map((room) => (
                 <div key={room.id} className="room-item">
                     <div className="room-avatar">
-                        <span className="room-avatar-text">{room.avatar}</span>
+                        {/* 룸 아이콘 및 아바타 표시 */}
+                        <img src={room.avatar} alt={`${room.name} avatar`} className="room-avatar-image" />
                         {room.online && (
                             <div className="online-indicator"></div>
                         )}
@@ -57,16 +62,17 @@ const RoomList = () => {
                     <div className="room-content">
                         <div className="room-header">
                             <div className="room-name-container">
-                                <span className="room-icon">{getRoomIcon(room.type)}</span>
+                                {/* <span className="room-icon">{getRoomIcon(room.type)}</span> */}
                                 <h3 className="room-name">{room.name}</h3>
                             </div>
-                            <span className="room-time">오늘</span>
+                            <span className="room-time">{formatReadTime(room.readtime)}</span>
                         </div>
                         <p className="room-last-message">{room.lastMessage}</p>
                     </div>
 
                     {room.unread > 0 && (
                         <div className="unread-badge">
+                            {/* 읽지 않은 메시지 수 표시 */}
                             {room.unread}
                         </div>
                     )}

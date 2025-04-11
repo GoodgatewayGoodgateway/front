@@ -35,17 +35,19 @@ function HousingSection() {
     return (
         <section className="housing-section container">
             <h2 className="section-title">추천 공유 주거 공간</h2>
-            <div className="housing-grid">
-                {houses.map(house => (
-                    <HousingCard
-                        key={house.id}
-                        name={house.name}
-                        icon={house.icon}
-                        type={house.type}
-                        price={house.price}
-                        features={house.features}
-                    />
-                ))}
+            <div className='housing-section-content'>
+                <div className="housing-grid">
+                    {houses.map(house => (
+                        <HousingCard
+                            key={house.id}
+                            name={house.name}
+                            icon={house.icon}
+                            type={house.type}
+                            price={house.price}
+                            features={house.features}
+                        />
+                    ))}
+                </div>
             </div>
         </section>
     );
