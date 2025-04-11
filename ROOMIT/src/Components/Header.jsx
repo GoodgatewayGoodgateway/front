@@ -15,7 +15,6 @@ function Header({ currentUser, setCurrentUser }) {
     return (
         <header className="header">
             <div className="logo">RoomIT</div>
-
             <nav className="nav">
                 <ul className="nav-menu">
                     <li className="nav-item"><Link to="/">홈</Link></li>
