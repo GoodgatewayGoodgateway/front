@@ -5,21 +5,21 @@ import Header from '../Components/Header';
 import Chat from '../Components/Chat';
 import RoomList from '../Components/RoomList.jsx';
 
-const ChatRoom = () => {
+const ChatRoom = ({ userData, currentUser, setCurrentUser }) => {
     const location = useLocation();
     const pathSegments = location.pathname.split('/');
     const hasRoomId = pathSegments.length > 2 && pathSegments[2]; // /chat/:roomId
 
     return (
         <div>
-            <Header />
+            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
             <div className="chatcontainer">
                 <div className="room-list">
                     <RoomList />
                 </div>
                 <div className="chat-room-container">
                     {hasRoomId ? (
-                        <Chat />
+                        <Chat userData={userData} />
                     ) : (
                         <div className="empty-chat">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

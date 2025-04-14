@@ -42,6 +42,13 @@
     transition: opacity 0.2s;
 }
 
+.other-user-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .chat-header .chat-actions button:hover {
     opacity: 1;
 }

@@ -9,6 +9,7 @@ import userData from './Data/UserData';  // 유저 데이터 import
 import MeetingDetail from './Pages/MeetingDetail';
 import ChatRoom from "./Pages/ChatRoom";
 import MyPages from './Pages/MyPages';
+import ScrollToTop from './Components/ScrollToTop';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -22,14 +23,15 @@ const App = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Routes>
           <Route path="/" element={<Main userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
-          <Route path="/meeting" element={<Meeting users={userData} currentUser={currentUser} />} />
-          <Route path="/meeting/:id" element={<MeetingDetail userData={userData} currentUser={currentUser} />} />
-          <Route path="/chat" element={<ChatRoom />} />
-          <Route path="/chat/:roomId" element={<ChatRoom />} />
+          <Route path="/meeting" element={<Meeting users={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
+          <Route path="/meeting/:id" element={<MeetingDetail userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
+          <Route path="/chat" element={<ChatRoom userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
+          <Route path="/chat/:roomId" element={<ChatRoom userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="/mypages" element={<MyPages currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="*" element={<Notfound />} />
         </Routes>

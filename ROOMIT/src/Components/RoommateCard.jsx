@@ -20,9 +20,12 @@ function RoommateCard({ id, name, age, avatar, mbti, job, location, budget, life
     return (
         <div className="roommate-card card">
             <div className="roommate-avatar-wrapper">
-                <span className="roommate-avatar" role="img" aria-label="Avatar">
-                    {avatar || defaultAvatar}
-                </span>
+                <img
+                    className="roommate-avatar"
+                    src={avatar || defaultAvatar}
+                    alt={`${name}의 아바타`}
+                    width={90}
+                />
             </div>
             <h3 className="roommate-name">{name}, {age}세</h3>
             <p className="roommate-info">{mbti || "정보 없음"} • {job}</p>

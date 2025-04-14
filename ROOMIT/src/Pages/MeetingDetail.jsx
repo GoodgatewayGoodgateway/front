@@ -1,26 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react'; // ✅ useState 추가
 import {
-    MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart, Utensils, Moon, Sun
+    MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2,
+    MessageCircle, Utensils, Moon, Sun
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../Pages/css/MeetingDetail.css';
 import Header from '../Components/Header';
 
-
+import useradd from '/src/assets/useradd.svg';
+import deluser from '/src/assets/deluser.svg';
 
 const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
     const { id } = useParams();
     const user = userData.find((u) => u.id === parseInt(id));
-
     const navigate = useNavigate();
     const currentUserId = 99;
+    const [isFavorited, setIsFavorited] = useState(false); // ✅ 즐겨찾기 상태 추가
 
-    // user가 없을 경우 처리 (예외 대응)
     if (!user) {
         return <div>해당 유저를 찾을 수 없습니다.</div>;
     }
-    // 🧑‍💻 유저 기본 데이터
-    // 🧼 라이프스타일 카테고리
+
     const lifestyleCategories = [
         {
             title: "🍽️ 식생활 & 주방 관련",
@@ -59,12 +59,14 @@ const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
         }
     };
 
+    const handleFavoriteClick = () => {
+        setIsFavorited(prev => !prev);
+    };
+
     return (
         <>
             <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
-
             <div className="meeting-user-detail">
-
                 <div className="profile-header">
                     <div className="profile-image-large"></div>
                     <div className="profile-basic-info">
@@ -113,7 +115,6 @@ const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
                             <Sun size={40} />
                             <span>기상 시간</span>
                             <strong>{user.lifestyle?.wakeUpTime}</strong>
-
                         </div>
                         <div className="lifestyle-item">
                             <Moon size={40} />
@@ -154,10 +155,16 @@ const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
                 ))}
 
                 <div className="action-buttons">
-                    <button className="like-button">
-                        <Heart size={40} />
-                        좋아요
+                    <button className="adduser-button" onClick={handleFavoriteClick}>
+                        <img
+                            src={isFavorited ? deluser : useradd}
+                            alt={isFavorited ? 'Remove from Favorites' : 'Add to Favorites'}
+                            width={40}
+                            height={40}
+                        />
+                        <span>{isFavorited ? '즐겨찾기 제거' : '즐겨찾기'}</span>
                     </button>
+
                     <button className="chat-button" onClick={handleChatClick}>
                         <MessageCircle size={40} />
                         채팅하기

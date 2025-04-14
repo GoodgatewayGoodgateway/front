@@ -14,10 +14,13 @@ const Meeting = ({ users, currentUser, setCurrentUser }) => {
             <h2>룸메이트를 찾아보세요!</h2>
             <FilterBar users={users} onFilterChange={setFilteredUsers} />  {/* 필터링된 결과를 받아옴 */}
             <div className='roommate-list'>
-                {filteredUsers.map(roommate => (
-                    <ProfileCard key={roommate.id} {...roommate} />
+                {filteredUsers.map((user, index) => (
+                    <ProfileCard key={`${user.id}-${index}`} {...user} />
                 ))}
             </div>
+
+
+
         </div>
     );
 };

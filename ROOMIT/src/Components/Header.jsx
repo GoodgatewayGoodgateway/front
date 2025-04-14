@@ -3,24 +3,39 @@ import { Link } from 'react-router-dom';
 import './css/Header.css';
 import profileImage from '../Data/profile.png';
 
-function Header({ currentUser, setCurrentUser }) {
+function Header({ currentUser, setCurrentUser, chatRooms }) {
     const isLoggedIn = !!currentUser;
+
+    const unreadUserCount = chatRooms
+        ? chatRooms.filter(room => room.unread > 0).length
+        : 0;
+
 
     const handleLogout = () => {
         setCurrentUser(null);
         localStorage.removeItem('currentUser');  // 로그인 상태 정보 제거
-        localStorage.removeItem('registeredUser');  // 회원가입 정보까지 제거
+        // localStorage.removeItem('registeredUser');  // 회원가입 정보까지 제거
     };
 
     return (
         <header className="header">
-            <div className="logo">RoomIT</div>
+            <div className="logo">
+                <img src="/ROMMITlogo.svg" alt="로고" className="logo-image" width="40px" />
+                ROOMIT
+            </div>
             <nav className="nav">
                 <ul className="nav-menu">
                     <li className="nav-item"><Link to="/">홈</Link></li>
                     <li className="nav-item"><Link to="/meeting">매칭</Link></li>
                     <li className="nav-item"><Link to="/housing">주거공간</Link></li>
-                    <li className="nav-item"><Link to="/chat">채팅</Link></li>
+                    <li className="nav-item">
+                        <Link to="/chat">
+                            채팅
+                            {unreadUserCount > 0 && (
+                                <span className="unread-user-badge">{unreadUserCount}</span>
+                            )}
+                        </Link>
+                    </li>
                     <li className="nav-item"><Link to="/mypages">마이페이지</Link></li>
                 </ul>
             </nav>

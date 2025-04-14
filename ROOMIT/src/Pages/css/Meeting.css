@@ -126,7 +126,7 @@
     border-color: #4A90E2;
 }
 
-.filter-form button {
+/* .filter-form-button {
     background-color: #4A90E2;
     color: white;
     border: none;
@@ -136,7 +136,7 @@
     font-size: 0.9rem;
     font-weight: 500;
     transition: background-color 0.3s;
-}
+} */
 
 .filter-form button:hover {
     background-color: #3A7BC8;
