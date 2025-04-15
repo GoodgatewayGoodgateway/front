@@ -7,6 +7,7 @@ const ProfileCard = ({ userData }) => {
         id,
         name = '이름 없음',
         age = 'N/A',
+        sex = '성별 미정',
         job = '직업 미정',
         idealRoommate = '설명 없음',
         avatar = '/images/default-avatar.png', // 기본 이미지도 지정
@@ -31,7 +32,7 @@ const ProfileCard = ({ userData }) => {
             <div className="profile-info">
                 <div className="Cardprofile-header">
                     <span className="profile-name">{name}</span>
-                    <span className="profile-age">{age}세</span>
+                    <span className="profile-age">{age}세({sex})</span>
                 </div>
                 <div className="Cardprofile-job">{job}</div>
                 <div className="profile-description">{idealRoommate}</div>

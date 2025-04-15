@@ -17,6 +17,7 @@ function RoommateSection({ users }) {
                             id={user.id || index}
                             name={user.name}
                             age={user.age}
+                            sex={user.sex}
                             avatar={user.avatar}
                             mbti={user.mbti}
                             job={user.job}

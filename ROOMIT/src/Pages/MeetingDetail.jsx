@@ -81,7 +81,7 @@ const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
                         <img src={user.avatar} alt={`${user.name}의 프로필`} className="profile-avatar" />
                     </div>
                     <div className="profile-basic-info">
-                        <h1>{user.name}, {user.age}세</h1>
+                        <h1>{user.name}, {user.age}세  ({user.sex})</h1>
                         <div className="profile-job-location">
                             <div className="profile-job">
                                 <Briefcase size={40} />

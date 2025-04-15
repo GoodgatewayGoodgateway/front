@@ -878,61 +878,71 @@ const userData = [
                 "allergy": "심함"
             }
         }
-    }, {
+    },
+    {
         title: "🍽️ 식생활 & 주방 관련",
         items: [
-            { label: "식사 시간", value: "규칙적" },
-            { label: "식사 시간", value: "불규칙" },
-            { label: "주방 사용", value: "자주 사용" },
-            { label: "주방 사용", value: "가끔 사용" },
+            { label: "식사 시간", value: "불규칙적" },
+            { label: "식사 시간", value: "아침형" },
+            { label: "식사 시간", value: "저녁형" },
+            { label: "식사 시간", value: "밤형" },
             { label: "주방 사용", value: "거의 안함" },
-            { label: "요리 빈도", value: "주 5회 이상" },
-            { label: "요리 빈도", value: "주 3-4회" },
-            { label: "요리 빈도", value: "주 1-2회" },
-            { label: "요리 빈도", value: "안 함" }
-        ],
+            { label: "주방 사용", value: "가끔" },
+            { label: "주방 사용", value: "자주" },
+            { label: "주방 사용", value: "매일" },
+            { label: "요리 빈도", value: "거의 안함" },
+            { label: "요리 빈도", value: "가끔" },
+            { label: "요리 빈도", value: "자주" },
+            { label: "요리 빈도", value: "매일" }
+        ]
     },
     {
         title: "🧹 청결 및 정리 습관",
         items: [
-            { label: "청결 수준", value: "상" },
-            { label: "청결 수준", value: "중" },
-            { label: "청결 수준", value: "하" },
+            { label: "청결 수준", value: "낮음" },
+            { label: "청결 수준", value: "보통" },
+            { label: "청결 수준", value: "높음" },
+            { label: "청결 수준", value: "매우 높음" },
+            { label: "청소 주기", value: "필요할 때만" },
+            { label: "청소 주기", value: "주 1회" },
+            { label: "청소 주기", value: "주 2-3회" },
             { label: "청소 주기", value: "매일" },
-            { label: "청소 주기", value: "주 3회 이상" },
-            { label: "청소 주기", value: "거의 안 함" },
-            { label: "공용공간 관리", value: "적극적" },
-            { label: "공용공간 관리", value: "보통" },
-            { label: "공용공간 관리", value: "소극적" }
-        ],
+            { label: "공용공간 관리", value: "개인공간만 관리" },
+            { label: "공용공간 관리", value: "가끔 정리" },
+            { label: "공용공간 관리", value: "공용공간 정리 참여" },
+            { label: "공용공간 관리", value: "적극적으로 관리" }
+        ]
     },
     {
         title: "🔊 소음 민감도",
         items: [
-            { label: "소음 민감도", value: "높음" },
+            { label: "소음 민감도", value: "둔감" },
             { label: "소음 민감도", value: "보통" },
-            { label: "소음 민감도", value: "낮음" },
-            { label: "취침시 소음", value: "아무 소리도 싫음" },
-            { label: "취침시 소음", value: "조용함 선호" },
-            { label: "취침시 소음", value: "어느 정도 허용" },
-            { label: "음악/TV 볼륨", value: "매우 작게" },
-            { label: "음악/TV 볼륨", value: "적당히" },
-            { label: "음악/TV 볼륨", value: "크게" }
-        ],
+            { label: "소음 민감도", value: "민감" },
+            { label: "소음 민감도", value: "매우 민감" },
+            { label: "취침시 소음", value: "조용해야 함" },
+            { label: "취침시 소음", value: "백색소음 선호" },
+            { label: "취침시 소음", value: "약간의 소음 허용" },
+            { label: "취침시 소음", value: "소음에 둔감" },
+            { label: "음악/TV 볼륨", value: "낮은 볼륨" },
+            { label: "음악/TV 볼륨", value: "중간 볼륨" },
+            { label: "음악/TV 볼륨", value: "높은 볼륨" },
+            { label: "음악/TV 볼륨", value: "헤드폰 사용" }
+        ]
     },
     {
         title: "🐾 반려동물 허용",
         items: [
-            { label: "반려동물 허용 여부", value: "허용" },
-            { label: "반려동물 허용 여부", value: "부분 허용" },
-            { label: "반려동물 허용 여부", value: "불허" },
-            { label: "반려동물 종류", value: "강아지" },
-            { label: "반려동물 종류", value: "고양이" },
-            { label: "반려동물 종류", value: "기타" },
-            { label: "반려동물 알레르기", value: "심함" },
-            { label: "반려동물 알레르기", value: "보통" },
-            { label: "반려동물 알레르기", value: "없음" }
-        ],
+            { label: "반려동물 허용 여부", value: "허용 안함" },
+            { label: "반려동물 허용 여부", value: "일부 허용" },
+            { label: "반려동물 허용 여부", value: "대부분 허용" },
+            { label: "반려동물 허용 여부", value: "모두 허용" },
+            { label: "반려동물 종류", value: "" }, // text 입력 필드는 구체적인 값 없음
+            { label: "반려동물 알레르기", value: "없음" },
+            { label: "반려동물 알레르기", value: "경미함" },
+            { label: "반려동물 알레르기", value: "중간" },
+            { label: "반려동물 알레르기", value: "심함" }
+        ]
     },
 ];
 

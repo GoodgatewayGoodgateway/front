@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
-    MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart,
-    Utensils, Moon, Sun, Cat
+    MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2,
+    Utensils, Moon, Sun, Cat, Camera, Upload,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import '../Pages/css/MyPages.css';
@@ -11,6 +11,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ ...currentUser });
     const [isSaving, setIsSaving] = useState(false);
+    const fileInputRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,20 +33,36 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     };
 
     // Handle nested habit changes
-    const handleHabitChange = (category, subcategory, field, value) => {
+    const handleHabitChange = (category, field, value) => {
         setFormData((prev) => ({
             ...prev,
             habits: {
                 ...prev.habits || {},
                 [category]: {
                     ...prev.habits?.[category] || {},
-                    [subcategory]: {
-                        ...prev.habits?.[category]?.[subcategory] || {},
-                        [field]: value
-                    }
+                    [field]: value
                 }
             }
         }));
+    };
+
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({
+                    ...prev,
+                    avatar: reader.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleAvatarClick = () => {
+        fileInputRef.current.click();
     };
 
     const handleSave = () => {
@@ -147,7 +164,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                     label: "반려동물 허용 여부", field: "allowed", type: "select",
                     options: ["허용 안함", "일부 허용", "대부분 허용", "모두 허용"]
                 },
-                { label: "반려동물 종류", field: "petType", type: "text" },
+                { label: "선호 반려동물 ", field: "petType", type: "text" },
                 {
                     label: "반려동물 알레르기", field: "allergy", type: "select",
                     options: ["없음", "경미함", "중간", "심함"]
@@ -167,12 +184,35 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     return (
         <>
             <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
-
             <div className="meeting-user-detail">
-
                 <div className="profile-header">
-                    <div className="profile-image-large">
-
+                    <div className="mypageprofile-image-large">
+                        <div className="avatar-container">
+                            {formData.avatar ? (
+                                <img
+                                    src={formData.avatar}
+                                    alt={`${formData.name} avatar`}
+                                    className="room-avatar-image"
+                                    onClick={handleAvatarClick}
+                                />
+                            ) : (
+                                <div className="avatar-placeholder" onClick={handleAvatarClick}>
+                                    <Camera size={40} />
+                                    <span>프로필 사진</span>
+                                </div>
+                            )}
+                            <div className="avatar-upload-button" onClick={handleAvatarClick}>
+                                <Upload size={20} />
+                                <span>사진 변경</span>
+                            </div>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
+                        </div>
                     </div>
                     <div className="profile-basic-info">
                         <input
@@ -183,6 +223,17 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                             placeholder="이름"
                             className="input-field"
                         />
+                        <select
+                            name="sex"
+                            value={formData.sex || ''}
+                            onChange={handleChange}
+                            className="input-field"
+                        >
+                            <option value="">성별 선택</option>
+                            <option value="남성">남성</option>
+                            <option value="여성">여성</option>
+                            <option value="기타">기타</option>
+                        </select>
                         <input
                             type="number"
                             name="age"
@@ -364,7 +415,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                         <div className="lifestyle-grid">
                             {category.items.map((item, itemIdx) => (
                                 <div key={itemIdx} className="lifestyle-item">
-                                    {itemIdx === 0 && category.icon}
+                                    {category.icon}
                                     <span>{item.label}</span>
                                     {item.type === 'select' ? (
                                         <select
@@ -403,7 +454,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
 
                     {/* 토글 스위치로 변경한 미팅 페이지 등록 버튼 */}
                     <div className="toggle-container">
-                        <span className="toggle-label">미팅 페이지 공개</span>
+                        <span className="toggle-label">매칭 페이지 공개</span>
                         <label className="toggle-switch">
                             <input
                                 type="checkbox"
