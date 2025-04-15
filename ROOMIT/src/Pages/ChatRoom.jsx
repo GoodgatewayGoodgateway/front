@@ -5,14 +5,14 @@ import Header from '../Components/Header';
 import Chat from '../Components/Chat';
 import RoomList from '../Components/RoomList.jsx';
 
-const ChatRoom = ({ userData, currentUser, setCurrentUser }) => {
+const ChatRoom = ({ userData }) => {
     const location = useLocation();
     const pathSegments = location.pathname.split('/');
     const hasRoomId = pathSegments.length > 2 && pathSegments[2]; // /chat/:roomId
 
     return (
         <div>
-            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
+            <Header />
             <div className="chatcontainer">
                 <div className="room-list">
                     <RoomList />

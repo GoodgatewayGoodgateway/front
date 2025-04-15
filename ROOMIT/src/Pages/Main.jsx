@@ -6,12 +6,12 @@ import RoommateSection from '../Components/RoommateSection';
 import HousingSection from '../Components/HousingSection';
 import Footer from '../Components/Footer';
 
-const Main = ({ userData, currentUser, setCurrentUser }) => {
+const Main = ({ userData }) => {
     console.log(userData); // userData가 제대로 전달되고 있는지 확인
 
     return (
         <div>
-            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
+            <Header />
             <HeroBanner />
             <FeatureSection />
             <RoommateSection users={userData} />

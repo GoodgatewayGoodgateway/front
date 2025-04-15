@@ -1,20 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/auth/authSlice'; // 리덕스에서 logout 액션 임포트
 import './css/Header.css';
 import profileImage from '../Data/profile.png';
 
-function Header({ currentUser, setCurrentUser, chatRooms }) {
+function Header() {
+    const dispatch = useDispatch(); // 리덕스 디스패치
+    const currentUser = useSelector((state) => state.auth.currentUser); // 리덕스에서 currentUser 가져오기
     const isLoggedIn = !!currentUser;
 
-    const unreadUserCount = chatRooms
-        ? chatRooms.filter(room => room.unread > 0).length
-        : 0;
-
+    const chatRooms = [];  // chatRooms가 어디에서 오는지에 따라 수정해야 합니다.
+    const unreadUserCount = chatRooms ? chatRooms.filter(room => room.unread > 0).length : 0;
 
     const handleLogout = () => {
-        setCurrentUser(null);
-        localStorage.removeItem('currentUser');  // 로그인 상태 정보 제거
-        // localStorage.removeItem('registeredUser');  // 회원가입 정보까지 제거
+        dispatch(logout()); // 로그아웃 액션 디스패치
+        localStorage.removeItem('currentUser'); // 로컬스토리지에서 로그인 정보 제거
     };
 
     return (

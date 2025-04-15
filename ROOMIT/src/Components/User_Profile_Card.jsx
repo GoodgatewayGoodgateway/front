@@ -2,8 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Components/css/User_Profile_Card.css';
 
-const ProfileCard = (userdata) => {
-    const { id, name = '이름 없음', age = 'N/A', job = '직업 미정', idealRoommate = '설명 없음' } = userdata;
+const ProfileCard = ({ userData }) => {
+    const {
+        id,
+        name = '이름 없음',
+        age = 'N/A',
+        job = '직업 미정',
+        idealRoommate = '설명 없음',
+        avatar = '/images/default-avatar.png', // 기본 이미지도 지정
+    } = userData;
+
     const navigate = useNavigate();
 
     const handleDetailClick = () => {
@@ -15,7 +23,10 @@ const ProfileCard = (userdata) => {
     return (
         <div className="profile-card" style={{ cursor: 'pointer' }}>
             <div className="profile-image-container">
-                <div className="profile-image"></div>
+                <div className="profile-image">
+                    <img src={avatar} alt={`${name}의 프로필`} className="profile-avatar" />
+                </div>
+
             </div>
             <div className="profile-info">
                 <div className="Cardprofile-header">

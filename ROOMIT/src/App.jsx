@@ -1,6 +1,7 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
+import store from './app/store';
+import { Provider } from 'react-redux';
 import Notfound from './Pages/Notfound';
 import Meeting from './Pages/Meeting';
 import Main from './Pages/Main';
@@ -12,31 +13,26 @@ import MyPages from './Pages/MyPages';
 import ScrollToTop from './Components/ScrollToTop';
 
 const App = () => {
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('currentUser');
-    if (saved) {
-      setCurrentUser(JSON.parse(saved));
-    }
-  }, []);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Main userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
-          <Route path="/meeting" element={<Meeting users={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          <Route path="/meeting/:id" element={<MeetingDetail userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          <Route path="/chat" element={<ChatRoom userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          <Route path="/chat/:roomId" element={<ChatRoom userData={userData} currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          <Route path="/mypages" element={<MyPages currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
-          <Route path="*" element={<Notfound />} />
-        </Routes>
-      </div>
-    </Router>
+
+    <Provider store={store}>
+      <Router>
+        <ScrollToTop />
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Main userData={userData} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/meeting" element={<Meeting users={userData} />} />
+            <Route path="/meeting/:id" element={<MeetingDetail userData={userData} />} />
+            <Route path="/chat" element={<ChatRoom userData={userData} />} />
+            <Route path="/chat/:roomId" element={<ChatRoom userData={userData} />} />
+            <Route path="/mypages" element={<MyPages />} />
+            <Route path="*" element={<Notfound />} />
+          </Routes>
+        </div>
+      </Router>
+    </Provider>
   );
 };
 

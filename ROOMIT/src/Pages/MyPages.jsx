@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import {
-    MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart, Utensils, Moon, Sun
+    MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2, MessageCircle, Heart,
+    Utensils, Moon, Sun, Cat
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import '../Pages/css/MyPages.css';
@@ -27,6 +27,23 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             lifestyle: {
                 ...prev.lifestyle,
                 [name]: value
+            }
+        }));
+    };
+
+    // Handle nested habit changes
+    const handleHabitChange = (category, subcategory, field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            habits: {
+                ...prev.habits || {},
+                [category]: {
+                    ...prev.habits?.[category] || {},
+                    [subcategory]: {
+                        ...prev.habits?.[category]?.[subcategory] || {},
+                        [field]: value
+                    }
+                }
             }
         }));
     };
@@ -63,6 +80,90 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
         alert(updatedFormData.matching ? '미팅 페이지에 공개되었습니다!' : '미팅 페이지에서 비공개되었습니다!');
     };
 
+    // Define lifestyle categories for rendering
+    const lifestyleCategories = [
+        {
+            title: "🍽️ 식생활 & 주방 관련",
+            category: "food",
+            items: [
+                {
+                    label: "식사 시간", field: "mealTime", type: "select",
+                    options: ["불규칙적", "아침형", "저녁형", "밤형"]
+                },
+                {
+                    label: "주방 사용", field: "kitchenUse", type: "select",
+                    options: ["거의 안함", "가끔", "자주", "매일"]
+                },
+                {
+                    label: "요리 빈도", field: "cookingFrequency", type: "select",
+                    options: ["거의 안함", "가끔", "자주", "매일"]
+                }
+            ],
+            icon: <Utensils size={40} />
+        },
+        {
+            title: "🧹 청결 및 정리 습관",
+            category: "cleaning",
+            items: [
+                {
+                    label: "청결 수준", field: "cleanLevel", type: "select",
+                    options: ["낮음", "보통", "높음", "매우 높음"]
+                },
+                {
+                    label: "청소 주기", field: "cleaningFrequency", type: "select",
+                    options: ["필요할 때만", "주 1회", "주 2-3회", "매일"]
+                },
+                {
+                    label: "공용공간 관리", field: "sharedSpaceManagement", type: "select",
+                    options: ["개인공간만 관리", "가끔 정리", "공용공간 정리 참여", "적극적으로 관리"]
+                }
+            ],
+            icon: <Home size={40} />
+        },
+        {
+            title: "🔊 소음 민감도",
+            category: "noiseSensitivity",
+            items: [
+                {
+                    label: "소음 민감도", field: "sensitivityLevel", type: "select",
+                    options: ["둔감", "보통", "민감", "매우 민감"]
+                },
+                {
+                    label: "취침시 소음", field: "sleepNoisePreference", type: "select",
+                    options: ["조용해야 함", "백색소음 선호", "약간의 소음 허용", "소음에 둔감"]
+                },
+                {
+                    label: "음악/TV 볼륨", field: "musicTVVolume", type: "select",
+                    options: ["낮은 볼륨", "중간 볼륨", "높은 볼륨", "헤드폰 사용"]
+                }
+            ],
+            icon: <Volume2 size={40} />
+        },
+        {
+            title: "🐶 애완동물",
+            category: "petPreferences",
+            items: [
+                {
+                    label: "반려동물 허용 여부", field: "allowed", type: "select",
+                    options: ["허용 안함", "일부 허용", "대부분 허용", "모두 허용"]
+                },
+                { label: "반려동물 종류", field: "petType", type: "text" },
+                {
+                    label: "반려동물 알레르기", field: "allergy", type: "select",
+                    options: ["없음", "경미함", "중간", "심함"]
+                }
+            ],
+            icon: <Cat size={40} />
+        }
+    ];
+
+    // Helper function to safely get nested value
+    const getNestedValue = (obj, path) => {
+        return path.split('.').reduce((prev, curr) => {
+            return prev ? prev[curr] : undefined;
+        }, obj);
+    };
+
     return (
         <>
             <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
@@ -70,7 +171,9 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             <div className="meeting-user-detail">
 
                 <div className="profile-header">
-                    <div className="profile-image-large"></div>
+                    <div className="profile-image-large">
+
+                    </div>
                     <div className="profile-basic-info">
                         <input
                             type="text"
@@ -253,6 +356,42 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                         </div>
                     </div>
                 </section>
+
+                {/* 추가된 라이프스타일 카테고리 섹션들 */}
+                {lifestyleCategories.map((category, idx) => (
+                    <section key={idx} className="meetprofile-section lifestyle-details">
+                        <h2>{category.title}</h2>
+                        <div className="lifestyle-grid">
+                            {category.items.map((item, itemIdx) => (
+                                <div key={itemIdx} className="lifestyle-item">
+                                    {itemIdx === 0 && category.icon}
+                                    <span>{item.label}</span>
+                                    {item.type === 'select' ? (
+                                        <select
+                                            value={getNestedValue(formData, `habits.${category.category}.${item.field}`) || ''}
+                                            onChange={(e) => handleHabitChange(category.category, item.field, e.target.value)}
+                                            className="input-field"
+                                        >
+                                            <option value="">선택해주세요</option>
+                                            {item.options.map((option, optIdx) => (
+                                                <option key={optIdx} value={option}>{option}</option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            value={getNestedValue(formData, `habits.${category.category}.${item.field}`) || ''}
+                                            onChange={(e) => handleHabitChange(category.category, item.field, e.target.value)}
+                                            className="input-field"
+                                            placeholder={`${item.label}을 입력하세요`}
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                ))}
+
                 <div className="action-buttons">
                     <button
                         className={`primary-button ${isSaving ? 'saving' : ''}`}
