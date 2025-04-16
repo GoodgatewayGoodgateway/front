@@ -15,12 +15,10 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.isLoggedIn = true;
             state.currentUser = action.payload;
-            localStorage.setItem('currentUser', JSON.stringify(action.payload));
         },
         logout: (state) => {
             state.isLoggedIn = false;
             state.currentUser = null;
-            localStorage.removeItem('currentUser');
         },
     },
 });

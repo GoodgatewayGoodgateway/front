@@ -4,6 +4,7 @@ import { User, Lock, Mail } from 'lucide-react';
 import { FaGoogle, FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { login } from '../features/auth/authSlice';
+import { login as loginAPI, registerUser } from '../services/auth'; // registerUser 임포트 추가
 import './css/Login.css';
 
 const Login = () => {
@@ -27,47 +28,41 @@ const Login = () => {
     const handleRegisterClick = () => setIsActive(true);
     const handleLoginClick = () => setIsActive(false);
 
-    const handleLogin = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
 
-        const users = JSON.parse(localStorage.getItem('users')) || [];
+        try {
+            const { username, email, password } = registerData;
 
-        const foundUser = users.find(user =>
-            user.name === loginUsername && user.password === loginPassword
-        );
+            // 회원가입 요청 (registerUser 사용)
+            const result = await registerUser(username, email, password); // registerUser 사용
 
-        if (foundUser) {
-            dispatch(login(foundUser));
-            localStorage.setItem('currentUser', JSON.stringify(foundUser));
+            console.log('회원가입 성공:', result);
+            alert('회원가입 성공! 로그인 해주세요.');
+            navigate('/login', { state: { register: false } });
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || '회원가입에 실패했습니다. 서버 오류가 발생했습니다.';
+            alert(errorMessage);
+            console.error('회원가입 오류:', error);
+        }
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        console.log('로그인 데이터:', { userId: loginUsername, password: loginPassword });  // 데이터 확인
+        try {
+            const userData = await loginAPI(loginUsername, loginPassword); // axios 요청
+            dispatch(login(userData)); // Redux 상태 업데이트
+            localStorage.setItem('currentUser', JSON.stringify(userData));
             navigate('/');
-        } else {
-            alert('❌ 로그인 정보가 올바르지 않습니다.');
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || '❌ 로그인에 실패했습니다. 아이디나 비밀번호를 확인해주세요.';
+            alert(errorMessage);
+            console.error('로그인 에러:', error);
         }
     };
 
-    const handleRegister = (e) => {
-        e.preventDefault();
 
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        const isEmailTaken = users.some(user => user.email === registerData.email);
-        if (isEmailTaken) {
-            alert("이미 등록된 이메일입니다.");
-            return;
-        }
-
-        const newUser = {
-            id: Date.now(),
-            name: registerData.username,
-            email: registerData.email,
-            password: registerData.password,
-        };
-
-        const updatedUsers = [...users, newUser];
-        localStorage.setItem('users', JSON.stringify(updatedUsers));
-        alert("회원가입 성공!");
-        navigate('/login', { state: { register: false } });
-    };
 
     const handleRegisterChange = (e) => {
         const { name, value } = e.target;
@@ -75,7 +70,7 @@ const Login = () => {
     };
 
     return (
-        <div className='container_main'>
+        <div className="container_main">
             <div className={`login_container ${isActive ? 'active' : ''}`}>
                 {/* 로그인 폼 */}
                 <div className="form-box login">
