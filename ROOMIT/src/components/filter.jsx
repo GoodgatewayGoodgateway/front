@@ -115,22 +115,23 @@ const FilterBar = ({ users, onFilterChange }) => {
     return (
         <div className="filter-container">
             <form onSubmit={handleSubmit} className="filter-form">
-                <div className="selected-filters">
-                    {selectedFilters.map(({ category, value }) => (
-                        <div
-                            key={`${category}-${value}`}
-                            className="filter-tag"
-                            onClick={() => removeFilter(category)}
-                        >
-                            {category}: {value}
-                            <span className="remove-icon">✕</span>
-                        </div>
-                    ))}
-                    <button type="submit" className="search-button">
-                        🔍 검색
-                    </button>
+                <div className='filter-header'>
+                    <div className="selected-filters">
+                        {selectedFilters.map(({ category, value }) => (
+                            <div
+                                key={`${category}-${value}`}
+                                className="filter-tag"
+                                onClick={() => removeFilter(category)}
+                            >
+                                {category}: {value}
+                                <span className="remove-icon">✕</span>
+                            </div>
+                        ))}
+                        <button type="submit" className="search-button">
+                            🔍 검색
+                        </button>
+                    </div>
                 </div>
-
                 <div className="filter-dropdowns">
                     {Object.keys(filters).map((category) => (
                         <div key={category} className="dropdown-container">
@@ -161,11 +162,14 @@ const FilterBar = ({ users, onFilterChange }) => {
                             )}
                         </div>
                     ))}
-                    {selectedFilters.length > 0 && (
+                    <button type="button" onClick={() => setSelectedFilters([])} className="clear-button">
+                        초기화
+                    </button>
+                    {/* {selectedFilters.length > 0 && (
                         <button type="button" onClick={() => setSelectedFilters([])} className="clear-button">
                             초기화
                         </button>
-                    )}
+                    )} */}
                 </div>
             </form>
         </div>

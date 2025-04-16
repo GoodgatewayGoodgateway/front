@@ -2,21 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { User, Lock, Mail } from 'lucide-react';
 import { FaGoogle, FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { login } from '../features/auth/authSlice';
 import './css/Login.css';
 
-const Login = ({ setCurrentUser }) => {
+const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    // 🔁 location.state를 기반으로 isActive 설정
     const [isActive, setIsActive] = useState(location.state?.register ?? false);
-
-    // 🔄 location.state 변경 시마다 isActive 갱신
-    useEffect(() => {
-        setIsActive(location.state?.register ?? false);
-    }, [location.state]);
-
-    // ✅ 입력 상태
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [registerData, setRegisterData] = useState({
@@ -25,65 +20,71 @@ const Login = ({ setCurrentUser }) => {
         password: ''
     });
 
+    useEffect(() => {
+        setIsActive(location.state?.register ?? false);
+    }, [location.state]);
+
     const handleRegisterClick = () => setIsActive(true);
     const handleLoginClick = () => setIsActive(false);
 
-    // 🔐 로그인 처리
     const handleLogin = (e) => {
         e.preventDefault();
 
-        const savedUser = JSON.parse(localStorage.getItem('registeredUser'));
+        const users = JSON.parse(localStorage.getItem('users')) || [];
 
-        if (
-            savedUser &&
-            savedUser.name === loginUsername &&
-            savedUser.password === loginPassword
-        ) {
-            setCurrentUser(savedUser);
-            localStorage.setItem('currentUser', JSON.stringify(savedUser)); // 추가!
+        const foundUser = users.find(user =>
+            user.name === loginUsername && user.password === loginPassword
+        );
+
+        if (foundUser) {
+            dispatch(login(foundUser));
+            localStorage.setItem('currentUser', JSON.stringify(foundUser));
             navigate('/');
         } else {
             alert('❌ 로그인 정보가 올바르지 않습니다.');
         }
-
     };
 
-    // 📝 회원가입 처리
     const handleRegister = (e) => {
         e.preventDefault();
 
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        const isEmailTaken = users.some(user => user.email === registerData.email);
+        if (isEmailTaken) {
+            alert("이미 등록된 이메일입니다.");
+            return;
+        }
+
         const newUser = {
-            id: Math.floor(Math.random() * 10000),
+            id: Date.now(),
             name: registerData.username,
             email: registerData.email,
             password: registerData.password,
         };
 
-        localStorage.setItem('registeredUser', JSON.stringify(newUser));
-
-        // 🔁 로그인 페이지로 이동 + 상태도 전달
+        const updatedUsers = [...users, newUser];
+        localStorage.setItem('users', JSON.stringify(updatedUsers));
+        alert("회원가입 성공!");
         navigate('/login', { state: { register: false } });
     };
 
-    // 📥 회원가입 폼 값 변경 핸들링
     const handleRegisterChange = (e) => {
         const { name, value } = e.target;
         setRegisterData(prev => ({ ...prev, [name]: value }));
     };
 
-
     return (
         <div className='container_main'>
             <div className={`login_container ${isActive ? 'active' : ''}`}>
-
                 {/* 로그인 폼 */}
                 <div className="form-box login">
                     <form onSubmit={handleLogin}>
-                        <h1>Login</h1>
+                        <h1>로그인</h1>
                         <div className="input-box">
                             <input
                                 type="text"
-                                placeholder="Username"
+                                placeholder="사용자 이름"
                                 value={loginUsername}
                                 onChange={(e) => setLoginUsername(e.target.value)}
                                 required
@@ -93,7 +94,7 @@ const Login = ({ setCurrentUser }) => {
                         <div className="input-box">
                             <input
                                 type="password"
-                                placeholder="Password"
+                                placeholder="비밀번호"
                                 value={loginPassword}
                                 onChange={(e) => setLoginPassword(e.target.value)}
                                 required
@@ -101,10 +102,10 @@ const Login = ({ setCurrentUser }) => {
                             <Lock className="icon" />
                         </div>
                         <div className="forgot-link">
-                            <a href="#">Forgot Password?</a>
+                            <a href="#">비밀번호를 잊으셨나요?</a>
                         </div>
-                        <button type="submit" className="btn">Login</button>
-                        <p>or login with social platforms</p>
+                        <button type="submit" className="btn">로그인</button>
+                        <p>또는 소셜 계정으로 로그인</p>
                         <div className="social-icons">
                             <a href="#"><FaGoogle /></a>
                             <a href="#"><FaFacebook /></a>
@@ -117,12 +118,12 @@ const Login = ({ setCurrentUser }) => {
                 {/* 회원가입 폼 */}
                 <div className="form-box register">
                     <form onSubmit={handleRegister}>
-                        <h1>Registration</h1>
+                        <h1>회원가입</h1>
                         <div className="input-box">
                             <input
                                 type="text"
                                 name="username"
-                                placeholder="Username"
+                                placeholder="사용자 이름"
                                 value={registerData.username}
                                 onChange={handleRegisterChange}
                                 required
@@ -133,7 +134,7 @@ const Login = ({ setCurrentUser }) => {
                             <input
                                 type="email"
                                 name="email"
-                                placeholder="Email"
+                                placeholder="이메일"
                                 value={registerData.email}
                                 onChange={handleRegisterChange}
                                 required
@@ -144,15 +145,15 @@ const Login = ({ setCurrentUser }) => {
                             <input
                                 type="password"
                                 name="password"
-                                placeholder="Password"
+                                placeholder="비밀번호"
                                 value={registerData.password}
                                 onChange={handleRegisterChange}
                                 required
                             />
                             <Lock className="icon" />
                         </div>
-                        <button type="submit" className="btn">Register</button>
-                        <p>or register with social platforms</p>
+                        <button type="submit" className="btn">가입하기</button>
+                        <p>또는 소셜 계정으로 가입하기</p>
                         <div className="social-icons">
                             <a href="#"><FaGoogle /></a>
                             <a href="#"><FaFacebook /></a>
@@ -164,23 +165,21 @@ const Login = ({ setCurrentUser }) => {
 
                 <div className="toggle-box">
                     <div className="toggle-panel toggle-left">
-                        <h1>Hello, Welcome!</h1>
-                        <p>Don't have an account?</p>
+                        <h1>안녕하세요!</h1>
+                        <p>아직 계정이 없으신가요?</p>
                         <button className="btn register-btn" onClick={handleRegisterClick}>
-                            Register
+                            회원가입
                         </button>
                     </div>
 
-
                     <div className="toggle-panel toggle-right">
-                        <h1>Welcome Back!</h1>
-                        <p>Already have an account?</p>
+                        <h1>다시 오신 걸 환영해요!</h1>
+                        <p>이미 계정이 있으신가요?</p>
                         <button className="btn login-btn" onClick={handleLoginClick}>
-                            Login
+                            로그인
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
     );

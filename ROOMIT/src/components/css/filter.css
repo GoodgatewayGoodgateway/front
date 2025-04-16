@@ -17,6 +17,15 @@
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+    justify-content: flex-start;
+    /* 내부 요소들을 왼쪽으로 정렬 */
+}
+
+.filter-header {
+    width: 700px;
+    background-color: #dbdbdb;
+    border-radius: 50px;
+    padding: 5px 10px;
 }
 
 .filter-tag {
@@ -48,7 +57,7 @@
     color: white;
     border: none;
     padding: 8px 20px;
-    border-radius: 20px;
+    border-radius: 50px;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -123,4 +132,23 @@
     background-color: #e6ecff;
     color: #4a6cf7;
     font-weight: 500;
+}
+
+.clear-button {
+    background-color: white;
+    color: #4a6cf7;
+    border: 1px solid #4a6cf7;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.clear-button:hover {
+    background-color: #4a6cf7;
+    color: white;
 }

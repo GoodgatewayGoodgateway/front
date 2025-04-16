@@ -35,9 +35,6 @@
     border: 4px solid #f0f5ff;
     box-shadow: 0 4px 8px rgba(74, 110, 255, 0.1);
     flex-shrink: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .profile-basic-info {
@@ -194,6 +191,7 @@
     margin: 30px 0 50px;
 }
 
+.like-button,
 .chat-button {
     flex: 1;
     padding: 16px;
@@ -209,6 +207,11 @@
     outline: none;
 }
 
+.like-button {
+    background-color: white;
+    color: #ff4b77;
+    border: 2px solid #ff4b77;
+}
 
 .chat-button {
     background-color: #4a6eff;
@@ -217,7 +220,11 @@
     box-shadow: 0 4px 12px rgba(74, 110, 255, 0.2);
 }
 
-
+.like-button:hover,
+.like-button:focus {
+    background-color: #fff0f3;
+    transform: translateY(-2px);
+}
 
 .chat-button:hover,
 .chat-button:focus {
@@ -227,42 +234,8 @@
 }
 
 /* Accessibility enhancements */
-
+.like-button:focus,
 .chat-button:focus {
-    outline: 2px solid #4a6eff;
-    outline-offset: 2px;
-}
-
-.adduser-button {
-    flex: 1;
-    padding: 16px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    outline: none;
-    background-color: #4a6eff;
-    /* 변경됨 */
-    color: white;
-    /* 변경됨 */
-    border: none;
-    /* 변경됨 */
-    box-shadow: 0 4px 12px rgba(74, 110, 255, 0.2);
-}
-
-.adduser-button:hover,
-.adduser-button:focus {
-    background-color: #3a5cff;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(74, 110, 255, 0.3);
-}
-
-.adduser-button:focus {
     outline: 2px solid #4a6eff;
     outline-offset: 2px;
 }
@@ -346,4 +319,118 @@
         width: 18px;
         height: 18px;
     }
+}
+
+.input-field,
+.textarea-field {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #dcdfe6;
+    background-color: #f9fafc;
+    transition: border-color 0.3s ease;
+}
+
+.input-field:focus,
+.textarea-field:focus {
+    border-color: #4a6eff;
+    outline: none;
+    background-color: #fff;
+}
+
+/* 액션 버튼 스타일 개선 */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+.primary-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.primary-button:hover {
+    background-color: #3a80d2;
+}
+
+.primary-button:active {
+    transform: scale(0.98);
+}
+
+.primary-button.saving {
+    background-color: #7fb0ee;
+    cursor: not-allowed;
+}
+
+/* 토글 스위치 스타일 */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.toggle-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.toggle-slider {
+    background-color: #4CAF50;
+}
+
+input:focus+.toggle-slider {
+    box-shadow: 0 0 1px #4CAF50;
+}
+
+input:checked+.toggle-slider:before {
+    transform: translateX(30px);
 }

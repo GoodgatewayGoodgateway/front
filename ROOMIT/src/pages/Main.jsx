@@ -1,18 +1,20 @@
 import React from 'react';
-import Header from '../components/Header';
-import HeroBanner from '../components/HeroBanner';
-import FeatureSection from '../components/FeatureSection';
-import RoommateSection from '../components/RoommateSection';
-import HousingSection from '../components/HousingSection';
-import Footer from '../components/Footer';
+import Header from '../Components/Header';
+import HeroBanner from '../Components/HeroBanner';
+import FeatureSection from '../Components/FeatureSection';
+import RoommateSection from '../Components/RoommateSection';
+import HousingSection from '../Components/HousingSection';
+import Footer from '../Components/Footer';
 
-const Main = ({ currentUser, setCurrentUser }) => {
+const Main = ({ userData }) => {
+    console.log(userData); // userData가 제대로 전달되고 있는지 확인
+
     return (
         <div>
-            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
+            <Header />
             <HeroBanner />
             <FeatureSection />
-            <RoommateSection />
+            <RoommateSection users={userData} />
             <HousingSection />
             <Footer />
         </div>
