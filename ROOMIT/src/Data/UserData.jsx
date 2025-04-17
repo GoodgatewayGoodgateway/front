@@ -17,8 +17,8 @@ const userData = [
             wakeUpTime: "오전 7시",
             sleepTime: "오후 11시",
             dayNightType: "낮",
-            cleanLevel: "중간",
-            noise: "보통"
+            cleanLevel: "보통",
+            noise: "낮음"
         },
         "habits": {
             "food": {
@@ -44,7 +44,7 @@ const userData = [
         }
     },
     {
-        id: 2,
+        id: "rjsgud49",
         name: "김민서",
         sex: "남",
         avatar: "/vite.svg",
@@ -61,7 +61,7 @@ const userData = [
             wakeUpTime: "오전 8시",
             sleepTime: "오전 12시",
             dayNightType: "낮",
-            cleanLevel: "상",
+            cleanLevel: "높음",
             noise: "보통"
 
         },
@@ -732,7 +732,7 @@ const userData = [
                 "cookingFrequency": "주 3-4회"
             },
             "cleaning": {
-                "cleanLevel": "상",
+                "cleanLevel": "필요할 때만",
                 "cleaningFrequency": "주 2회",
                 "sharedSpaceManagement": "적극적"
             },
