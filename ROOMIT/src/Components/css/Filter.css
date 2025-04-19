@@ -1,169 +1,129 @@
-/* Filter.css */
-.filter-container {
-    font-family: 'Arial', sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+.meetfilterPanel {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 500px;
+    /* 💡 화면 전체 높이로 확장 */
+    margin-top: 15%;
+    background-color: #fff;
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.15);
+    padding: 24px 20px;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    border-radius: 10px;
+    overflow-y: auto;
+    /* ✅ 스크롤 생기게 */
+
+
 }
 
-.filter-form {
+
+.meetfilterPanel.open {
+    right: 0;
+}
+
+.meetfilterHeader {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-    /* 전체 높이를 100%로 설정 */
     justify-content: space-between;
     align-items: center;
-    max-width: 800px;
-    margin: 0 auto 20px;
-    gap: 15px;
-    font-family: 'Noto Sans KR', sans-serif;
-
+    margin-bottom: 20px;
 }
 
-.selected-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: flex-start;
-    /* 내부 요소들을 왼쪽으로 정렬 */
-}
-
-.filter-header {
-    width: 700px;
-    background-color: #dbdbdb;
-    border-radius: 25px;
-    padding: 5px 10px;
-    min-height: 47.4px;
-}
-
-.filter-tag {
-    background-color: #e6ecff;
+.meetfilterHeader strong {
+    font-size: 16px;
     color: #4a6cf7;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
+}
+
+.meetfilterOptions {
     display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    border: 1px solid #4a6cf7;
-    transition: all 0.2s ease;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.filter-tag:hover {
-    background-color: #d6e0ff;
+.meetfilterFooter {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
 }
 
-.remove-icon {
-    font-size: 12px;
-    margin-left: 5px;
-}
-
-.search-button {
-    background-color: transparent;
-    color: transparent;
+.meetbtn {
+    padding: 8px 16px;
     border: none;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: default;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    height: 40px;
-    /* 버튼의 높이 고정 */
-    margin-top: auto;
-    /* 버튼을 아래로 밀기 */
-    pointer-events: none;
-    /* 비활성화된 상태 */
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
 }
 
-.search-button:hover {
-    background-color: transparent;
-    color: transparent;
+.meetbtn-reset {
+    background-color: #f3f4f6;
+    color: #333;
 }
 
-.filter-dropdowns {
+.meetbtn-apply {
+    background-color: #4a6cf7;
+    color: white;
+}
+
+.meetselectedFilters {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 15px;
 }
 
-.dropdown-container {
-    position: relative;
-}
-
-.dropdown-button {
-    background-color: white;
-    color: #4a6cf7;
-    border: 1px solid #4a6cf7;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
+.meetfilter-tag {
     display: flex;
     align-items: center;
-    gap: 8px;
+    background-color: #e5ecff;
+    color: #1f3bb3;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    gap: 6px;
     transition: all 0.2s ease;
 }
 
-.dropdown-button:hover,
-.dropdown-button.active {
-    background-color: #4a6cf7;
-    color: white;
+.meetfilter-tag span {
+    cursor: pointer;
+    font-weight: bold;
+    color: #4a6cf7;
+    margin-left: 4px;
 }
 
-.dropdown-icon {
-    font-size: 10px;
+.meetfilter-tag:hover {
+    background-color: #d7e2ff;
 }
 
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    width: 150px;
-    margin-top: 5px;
-}
-
-.dropdown-item {
-    padding: 8px 15px;
+.category-title {
+    margin-top: 1rem;
+    margin-left: 5px;
+    font-weight: bold;
     font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #f5f7ff;
-}
-
-.dropdown-item.selected {
-    background-color: #e6ecff;
     color: #4a6cf7;
-    font-weight: 500;
 }
 
-.clear-button {
-    background-color: white;
-    color: #4a6cf7;
-    border: 1px solid #4a6cf7;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
+.nested-options {
+    list-style: none;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.nested-options li {
+    margin: 4px 0;
+}
+
+.meetcheckbox-label {
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: all 0.2s ease;
+    gap: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-.clear-button:hover {
-    background-color: #4a6cf7;
-    color: white;
+.meetcheckbox-label input[type='radio'] {
+    accent-color: #4a6cf7;
 }

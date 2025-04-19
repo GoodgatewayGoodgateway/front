@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProfile } from '../services/user';  // API 호출 함수 import
+import { fetchProfile } from '../services/user';
 import ProfileCard from '../Components/User_Profile_Card';
 import Header from '../Components/Header';
-import FilterBar from '../Components/Filter';
+import Filter from "../Components/Filter"; // ✅ 패널 컴포넌트 import\
+
+import { Funnel } from 'lucide-react';
 import '../Pages/css/Meeting.css';
 
 const Meeting = () => {
-    const [users, setUsers] = useState([]);  // 사용자 데이터를 저장할 상태
-    const [filteredUsers, setFilteredUsers] = useState([]);  // 필터링된 사용자 목록
+    const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
@@ -24,18 +27,34 @@ const Meeting = () => {
             });
     }, []);
 
-
-
+    const togglePanel = () => {
+        setOpen(!open);
+        console.log("📂 패널 토글 상태:", !open);
+    };
 
     return (
         <div className="roommates-list">
             <Header />
-            <h1>룸메이트 매칭</h1>
-            <h2>룸메이트를 찾아보세요!</h2>
-            <FilterBar users={users} onFilterChange={setFilteredUsers} />  {/* 필터링된 결과를 받아옴 */}
+            <div className="meeting-header">
+                <h1>룸메이트 매칭</h1>
+                <h2>룸메이트를 찾아보세요!</h2>
+                <button className="filterbtn" onClick={togglePanel}>
+                    <Funnel size={17} />
+                    필터
+                </button>
+            </div>
+
+
+            {/* ✅ 필터 패널 삽입 */}
+            <Filter
+                open={open}
+                setOpen={setOpen}
+                users={users}
+                onFilterChange={setFilteredUsers}
+            />
             <div className='roommate-list'>
                 {filteredUsers
-                    .filter(user => user && user.id) // 존재하고 id가 있는 유저만 통과
+                    .filter(user => user && user.id)
                     .map((user, index) => (
                         <ProfileCard key={`${user.id}-${index}`} userData={user} />
                     ))}
