@@ -1,14 +1,21 @@
 import "./css/LivingSpace_Item.css";
+import { useState } from "react";
 
 const LivingSpace_item = ({ LivingSpaceData }) => {
   const {
     id,
     name = "이름 없음",
-    type = "월세/전세",
+    type = "없음",
     location = "상세위치 없음",
     maxPersons = 0,
     presentPersons = 0,
   } = LivingSpaceData;
+
+  const handleDetailClick = () => {
+    if (id) {
+      navigate(`/housing/${id}`);
+    }
+  };
 
   return (
     <div className="livingSpace-item">
@@ -16,12 +23,13 @@ const LivingSpace_item = ({ LivingSpaceData }) => {
         <img src="/images/room.jpg" alt="Room" />
       </div>
       <div className="info">
-        <h3>건물명</h3>
-        <p>월세/전세</p>
-        <p>상세위치</p>
-        <p>최대인원</p>
-        <p>현재인원</p>
+        <b>{name}</b>
+        <p>임대 유형: {type}</p>
+        <p>위치: {location}</p>
+        <p>최대 인원: {maxPersons}</p>
+        <p>현재 인원: {presentPersons}</p>
       </div>
+      <button className="detail">매물 상세보기</button>
     </div>
   );
 };

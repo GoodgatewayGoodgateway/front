@@ -12,3 +12,7 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
+.livingSpace-item .info b {
+  font-size: 1.3rem;
+}

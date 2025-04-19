@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchProfile } from '../services/user';  // API 호출 함수 import
 import ProfileCard from '../Components/User_Profile_Card';
 import Header from '../Components/Header';
 import FilterBar from '../Components/Filter';
 import '../Pages/css/Meeting.css';
 
-const Meeting = ({ users }) => {
-    const [filteredUsers, setFilteredUsers] = useState(users);  // 초기 값은 전체 사용자 목록
+const Meeting = () => {
+    const [users, setUsers] = useState([]);  // 사용자 데이터를 저장할 상태
+    const [filteredUsers, setFilteredUsers] = useState([]);  // 필터링된 사용자 목록
+
+    useEffect(() => {
+        const userId = localStorage.getItem("userId");
+        console.log("📌 [Meeting.jsx] userId:", userId);
+
+        fetchProfile(userId)
+            .then((data) => {
+                console.log("✅ 서버에서 받은 프로필 데이터:", data);
+                setUsers(data);
+                setFilteredUsers(data);
+            })
+            .catch((error) => {
+                console.error('❌ 데이터를 가져오는 데 실패했습니다:', error);
+            });
+    }, []);
+
+
+
 
     return (
         <div className="roommates-list">
@@ -19,11 +39,7 @@ const Meeting = ({ users }) => {
                     .map((user, index) => (
                         <ProfileCard key={`${user.id}-${index}`} userData={user} />
                     ))}
-
             </div>
-
-
-
         </div>
     );
 };

@@ -10,6 +10,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    /* 전체 높이를 100%로 설정 */
+
 }
 
 .selected-filters {
@@ -24,8 +26,9 @@
 .filter-header {
     width: 700px;
     background-color: #dbdbdb;
-    border-radius: 50px;
+    border-radius: 25px;
     padding: 5px 10px;
+    min-height: 47.4px;
 }
 
 .filter-tag {
@@ -53,21 +56,27 @@
 }
 
 .search-button {
-    background-color: #4a6cf7;
-    color: white;
+    background-color: transparent;
+    color: transparent;
     border: none;
     padding: 8px 20px;
     border-radius: 50px;
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    cursor: default;
     display: flex;
     align-items: center;
     gap: 5px;
+    height: 40px;
+    /* 버튼의 높이 고정 */
+    margin-top: auto;
+    /* 버튼을 아래로 밀기 */
+    pointer-events: none;
+    /* 비활성화된 상태 */
 }
 
 .search-button:hover {
-    background-color: #3a5bd9;
+    background-color: transparent;
+    color: transparent;
 }
 
 .filter-dropdowns {

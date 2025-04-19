@@ -48,7 +48,7 @@ const NotFoundPage = () => {
           <button className="go-back-button" onClick={() => window.history.back()}>
             뒤로 가기
           </button>
-          <button className="find-roommate-button" onClick={() => window.location.href = '/'}>
+          <button className="find-roommate-button" onClick={() => window.location.href = '/meeting'}>
             룸메이트 찾기
           </button>
         </div>
