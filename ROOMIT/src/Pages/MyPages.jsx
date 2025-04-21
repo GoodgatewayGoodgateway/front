@@ -1,23 +1,98 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     MapPin, Briefcase, Calendar, Star, Coffee, Home, Volume2,
     Utensils, Moon, Sun, Cat, Camera, Upload,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import '../Pages/css/MyPages.css';
+import './css/MyPages.css';
 import Header from '../Components/Header';
+import { fetchProfile, submitProfile, updateMatching, uploadAvatar } from '../services/user';
 
 const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ ...currentUser });
+    const [formData, setFormData] = useState({
+        id: currentUser?.id || '',
+        userId: currentUser?.id || '',
+        name: currentUser?.name || '',
+        age: currentUser?.age || '',
+        job: currentUser?.job || '',
+        avatar: currentUser?.avatar || '',
+        avatarFile: null,
+        sex: currentUser?.gender || '',
+        location: currentUser?.location || '',
+        introduction: currentUser?.introduction || '',
+        interests: currentUser?.interests || [],
+        idealRoommate: currentUser?.idealRoommate || '',
+        mbti: currentUser?.mbti || '',
+        smoking: currentUser?.smoking || '',
+        drinking: currentUser?.drinking || '',
+        matching: currentUser?.matching || false,
+        lifestyle: {
+            wakeUpTime: currentUser?.wakeUpTime || '',
+            sleepTime: currentUser?.sleepTime || '',
+            dayNightPreference: currentUser?.dayNightType || '',
+        },
+        habits: {
+            food: currentUser?.habits?.food || { mealTime: '', kitchenUse: '', cookingFrequency: '' },
+            cleaning: currentUser?.habits?.cleaning || { cleanLevel: '', cleaningFrequency: '', sharedSpaceManagement: '' },
+            noiseSensitivity: currentUser?.habits?.noiseSensitivity || { sensitivityLevel: '', sleepNoisePreference: '', musicTVVolume: '' },
+            petPreferences: currentUser?.habits?.petPreferences || { allowed: '', petType: '', allergy: '' },
+        },
+    });
     const [isSaving, setIsSaving] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        let isMounted = true;
+        const loadProfile = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const data = await fetchProfile(currentUser.id);
+                if (isMounted) {
+                    setFormData({
+                        ...formData,
+                        ...data,
+                        sex: data.gender || formData.sex,
+                        habits: {
+                            food: data.habits?.food || formData.habits.food,
+                            cleaning: data.habits?.cleaning || formData.habits.cleaning,
+                            noiseSensitivity: data.habits?.noiseSensitivity || formData.habits.noiseSensitivity,
+                            petPreferences: data.habits?.petPreferences || formData.habits.petPreferences,
+                        },
+                        lifestyle: data.lifestyle || formData.lifestyle,
+                    });
+                }
+            } catch (error) {
+                console.error('프로필 로딩 실패:', error);
+                if (isMounted) {
+                    setError(
+                        '프로필을 불러올 수 없습니다. 서버에 연결할 수 없거나 네트워크 문제가 발생했습니다.'
+                    );
+                }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        if (currentUser?.id) {
+            loadProfile();
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [currentUser?.id]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -27,37 +102,32 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             ...prev,
             lifestyle: {
                 ...prev.lifestyle,
-                [name]: value
-            }
+                [name]: value,
+            },
         }));
     };
 
-    // Handle nested habit changes
     const handleHabitChange = (category, field, value) => {
         setFormData((prev) => ({
             ...prev,
             habits: {
-                ...prev.habits || {},
+                ...prev.habits,
                 [category]: {
-                    ...prev.habits?.[category] || {},
-                    [field]: value
-                }
-            }
+                    ...prev.habits[category],
+                    [field]: value,
+                },
+            },
         }));
     };
-
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData(prev => ({
-                    ...prev,
-                    avatar: reader.result
-                }));
-            };
-            reader.readAsDataURL(file);
+            setFormData((prev) => ({
+                ...prev,
+                avatarFile: file,
+                avatar: URL.createObjectURL(file),
+            }));
         }
     };
 
@@ -65,121 +135,144 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
         fileInputRef.current.click();
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (!formData.name || !formData.age || !formData.job) {
+            alert('이름, 나이, 직업은 필수 입력 항목입니다.');
+            return;
+        }
+
+        const age = parseInt(formData.age, 10);
+        if (isNaN(age) || age < 18 || age > 100) {
+            alert('나이는 18세 이상 100세 이하로 입력해 주세요.');
+            return;
+        }
+
+        if (!formData.interests || formData.interests.length === 0) {
+            alert('관심사를 최소 하나 이상 입력해 주세요.');
+            return;
+        }
+
         setIsSaving(true);
-        // 저장 작업 시뮬레이션
-        setTimeout(() => {
-            updateUserData(formData);
+        try {
+            let profileData = {
+                ...formData,
+                userId: formData.id,
+                gender: formData.sex,
+                dayNightType: formData.lifestyle.dayNightPreference,
+                wakeUpTime: formData.lifestyle.wakeUpTime,
+                sleepTime: formData.lifestyle.sleepTime,
+                cleanLevel: formData.habits.cleaning?.cleanLevel || '',
+                noise: formData.habits.noiseSensitivity?.sensitivityLevel || '',
+            };
+
+            if (profileData.avatarFile) {
+                const avatarUrl = await uploadAvatar(profileData.avatarFile);
+                profileData.avatar = avatarUrl;
+            } else if (!profileData.avatar) {
+                profileData.avatar = ''; // 서버에서 null 허용 시 빈 문자열로 설정
+            }
+
+            delete profileData.avatarFile;
+            delete profileData.sex;
+            delete profileData.lifestyle;
+            delete profileData.habits;
+
+            const result = await submitProfile(profileData);
+            updateUserData(profileData);
+            navigate('/mypages');
+        } catch (error) {
+            console.error('저장 실패:', error);
+            alert(`프로필 저장에 실패했습니다: ${error.message}`);
+        } finally {
             setIsSaving(false);
-            navigate(`/mypage/${formData.id}`);
-        }, 500);
+        }
     };
 
-    const handleToggleMatching = () => {
-        // 디버깅을 위한 로그 추가
-        console.log('토글 전 상태:', formData.matching);
+    const handleToggleMatching = async () => {
+        const newMatchingState = !formData.matching;
+        const updatedFormData = { ...form_iconData, matching: newMatchingState };
 
-        const updatedFormData = {
-            ...formData,
-            matching: !formData.matching
-        };
-
-        // 즉시 상태 업데이트
         setFormData(updatedFormData);
-
-        // updateUserData 호출 (이 함수가 제대로 구현되었는지 확인)
         updateUserData(updatedFormData);
 
-        // 토글 후 상태 확인
-        console.log('토글 후 상태:', updatedFormData.matching);
-
-        // 시각적 피드백 제공
-        alert(updatedFormData.matching ? '미팅 페이지에 공개되었습니다!' : '미팅 페이지에서 비공개되었습니다!');
+        try {
+            await updateMatching(formData.id, newMatchingState);
+            alert(newMatchingState ? '미팅 페이지에 공개되었습니다!' : '미팅 페이지에서 비공개되었습니다!');
+        } catch (error) {
+            console.error('매칭 상태 업데이트 실패:', error);
+            alert(`매칭 상태 업데이트에 실패했습니다: ${error.message}`);
+            setFormData({ ...formData, matching: !newMatchingState });
+            updateUserData({ ...formData, matching: !newMatchingState });
+        }
     };
 
-    // Define lifestyle categories for rendering
     const lifestyleCategories = [
         {
-            title: "🍽️ 식생활 & 주방 관련",
-            category: "food",
+            title: '🍽️ 식생활 & 주방 관련',
+            category: 'food',
             items: [
-                {
-                    label: "식사 시간", field: "mealTime", type: "select",
-                    options: ["불규칙적", "아침형", "저녁형", "밤형"]
-                },
-                {
-                    label: "주방 사용", field: "kitchenUse", type: "select",
-                    options: ["거의 안함", "가끔", "자주", "매일"]
-                },
-                {
-                    label: "요리 빈도", field: "cookingFrequency", type: "select",
-                    options: ["거의 안함", "가끔", "자주", "매일"]
-                }
+                { label: '식사 시간', field: 'mealTime', type: 'select', options: ['불규칙적', '아침형', '저녁형', '밤형'] },
+                { label: '주방 사용', field: 'kitchenUse', type: 'select', options: ['거의 안함', '가끔', '자주', '매일'] },
+                { label: '요리 빈도', field: 'cookingFrequency', type: 'select', options: ['거의 안함', '가끔', '자주', '매일'] },
             ],
-            icon: <Utensils size={40} />
+            icon: <Utensils size={40} />,
         },
         {
-            title: "🧹 청결 및 정리 습관",
-            category: "cleaning",
+            title: '🧹 청결 및 정리 습관',
+            category: 'cleaning',
             items: [
-                {
-                    label: "청결 수준", field: "cleanLevel", type: "select",
-                    options: ["낮음", "보통", "높음", "매우 높음"]
-                },
-                {
-                    label: "청소 주기", field: "cleaningFrequency", type: "select",
-                    options: ["필요할 때만", "주 1회", "주 2-3회", "매일"]
-                },
-                {
-                    label: "공용공간 관리", field: "sharedSpaceManagement", type: "select",
-                    options: ["개인공간만 관리", "가끔 정리", "공용공간 정리 참여", "적극적으로 관리"]
-                }
+                { label: '청결 수준', field: 'cleanLevel', type: 'select', options: ['낮음', '보통', '높음', '매우 높음'] },
+                { label: '청소 주기', field: 'cleaningFrequency', type: 'select', options: ['필요할 때만', '주 1회', '주 2-3회', '매일'] },
+                { label: '공용공간 관리', field: 'sharedSpaceManagement', type: 'select', options: ['개인공간만 관리', '가끔 정리', '공용공간 정리 참여', '적극적으로 관리'] },
             ],
-            icon: <Home size={40} />
+            icon: <Home size={40} />,
         },
         {
-            title: "🔊 소음 민감도",
-            category: "noiseSensitivity",
+            title: '🔊 소음 민감도',
+            category: 'noiseSensitivity',
             items: [
-                {
-                    label: "소음 민감도", field: "sensitivityLevel", type: "select",
-                    options: ["둔감", "보통", "민감", "매우 민감"]
-                },
-                {
-                    label: "취침시 소음", field: "sleepNoisePreference", type: "select",
-                    options: ["조용해야 함", "백색소음 선호", "약간의 소음 허용", "소음에 둔감"]
-                },
-                {
-                    label: "음악/TV 볼륨", field: "musicTVVolume", type: "select",
-                    options: ["낮은 볼륨", "중간 볼륨", "높은 볼륨", "헤드폰 사용"]
-                }
+                { label: '소음 민감도', field: 'sensitivityLevel', type: 'select', options: ['둔감', '보통', '민감', '매우 민감'] },
+                { label: '취침시 소음', field: 'sleepNoisePreference', type: 'select', options: ['조용해야 함', '백색소음 선호', '약간의 소음 허용', '소음에 둔감'] },
+                { label: '음악/TV 볼륨', field: 'musicTVVolume', type: 'select', options: ['낮은 볼륨', '중간 볼륨', '높은 볼륨', '헤드폰 사용'] },
             ],
-            icon: <Volume2 size={40} />
+            icon: <Volume2 size={40} />,
         },
         {
-            title: "🐶 애완동물",
-            category: "petPreferences",
+            title: '🐶 애완동물',
+            category: 'petPreferences',
             items: [
-                {
-                    label: "반려동물 허용 여부", field: "allowed", type: "select",
-                    options: ["허용 안함", "일부 허용", "대부분 허용", "모두 허용"]
-                },
-                { label: "선호 반려동물 ", field: "petType", type: "text" },
-                {
-                    label: "반려동물 알레르기", field: "allergy", type: "select",
-                    options: ["없음", "경미함", "중간", "심함"]
-                }
+                { label: '반려동물 허용 여부', field: 'allowed', type: 'select', options: ['허용 안함', '일부 허용', '대부분 허용', '모두 허용'] },
+                { label: '선호 반려동물', field: 'petType', type: 'text' },
+                { label: '반려동물 알레르기', field: 'allergy', type: 'select', options: ['없음', '경미함', '중간', '심함'] },
             ],
-            icon: <Cat size={40} />
-        }
+            icon: <Cat size={40} />,
+        },
     ];
 
-    // Helper function to safely get nested value
     const getNestedValue = (obj, path) => {
-        return path.split('.').reduce((prev, curr) => {
-            return prev ? prev[curr] : undefined;
-        }, obj);
+        try {
+            return path.split('.').reduce((prev, curr) => {
+                return prev && prev[curr] !== undefined ? prev[curr] : '';
+            }, obj) || '';
+        } catch {
+            return '';
+        }
     };
+
+    if (isLoading) {
+        return <div className="loading">프로필을 불러오는 중...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="error">
+                {error}
+                <button onClick={() => window.location.reload()} style={{ marginLeft: '10px' }}>
+                    다시 시도
+                </button>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -191,7 +284,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                             {formData.avatar ? (
                                 <img
                                     src={formData.avatar}
-                                    alt={`${formData.name} avatar`}
+                                    alt={`${formData.name || 'User'} avatar`}
                                     className="room-avatar-image"
                                     onClick={handleAvatarClick}
                                 />
@@ -218,7 +311,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                         <input
                             type="text"
                             name="name"
-                            value={formData.name}
+                            value={formData.name || ''}
                             onChange={handleChange}
                             placeholder="이름"
                             className="input-field"
@@ -237,7 +330,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                         <input
                             type="number"
                             name="age"
-                            value={formData.age}
+                            value={formData.age || ''}
                             onChange={handleChange}
                             placeholder="나이"
                             className="input-field"
@@ -248,7 +341,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                                 <input
                                     type="text"
                                     name="job"
-                                    value={formData.job}
+                                    value={formData.job || ''}
                                     onChange={handleChange}
                                     placeholder="직업"
                                     className="input-field"
@@ -259,7 +352,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                                 <input
                                     type="text"
                                     name="location"
-                                    value={formData.location}
+                                    value={formData.location || ''}
                                     onChange={handleChange}
                                     placeholder="지역"
                                     className="input-field"
@@ -273,7 +366,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                     <h2>자기소개</h2>
                     <textarea
                         name="introduction"
-                        value={formData.introduction}
+                        value={formData.introduction || ''}
                         onChange={handleChange}
                         className="textarea-field"
                         rows={4}
@@ -286,11 +379,14 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                     <input
                         type="text"
                         name="interests"
-                        value={formData.interests?.join(', ') || ''}
+                        value={Array.isArray(formData.interests) ? formData.interests.join(', ') : ''}
                         onChange={(e) =>
                             setFormData({
                                 ...formData,
-                                interests: e.target.value.split(',').map(item => item.trim())
+                                interests: e.target.value
+                                    .split(',')
+                                    .map((item) => item.trim())
+                                    .filter((item) => item),
                             })
                         }
                         className="input-field"
@@ -302,7 +398,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                     <h2>이상적인 룸메이트</h2>
                     <textarea
                         name="idealRoommate"
-                        value={formData.idealRoommate}
+                        value={formData.idealRoommate || ''}
                         onChange={handleChange}
                         className="textarea-field"
                         rows={3}
@@ -318,30 +414,16 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                             <span>MBTI</span>
                             <select
                                 name="mbti"
-                                value={formData.mbti}
+                                value={formData.mbti || ''}
                                 onChange={handleChange}
                                 className="input-field"
                             >
                                 <option value="">선택해주세요</option>
-                                <option value="ISTJ">ISTJ</option>
-                                <option value="ISFJ">ISFJ</option>
-                                <option value="INFJ">INFJ</option>
-                                <option value="INTJ">INTJ</option>
-                                <option value="ISTP">ISTP</option>
-                                <option value="ISFP">ISFP</option>
-                                <option value="INFP">INFP</option>
-                                <option value="INTP">INTP</option>
-                                <option value="ESTP">ESTP</option>
-                                <option value="ESFP">ESFP</option>
-                                <option value="ENFP">ENFP</option>
-                                <option value="ENTP">ENTP</option>
-                                <option value="ESTJ">ESTJ</option>
-                                <option value="ESFJ">ESFJ</option>
-                                <option value="ENFJ">ENFJ</option>
-                                <option value="ENTJ">ENTJ</option>
+                                {['ISTJ', 'ISFJ', 'INFJ', 'INTJ', 'ISTP', 'ISFP', 'INFP', 'INTP', 'ESTP', 'ESFP', 'ENFP', 'ENTP', 'ESTJ', 'ESFJ', 'ENFJ', 'ENTJ'].map((type) => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
                             </select>
                         </div>
-
                         <div className="lifestyle-item">
                             <Sun size={40} />
                             <span>기상 시간</span>
@@ -373,6 +455,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                                 onChange={handleLifestyleChange}
                                 className="input-field"
                             >
+                                <option value="">선택해주세요</option>
                                 <option value="낮">낮</option>
                                 <option value="밤">밤</option>
                             </select>
@@ -382,10 +465,11 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                             <span>흡연 여부</span>
                             <select
                                 name="smoking"
-                                value={formData.smoking}
+                                value={formData.smoking || ''}
                                 onChange={handleChange}
                                 className="input-field"
                             >
+                                <option value="">선택해주세요</option>
                                 <option value="안 함">안 함</option>
                                 <option value="가끔">가끔</option>
                                 <option value="자주">자주</option>
@@ -396,10 +480,11 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                             <span>음주</span>
                             <select
                                 name="drinking"
-                                value={formData.drinking}
+                                value={formData.drinking || ''}
                                 onChange={handleChange}
                                 className="input-field"
                             >
+                                <option value="">선택해주세요</option>
                                 <option value="안 함">안 함</option>
                                 <option value="가끔">가끔</option>
                                 <option value="자주">자주</option>
@@ -408,7 +493,6 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                     </div>
                 </section>
 
-                {/* 추가된 라이프스타일 카테고리 섹션들 */}
                 {lifestyleCategories.map((category, idx) => (
                     <section key={idx} className="meetprofile-section lifestyle-details">
                         <h2>{category.title}</h2>
@@ -419,7 +503,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                                     <span>{item.label}</span>
                                     {item.type === 'select' ? (
                                         <select
-                                            value={getNestedValue(formData, `habits.${category.category}.${item.field}`) || ''}
+                                            value={getNestedValue(formData, `habits.${category.category}.${item.field}`)}
                                             onChange={(e) => handleHabitChange(category.category, item.field, e.target.value)}
                                             className="input-field"
                                         >
@@ -431,7 +515,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                                     ) : (
                                         <input
                                             type="text"
-                                            value={getNestedValue(formData, `habits.${category.category}.${item.field}`) || ''}
+                                            value={getNestedValue(formData, `habits.${category.category}.${item.field}`)}
                                             onChange={(e) => handleHabitChange(category.category, item.field, e.target.value)}
                                             className="input-field"
                                             placeholder={`${item.label}을 입력하세요`}
@@ -452,13 +536,12 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                         {isSaving ? '저장 중...' : '프로필 저장'}
                     </button>
 
-                    {/* 토글 스위치로 변경한 미팅 페이지 등록 버튼 */}
                     <div className="toggle-container">
                         <span className="toggle-label">매칭 페이지 공개</span>
                         <label className="toggle-switch">
                             <input
                                 type="checkbox"
-                                checked={Boolean(formData.matching)}
+                                checked={formData.matching}
                                 onChange={handleToggleMatching}
                             />
                             <span className="toggle-slider"></span>
