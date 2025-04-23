@@ -32,11 +32,11 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             sleepTime: currentUser?.sleepTime || '',
             dayNightPreference: currentUser?.dayNightType || '',
         },
-        habits: {
-            food: currentUser?.habits?.food || { mealTime: '', kitchenUse: '', cookingFrequency: '' },
-            cleaning: currentUser?.habits?.cleaning || { cleanLevel: '', cleaningFrequency: '', sharedSpaceManagement: '' },
-            noiseSensitivity: currentUser?.habits?.noiseSensitivity || { sensitivityLevel: '', sleepNoisePreference: '', musicTVVolume: '' },
-            petPreferences: currentUser?.habits?.petPreferences || { allowed: '', petType: '', allergy: '' },
+        habits: currentUser?.habits || {
+            food: { mealTime: '', kitchenUse: '', cookingFrequency: '' },
+            cleaning: { cleanLevel: '', cleaningFrequency: '', sharedSpaceManagement: '' },
+            noiseSensitivity: { sensitivityLevel: '', sleepNoisePreference: '', musicTVVolume: '' },
+            petPreferences: { allowed: '', petType: '', allergy: '' },
         },
     });
     const [isSaving, setIsSaving] = useState(false);
@@ -52,21 +52,29 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             try {
                 const data = await fetchProfile(currentUser.id);
                 if (isMounted) {
-                    setFormData({
-                        ...formData,
+                    setFormData((prev) => ({
+                        ...prev,
                         ...data,
-                        sex: data.gender || formData.sex,
+                        sex: data.gender || prev.sex,
                         habits: {
-                            food: data.habits?.food || formData.habits.food,
-                            cleaning: data.habits?.cleaning || formData.habits.cleaning,
-                            noiseSensitivity: data.habits?.noiseSensitivity || formData.habits.noiseSensitivity,
-                            petPreferences: data.habits?.petPreferences || formData.habits.petPreferences,
+                            food: data.habits?.food || prev.habits.food,
+                            cleaning: data.habits?.cleaning || prev.habits.cleaning,
+                            noiseSensitivity: data.habits?.noiseSensitivity || prev.habits.noiseSensitivity,
+                            petPreferences: data.habits?.petPreferences || prev.habits.petPreferences,
                         },
-                        lifestyle: data.lifestyle || formData.lifestyle,
-                    });
+                        lifestyle: {
+                            wakeUpTime: data.lifestyle?.wakeUpTime || prev.lifestyle.wakeUpTime,
+                            sleepTime: data.lifestyle?.sleepTime || prev.lifestyle.sleepTime,
+                            dayNightPreference: data.lifestyle?.dayNightPreference || prev.lifestyle.dayNightPreference,
+                        },
+                    }));
                 }
             } catch (error) {
-                console.error('프로필 로딩 실패:', error);
+                console.error('프로필 로딩 실패:', {
+                    message: error.message,
+                    stack: error.stack,
+                    userId: currentUser?.id,
+                });
                 if (isMounted) {
                     setError(
                         '프로필을 불러올 수 없습니다. 서버에 연결할 수 없거나 네트워크 문제가 발생했습니다.'
@@ -87,6 +95,14 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             isMounted = false;
         };
     }, [currentUser?.id]);
+
+    useEffect(() => {
+        return () => {
+            if (formData.avatar && formData.avatar.startsWith('blob:')) {
+                URL.revokeObjectURL(formData.avatar);
+            }
+        };
+    }, [formData.avatar]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -123,6 +139,9 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (formData.avatar && formData.avatar.startsWith('blob:')) {
+                URL.revokeObjectURL(formData.avatar);
+            }
             setFormData((prev) => ({
                 ...prev,
                 avatarFile: file,
@@ -166,10 +185,14 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             };
 
             if (profileData.avatarFile) {
-                const avatarUrl = await uploadAvatar(profileData.avatarFile);
-                profileData.avatar = avatarUrl;
+                try {
+                    const avatarUrl = await uploadAvatar(profileData.avatarFile);
+                    profileData.avatar = avatarUrl;
+                } catch {
+                    throw new Error('아바타 업로드에 실패했습니다.');
+                }
             } else if (!profileData.avatar) {
-                profileData.avatar = ''; // 서버에서 null 허용 시 빈 문자열로 설정
+                profileData.avatar = '';
             }
 
             delete profileData.avatarFile;
@@ -177,11 +200,15 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             delete profileData.lifestyle;
             delete profileData.habits;
 
-            const result = await submitProfile(profileData);
+            await submitProfile(profileData);
             updateUserData(profileData);
             navigate('/mypages');
         } catch (error) {
-            console.error('저장 실패:', error);
+            console.error('저장 실패:', {
+                message: error.message,
+                stack: error.stack,
+                userId: currentUser?.id,
+            });
             alert(`프로필 저장에 실패했습니다: ${error.message}`);
         } finally {
             setIsSaving(false);
@@ -190,7 +217,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
 
     const handleToggleMatching = async () => {
         const newMatchingState = !formData.matching;
-        const updatedFormData = { ...form_iconData, matching: newMatchingState };
+        const updatedFormData = { ...formData, matching: newMatchingState };
 
         setFormData(updatedFormData);
         updateUserData(updatedFormData);
@@ -199,7 +226,11 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
             await updateMatching(formData.id, newMatchingState);
             alert(newMatchingState ? '미팅 페이지에 공개되었습니다!' : '미팅 페이지에서 비공개되었습니다!');
         } catch (error) {
-            console.error('매칭 상태 업데이트 실패:', error);
+            console.error('매칭 상태 업데이트 실패:', {
+                message: error.message,
+                stack: error.stack,
+                userId: currentUser?.id,
+            });
             alert(`매칭 상태 업데이트에 실패했습니다: ${error.message}`);
             setFormData({ ...formData, matching: !newMatchingState });
             updateUserData({ ...formData, matching: !newMatchingState });
@@ -250,13 +281,9 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
     ];
 
     const getNestedValue = (obj, path) => {
-        try {
-            return path.split('.').reduce((prev, curr) => {
-                return prev && prev[curr] !== undefined ? prev[curr] : '';
-            }, obj) || '';
-        } catch {
-            return '';
-        }
+        return path.split('.').reduce((current, key) => {
+            return current && current[key] !== undefined ? current[key] : '';
+        }, obj) || '';
     };
 
     if (isLoading) {
@@ -380,15 +407,13 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
                         type="text"
                         name="interests"
                         value={Array.isArray(formData.interests) ? formData.interests.join(', ') : ''}
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                interests: e.target.value
-                                    .split(',')
-                                    .map((item) => item.trim())
-                                    .filter((item) => item),
-                            })
-                        }
+                        onChange={(e) => {
+                            const interestsArray = e.target.value
+                                .split(',')
+                                .map((item) => item.trim())
+                                .filter((item) => item.length > 0);
+                            setFormData({ ...formData, interests: interestsArray });
+                        }}
                         className="input-field"
                         placeholder="관심사를 쉼표(,)로 구분해 입력하세요"
                     />
