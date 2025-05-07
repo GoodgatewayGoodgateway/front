@@ -13,6 +13,7 @@ import MeetingDetail from "./Pages/MeetingDetail";
 import ChatRoom from "./Pages/ChatRoom";
 import MyPages from "./Pages/MyPages";
 import ScrollToTop from "./Components/ScrollToTop";
+import LivingSpaceDetail from "./Pages/LivingSpaceDetail";
 
 const App = () => {
   return (
@@ -26,6 +27,10 @@ const App = () => {
             <Route path="/meeting" element={<Meeting users={userData} />} />
             <Route path="/meeting/:id" element={<MeetingDetail userData={userData} />} />
             <Route path="/housing" element={<LivingSpace LivingSpaceData={LivingSpaceData} />} />
+            <Route
+              path="/housing/:id"
+              element={<LivingSpaceDetail LivingSpaceData={LivingSpaceData} />}
+            />
             <Route path="/chat" element={<ChatRoom userData={userData} />} />
             <Route path="/chat/:roomId" element={<ChatRoom userData={userData} />} />
             <Route path="/mypages" element={<MyPages />} />

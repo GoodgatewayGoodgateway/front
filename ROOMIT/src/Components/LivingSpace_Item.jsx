@@ -1,5 +1,5 @@
 import "./css/LivingSpace_Item.css";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LivingSpace_item = ({ LivingSpaceData }) => {
   const {
@@ -11,7 +11,9 @@ const LivingSpace_item = ({ LivingSpaceData }) => {
     presentPersons = 0,
   } = LivingSpaceData;
 
-  const handleDetailClick = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
     if (id) {
       navigate(`/housing/${id}`);
     }
@@ -29,7 +31,9 @@ const LivingSpace_item = ({ LivingSpaceData }) => {
         <p>최대 인원: {maxPersons}</p>
         <p>현재 인원: {presentPersons}</p>
       </div>
-      <button className="detail">매물 상세보기</button>
+      <div className="btn-container" onClick={handleClick}>
+        <button className="btn-detail">매물 상세보기</button>
+      </div>
     </div>
   );
 };
