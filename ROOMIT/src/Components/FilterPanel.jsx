@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./css/FilterPanel.css";
 
-// 필터 헤더 컴포넌트
+const categoryKeyMap = {
+  "임대 유형": "type",
+  지역: "location",
+  "최대 인원": "maxPersons",
+  면적: "netLeasableArea",
+  가격대: "price",
+  "AI 추천": "aiRecommendation",
+};
+
 const FilterHeader = () => (
   <div className="filterHeader">
     <strong>🔍 필터 설정</strong>
   </div>
 );
 
-// 선택된 필터 태그 컴포넌트
 const SelectedFilters = ({ selectedFilters, onRemove }) => (
   <div className="selectedFilters">
     {selectedFilters.map(({ category, value }) => (
@@ -20,7 +27,6 @@ const SelectedFilters = ({ selectedFilters, onRemove }) => (
   </div>
 );
 
-// 필터 카테고리 컴포넌트
 const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
   const isSelected = (value) =>
     selectedFilters.find((f) => f.category === category && f.value === value);
@@ -47,7 +53,6 @@ const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
   );
 };
 
-// 필터 푸터 컴포넌트
 const FilterFooter = ({ onReset, onApply }) => (
   <div className="filterFooter">
     <button className="lvsbtn btn-reset" onClick={onReset}>
@@ -59,7 +64,6 @@ const FilterFooter = ({ onReset, onApply }) => (
   </div>
 );
 
-// 메인 필터 패널 컴포넌트
 const FilterPanel = ({
   open,
   setOpen,
@@ -76,20 +80,44 @@ const FilterPanel = ({
     (filtersObj) => {
       if (!datas || !Array.isArray(datas)) return [];
 
-      return datas.filter((data) => {
+      let filtered = datas.filter((data) => {
         return filters.every(({ category }) => {
+          if (category === "등록순") return true;
           const selectedValue = filtersObj[category];
           if (!selectedValue || selectedValue === "상관없음") return true;
 
-          const dataValue = data[category];
-          return typeof dataValue === "string" && dataValue.includes(selectedValue);
+          const dataKey = categoryKeyMap[category];
+          const dataValue = data[dataKey];
+
+          if (typeof dataValue === "string") {
+            return dataValue.includes(selectedValue);
+          } else {
+            return dataValue === selectedValue;
+          }
         });
       });
+
+      // 등록순 정렬 적용
+      const sortValue = filtersObj["등록순"];
+      if (sortValue === "최신순") {
+        filtered.sort(
+          (a, b) =>
+            new Date(b.registrationTime.replaceAll(".", "-")) -
+            new Date(a.registrationTime.replaceAll(".", "-"))
+        );
+      } else if (sortValue === "오래된 순") {
+        filtered.sort(
+          (a, b) =>
+            new Date(a.registrationTime.replaceAll(".", "-")) -
+            new Date(b.registrationTime.replaceAll(".", "-"))
+        );
+      }
+
+      return filtered;
     },
     [datas, filters]
   );
 
-  // ✅ selectedFilters가 바뀌었을 때만 필터 적용
   useEffect(() => {
     const filtersObj = {};
     selectedFilters.forEach(({ category, value }) => {
@@ -133,11 +161,6 @@ const FilterPanel = ({
   };
 
   const handleApply = () => {
-    // const result = {};
-    // selectedFilters.forEach(({ category, value }) => {
-    //   result[category] = value;
-    // });
-    // filterDatas(result);
     togglePanel();
   };
 
