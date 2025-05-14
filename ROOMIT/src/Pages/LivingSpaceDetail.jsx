@@ -36,9 +36,9 @@ const LivingSpaceDetail = () => {
           </div>
         </div>
 
-        <div className="card location-map"></div>
+        <div className="card location-map">지도</div>
 
-        <div className="card livingSpace-feature"></div>
+        <div className="card livingSpace-feature">특징(주변 편의시설, 역세권 등등)</div>
       </div>
     </div>
   );

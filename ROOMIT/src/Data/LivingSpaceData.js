@@ -8,7 +8,7 @@ const LivingSpaceData = [
     maxPersons: 2,
     presentPersons: 0,
     netLeasableArea: "10", // 전용면적(평수)
-    registrationTime: "2025.04.21.",
+    registrationTime: "2025.04.21",
     aiRecommendation: "",
   },
   {
@@ -20,7 +20,7 @@ const LivingSpaceData = [
     maxPersons: 2,
     presentPersons: 0,
     netLeasableArea: "6.78", // 전용면적(평수)
-    registrationTime: "2025.04.19.",
+    registrationTime: "2025.04.19",
     aiRecommendation: "",
   },
   {
@@ -32,7 +32,7 @@ const LivingSpaceData = [
     maxPersons: 1,
     presentPersons: 0,
     netLeasableArea: "7.28", // 전용면적(평수)
-    registrationTime: "2025.04.21.",
+    registrationTime: "2025.04.21",
     aiRecommendation: "",
   },
   {
@@ -44,7 +44,7 @@ const LivingSpaceData = [
     maxPersons: 1,
     presentPersons: 0,
     netLeasableArea: "8.16", // 전용면적(평수)
-    registrationTime: "2025.04.21.",
+    registrationTime: "2025.04.21",
     aiRecommendation: "",
   },
   {
@@ -56,7 +56,7 @@ const LivingSpaceData = [
     maxPersons: 2,
     presentPersons: 0,
     netLeasableArea: "13.8", // 전용면적(평수)
-    registrationTime: "2025.04.09.",
+    registrationTime: "2025.04.09",
     aiRecommendation: "",
   },
   {
@@ -68,7 +68,7 @@ const LivingSpaceData = [
     maxPersons: 2,
     presentPersons: 0,
     netLeasableArea: "15.12", // 전용면적(평수)
-    registrationTime: "2025.04.15.",
+    registrationTime: "2025.04.15",
     aiRecommendation: "",
   },
   {
@@ -80,7 +80,7 @@ const LivingSpaceData = [
     maxPersons: 2,
     presentPersons: 0,
     netLeasableArea: "15.12", // 전용면적(평수)
-    registrationTime: "2025.04.21.",
+    registrationTime: "2025.04.21",
     aiRecommendation: "",
   },
   {
@@ -92,7 +92,7 @@ const LivingSpaceData = [
     maxPersons: 3,
     presentPersons: 0,
     netLeasableArea: "25.7", // 전용면적(평수)
-    registrationTime: "2025.04.14.",
+    registrationTime: "2025.04.14",
     aiRecommendation: "",
   },
   {
@@ -104,7 +104,7 @@ const LivingSpaceData = [
     maxPersons: 3,
     presentPersons: 0,
     netLeasableArea: "22.97", // 전용면적(평수)
-    registrationTime: "2025.04.17.",
+    registrationTime: "2025.04.17",
     aiRecommendation: "",
   },
   {
@@ -116,7 +116,7 @@ const LivingSpaceData = [
     maxPersons: 3,
     presentPersons: 0,
     netLeasableArea: "25.7", // 전용면적(평수)
-    registrationTime: "2025.04.23.",
+    registrationTime: "2025.04.23",
     aiRecommendation: "",
   },
 ];

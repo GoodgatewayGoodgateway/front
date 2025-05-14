@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./css/FilterPanel.css";
 
 const categoryKeyMap = {
@@ -64,15 +64,19 @@ const FilterFooter = ({ onReset, onApply }) => (
   </div>
 );
 
-const FilterPanel = ({
-  open,
-  setOpen,
-  filters,
-  datas,
-  onFilterChange,
-  showfilterButton = true,
-}) => {
+const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
   const [selectedFilters, setSelectedFilters] = useState([]);
+
+  // Sort filter (등록순) 보장하기
+  const sortFilter = useMemo(
+    () => ({ category: "등록순", options: ["상관없음", "최신순", "오래된 순"] }),
+    []
+  );
+
+  const filterList = useMemo(() => {
+    const hasSort = filters.some((f) => f.category === "등록순");
+    return hasSort ? filters : [...filters, sortFilter];
+  }, [filters, sortFilter]);
 
   const togglePanel = () => setOpen((prev) => !prev);
 
@@ -81,7 +85,7 @@ const FilterPanel = ({
       if (!datas || !Array.isArray(datas)) return [];
 
       let filtered = datas.filter((data) => {
-        return filters.every(({ category }) => {
+        return filterList.every(({ category }) => {
           if (category === "등록순") return true;
           const selectedValue = filtersObj[category];
           if (!selectedValue || selectedValue === "상관없음") return true;
@@ -115,7 +119,7 @@ const FilterPanel = ({
 
       return filtered;
     },
-    [datas, filters]
+    [datas, filterList]
   );
 
   useEffect(() => {
@@ -170,7 +174,7 @@ const FilterPanel = ({
         <FilterHeader onClose={togglePanel} />
         <SelectedFilters selectedFilters={selectedFilters} onRemove={toggleFilter} />
         <div className="filterOptions">
-          {filters.map(({ category, options }) => (
+          {filterList.map(({ category, options }) => (
             <FilterCategory
               key={category}
               category={category}
