@@ -25,7 +25,7 @@ export default function KakaoMap() {
 
         // ✅ 정보창
         const info = new window.kakao.maps.InfoWindow({
-          content: '<div style="padding:6px;font-size:14px;">📍 서울시청</div>',
+          content: `<div style="padding:6px;font-size:14px;">📍 서울시청</div>`,
         });
         info.open(map, marker);
       });
@@ -34,5 +34,5 @@ export default function KakaoMap() {
     document.head.appendChild(script);
   }, []);
 
-  return <div id="map" style={{ width: "100%", height: "100vh", border: "1px solid #ddd" }}></div>;
+  return <div id="map" className="card"></div>;
 }

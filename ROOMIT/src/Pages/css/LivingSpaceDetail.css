@@ -46,7 +46,7 @@
   font-size: 20px;
 }
 
-.location-map {
+#map {
   width: 600px;
   height: 400px;
   grid-area: card2;

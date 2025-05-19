@@ -3,6 +3,7 @@ import Header from "../Components/Header";
 import LivingSpaceData from "../Data/LivingSpaceData";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import KakaoMap from "../Components/Kakaomap";
 
 const LivingSpaceDetail = () => {
   const { id } = useParams();
@@ -36,7 +37,7 @@ const LivingSpaceDetail = () => {
           </div>
         </div>
 
-        <div className="card location-map">지도</div>
+        <KakaoMap />
 
         <div className="card livingSpace-feature">특징(주변 편의시설, 역세권 등등)</div>
       </div>

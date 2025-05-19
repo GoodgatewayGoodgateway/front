@@ -14,7 +14,6 @@ import ChatRoom from "./Pages/ChatRoom";
 import MyPages from "./Pages/MyPages";
 import ScrollToTop from "./Components/ScrollToTop";
 import LivingSpaceDetail from "./Pages/LivingSpaceDetail";
-import KakaoMap from "./Pages/Kakaomap";
 
 const App = () => {
   return (
@@ -36,7 +35,6 @@ const App = () => {
             <Route path="/chat/:roomId" element={<ChatRoom userData={userData} />} />
             <Route path="/mypages" element={<MyPages />} />
             <Route path="*" element={<Notfound />} />
-            <Route path="/kakaomap" element={<KakaoMap />} />
           </Routes>
         </div>
       </Router>
