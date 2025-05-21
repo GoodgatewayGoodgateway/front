@@ -1,6 +1,8 @@
 // HeroBanner.jsx
 import React from 'react';
 import './css/HeroBanner.css';
+import { Link } from 'react-router-dom';
+
 
 function HeroBanner() {
     return (
@@ -11,8 +13,12 @@ function HeroBanner() {
                 <p className="hero-subtitle">성향, 생활패턴, 관심사가 비슷한 최적의 룸메이트와 함께하세요</p>
                 <div className="search-container">
                     <div className="test-promo">
-                        <p>룸메이트 성향 테스트로 나와 잘 맞는 사람을 알아보세요</p>
-                        <button className="test-button">테스트 시작하기</button>
+                        <p>룸메이트 성향이 나와 잘 맞는 사람을 알아보세요</p>
+
+                        <Link to="/meeting" className="test-button">
+                            매칭 시작하기
+                        </Link>
+
                     </div>
 
                 </div>

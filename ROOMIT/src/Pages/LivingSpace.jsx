@@ -6,7 +6,7 @@ import { Funnel } from "lucide-react";
 import { useState } from "react";
 
 const LivingSpace = ({ LivingSpaceData }) => {
-  const [filteredLivingSpaces, setFilteredLivingSpaces] = useState(LivingSpaceData);
+  const [filteredLivingSpaces] = useState(LivingSpaceData);
   const [open, setOpen] = useState(false);
 
   const togglePanel = () => {

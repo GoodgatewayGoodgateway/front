@@ -1,14 +1,14 @@
 import "./css/LivingSpace_Item.css";
 
 const LivingSpace_item = ({ LivingSpaceData }) => {
-  const {
-    id,
-    name = "이름 없음",
-    type = "월세/전세",
-    location = "상세위치 없음",
-    maxPersons = 0,
-    presentPersons = 0,
-  } = LivingSpaceData;
+//   const {
+//     id,
+//     name = "이름 없음",
+//     type = "월세/전세",
+//     location = "상세위치 없음",
+//     maxPersons = 0,
+//     presentPersons = 0,
+//   } = LivingSpaceData;
 
   return (
     <div className="livingSpace-item">

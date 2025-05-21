@@ -5,7 +5,7 @@ import FeatureCard from './FeatureCard';
 
 function FeatureSection() {
     const features = [
-        {
+        {           
             id: 1,
             icon: '🧩',
             title: '성향 기반 매칭',

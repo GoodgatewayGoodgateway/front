@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { fetchProfile } from '../services/user';
+import React, { useState, useEffect, useCallback } from 'react';
+import { fetchAllProfiles } from '../services/user';
 import ProfileCard from '../Components/User_Profile_Card';
 import Header from '../Components/Header';
-import FilterPanel from '../Components/Filter'; // ✅ FilterPanel 컴포넌트 import
+import FilterPanel from '../Components/Filter';
 import { Funnel } from 'lucide-react';
 import '../Pages/css/Meeting.css';
+import Loading from './Loading';
+import RetryPage from './RetryPage';
 
-// 필터 데이터 정의
 const filters = [
     { category: '나이대', options: ['상관없음', '20-25', '26-30', '31-35'] },
     { category: '흡연', options: ['상관없음', '비흡연', '흡연'] },
@@ -25,32 +26,25 @@ const Meeting = () => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const userId = localStorage.getItem("userId");
-        console.log("📌 [Meeting.jsx] userId:", userId);
-
-        const loadProfiles = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const data = await fetchProfile(userId);
-                console.log("✅ 서버에서 받은 프로필 데이터:", data);
-                // fetchProfile이 단일 객체 또는 배열을 반환할 수 있음
-                const userArray = Array.isArray(data) ? data : [data];
-                setUsers(userArray);
-                setFilteredUsers(userArray);
-            } catch (error) {
-                console.error('❌ 데이터를 가져오는 데 실패했습니다:', error);
-                setError('프로필 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        if (userId) {
-            loadProfiles();
+    const loadProfiles = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const data = await fetchAllProfiles();
+            console.log("✅ 서버에서 받은 전체 유저 프로필:", data);
+            setUsers(data);
+            setFilteredUsers(data);
+        } catch (err) {
+            console.error('❌ 데이터를 가져오는 데 실패했습니다:', err);
+            setError('데이터를 불러오는 데 실패했습니다.');
+        } finally {
+            setIsLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        loadProfiles();
+    }, [loadProfiles]);
 
     const togglePanel = () => {
         setOpen(prev => !prev);
@@ -58,18 +52,11 @@ const Meeting = () => {
     };
 
     if (isLoading) {
-        return <div className="loading">데이터를 불러오는 중...</div>;
+        return <Loading />;
     }
 
     if (error) {
-        return (
-            <div className="error">
-                {error}
-                <button onClick={() => window.location.reload()} style={{ marginLeft: '10px' }}>
-                    다시 시도
-                </button>
-            </div>
-        );
+        return <RetryPage errorMessage={error} onRetry={loadProfiles} />;
     }
 
     return (
@@ -90,14 +77,14 @@ const Meeting = () => {
                 filters={filters}
                 users={users}
                 onFilterChange={setFilteredUsers}
-                showFilterButton={false} // ✅ 내부 필터 버튼 비활성화
+                showFilterButton={false}
             />
 
             <div className="roommate-list">
                 {filteredUsers
-                    .filter(user => user && user.id)
+                    .filter(user => user && user.profile)
                     .map(user => (
-                        <ProfileCard key={user.id} userData={user} />
+                        <ProfileCard key={user.userId} userData={user.profile} />
                     ))}
             </div>
         </div>

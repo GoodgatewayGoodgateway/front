@@ -16,10 +16,13 @@ const ProfileCard = ({ userData }) => {
     const navigate = useNavigate();
 
     const handleDetailClick = () => {
-        if (id) {
-            navigate(`/meeting/${id}`);
+        if (!id) {
+            alert('프로필 ID가 없어 상세보기 불가');
+            return;
         }
+        navigate(`/meeting/${id}`);
     };
+
 
     return (
         <div className="profile-card" style={{ cursor: 'pointer' }}>

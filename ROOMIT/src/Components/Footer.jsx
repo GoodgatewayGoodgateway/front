@@ -35,9 +35,6 @@ function Footer() {
                     <p>이메일: info@roomit.co.kr</p>
                     <p>전화: 02-123-4567</p>
                     <div className="social-icons">
-                        <span>📱</span>
-                        <span>💻</span>
-                        <span>📧</span>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,11 @@ const api = axios.create({
     },
 });
 
+export const fetchAllProfiles = async () => {
+    const response = await axios.get('http://172.28.2.18:8081/api/user/all/full');
+    return response.data;
+};
+
 export const submitProfile = async (profileData) => {
     try {
         if (!profileData.name || !profileData.age || !profileData.job) {
