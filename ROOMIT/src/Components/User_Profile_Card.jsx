@@ -4,7 +4,7 @@ import '../Components/css/User_Profile_Card.css';
 
 const ProfileCard = ({ userData }) => {
     const {
-        id,
+        userId,
         name = '이름 없음',
         age = 'N/A',
         sex = '성별 미정',
@@ -16,11 +16,11 @@ const ProfileCard = ({ userData }) => {
     const navigate = useNavigate();
 
     const handleDetailClick = () => {
-        if (!id) {
+        if (!userId) {
             alert('프로필 ID가 없어 상세보기 불가');
             return;
         }
-        navigate(`/meeting/${id}`);
+        navigate(`/meeting/${userId}`);
     };
 
 
