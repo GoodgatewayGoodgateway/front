@@ -1,57 +1,35 @@
-import axios from 'axios';
+// 📁 api/auth.js
+import api from './instance';
 
-const BASE_URL = 'http://172.28.2.18:8081/api';
+// 공통 에러 처리 함수
+const handleApiError = (error, contextMessage) => {
+    const errorMessage = error.response
+        ? `서버 오류: ${error.response.data.error || error.response.statusText}`
+        : error.request
+            ? '서버와 연결할 수 없습니다.'
+            : `요청 설정 오류: ${error.message}`;
 
-export const registerUser = async (userId, email, password) => {
+    console.error(`❌ ${contextMessage}:`, errorMessage);
+    alert(errorMessage);
+    throw error;
+};
+
+// 회원가입
+export const registerUser = async ({ userId, email, password }) => {
     try {
-        const response = await axios.post(`${BASE_URL}/user`,
-            {
-                userId,
-                email,
-                password
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            }
-        );
+        const response = await api.post('/user', { userId, email, password });
         return response.data;
     } catch (error) {
-        console.error('회원가입 실패:', error);
-        throw error;
+        handleApiError(error, '회원가입 실패');
     }
 };
 
-
-export const login = async (userId, password) => {
+// 로그인
+export const login = async ({ userId, password }) => {
     try {
-        const response = await axios.post(`${BASE_URL}/login`, {
-            userId,
-            password
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        });
+        const response = await api.post('/login', { userId, password });
         return response.data;
     } catch (error) {
-        if (error.response) {
-            // 서버 응답 오류
-            console.error('서버 응답 오류:', error.response.data);
-            alert(`서버 오류: ${error.response.data.error || '알 수 없는 오류'}`);
-        } else if (error.request) {
-            // 서버 응답 없음
-            console.error('서버 응답 없음:', error.request);
-            alert('서버와 연결할 수 없습니다.');
-        } else {
-            // 요청 설정 오류
-            console.error('요청 설정 오류:', error.message);
-            alert(`요청 설정 오류: ${error.message}`);
-        }
-        throw error;
+        handleApiError(error, '로그인 실패');
     }
 };
-

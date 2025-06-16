@@ -20,7 +20,7 @@ const Login = () => {
         email: '',
         password: ''
     });
-
+ 
     useEffect(() => {
         setIsActive(location.state?.register ?? false);
     }, [location.state]);
@@ -100,13 +100,6 @@ const Login = () => {
                             <a href="#">비밀번호를 잊으셨나요?</a>
                         </div>
                         <button type="submit" className="btn">로그인</button>
-                        <p>또는 소셜 계정으로 로그인</p>
-                        <div className="social-icons">
-                            <a href="#"><FaGoogle /></a>
-                            <a href="#"><FaFacebook /></a>
-                            <a href="#"><FaGithub /></a>
-                            <a href="#"><FaLinkedin /></a>
-                        </div>
                     </form>
                 </div>
 
@@ -148,13 +141,6 @@ const Login = () => {
                             <Lock className="icon" />
                         </div>
                         <button type="submit" className="btn">가입하기</button>
-                        <p>또는 소셜 계정으로 가입하기</p>
-                        <div className="social-icons">
-                            <a href="#"><FaGoogle /></a>
-                            <a href="#"><FaFacebook /></a>
-                            <a href="#"><FaGithub /></a>
-                            <a href="#"><FaLinkedin /></a>
-                        </div>
                     </form>
                 </div>
 

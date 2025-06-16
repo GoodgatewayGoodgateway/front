@@ -4,7 +4,7 @@ import React from 'react';
 import './css/HousingSection.css';
 import HousingCard from './HousingCard';
 
-function HousingSection() {
+function  HousingSection() {
     const houses = [
         {
             id: 1,

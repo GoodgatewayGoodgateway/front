@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://172.28.2.18:8081/api',
+    baseURL: '/api', 
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
 export const fetchAllProfiles = async () => {
-    const response = await axios.get('http://172.28.2.18:8081/api/user/all/full');
+    const response = await axios.get('/api/user/all/full');
     return response.data;
 };
 

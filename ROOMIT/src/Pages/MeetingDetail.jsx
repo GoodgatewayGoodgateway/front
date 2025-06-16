@@ -12,8 +12,7 @@ import deluser from '/src/assets/deluser.svg';
 
 const UserProfile = ({ userData, currentUser, setCurrentUser }) => {
     const { id } = useParams();
-    // const user = userData.find((u) => u.id === parseInt(id));
-    const user = userData.find((u) => String(u.id) === id);
+    const user = userData.find((u) => u.id === parseInt(id));
     const navigate = useNavigate();
     const currentUserId = 99;
     const [isFavorited, setIsFavorited] = useState(false); // ✅ 즐겨찾기 상태 추가

@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     open: true,
     proxy: {
-      '/api': 'http://172.28.2.18:8081',  // 백엔드 서버 주소
+      '/api': 'http://172.28.2.18:8082',  // 백엔드 서버 주소
     },
   },
 });

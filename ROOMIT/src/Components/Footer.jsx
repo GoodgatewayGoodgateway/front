@@ -1,6 +1,7 @@
 // Footer.jsx
 import React from 'react';
 import './css/Footer.css';
+import { Link } from 'react-router-dom';
 
 function Footer() {
     return (
@@ -14,7 +15,7 @@ function Footer() {
                     <div className="footer-links-column">
                         <h3>서비스</h3>
                         <ul>
-                            <li>룸메이트 매칭</li>
+                            <li><Link to="/mypage">룸메이트 매칭</Link></li>
                             <li>주거공간 찾기</li>
                             <li>생활규칙 관리</li>
                             <li>신뢰도 평가</li>
