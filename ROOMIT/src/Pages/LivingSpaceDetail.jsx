@@ -1,7 +1,6 @@
 import "./css/LivingSpaceDetail.css";
 import Header from "../Components/Header";
 import LivingSpaceData from "../Data/LivingSpaceData";
-import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import KakaoMap from "../Components/Kakaomap";
 
@@ -22,11 +21,14 @@ const LivingSpaceDetail = () => {
       <div className="livingSpaceDetail-content">
         <div className="card livingSpaceDetail-item">
           <div className="image-container">
-            <img src="/images/room.jpg" alt="Room" />
+            <img
+              src="https://img.khan.co.kr/news/r/1100xX/2024/07/21/news-p.v1.20240719.96f020c1776f4ef69692b7b6825fb827.webp"
+              alt={livingSpace.name}
+            />
           </div>
 
           <div className="info">
-            <b>{livingSpace.name}</b>
+            <h3>{livingSpace.name}</h3>
             <p>임대 유형: {livingSpace.type}</p>
             <p>임대료: {livingSpace.price}</p>
             <p>위치: {livingSpace.location}</p>
@@ -37,7 +39,7 @@ const LivingSpaceDetail = () => {
           </div>
         </div>
 
-        <KakaoMap />
+        <KakaoMap livingSpace={livingSpace} id={id} />
 
         <div className="card livingSpace-feature">특징(주변 편의시설, 역세권 등등)</div>
       </div>

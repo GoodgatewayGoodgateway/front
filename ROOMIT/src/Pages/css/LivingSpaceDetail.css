@@ -40,6 +40,12 @@
   justify-content: center;
   align-items: center;
 }
+.livingSpaceDetail-item .image-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+}
 
 .livingSpaceDetail-item .info p {
   margin: 5px 0;
