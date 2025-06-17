@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { fetchAllProfiles } from '../services/user';
 import ProfileCard from '../Components/User_Profile_Card';
-import Header from '../Components/Header';
+// import Header from '../Components/Header';
 import FilterPanel from '../Components/Filter';
 import { Funnel } from 'lucide-react';
 import '../Pages/css/Meeting.css';
@@ -61,7 +61,7 @@ const Meeting = () => {
 
     return (
         <div className="roommates-list">
-            <Header />
+            {/* <Header /> */}
             <div className="meeting-header">
                 <h1>룸메이트 매칭</h1>
                 <h2>룸메이트를 찾아보세요!</h2>
@@ -84,9 +84,13 @@ const Meeting = () => {
                 {filteredUsers
                     .filter(user => user && user.profile)
                     .map(user => (
-                        <ProfileCard key={user.userId} userData={user.profile} />
+                        <ProfileCard
+                            key={user.userId}
+                            userData={{ ...user.profile, id: user.userId }}
+                        />
                     ))}
             </div>
+
         </div>
     );
 };

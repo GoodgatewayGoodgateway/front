@@ -1,5 +1,5 @@
 import "./css/LivingSpace.css";
-import Header from "../Components/Header";
+// import Header from "../Components/Header";
 import LivingSpaceItem from "../Components/LivingSpace_Item";
 import FilterPanel from "../Components/FilterPanel";
 import { Funnel } from "lucide-react";
@@ -16,7 +16,7 @@ const LivingSpace = ({ LivingSpaceData }) => {
 
   return (
     <div className="livingSpace">
-      <Header />
+      {/* <Header /> */}
       <div className="container">
         <div className="title">
           <h1>주거공간</h1>

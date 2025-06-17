@@ -8,7 +8,7 @@ import './css/MyPages.css';
 import Header from '../Components/Header';
 import { fetchProfile, submitProfile, updateMatching, uploadAvatar } from '../services/user';
 
-const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
+const MyEditPage = ({ currentUser, updateUserData }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         id: currentUser?.id || '',
@@ -173,48 +173,47 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
 
         setIsSaving(true);
         try {
-            let profileData = {
-                ...formData,
-                userId: formData.id,
-                gender: formData.sex,
-                dayNightType: formData.lifestyle.dayNightPreference,
-                wakeUpTime: formData.lifestyle.wakeUpTime,
-                sleepTime: formData.lifestyle.sleepTime,
-                cleanLevel: formData.habits.cleaning?.cleanLevel || '',
-                noise: formData.habits.noiseSensitivity?.sensitivityLevel || '',
-            };
-
-            if (profileData.avatarFile) {
+            // 아바타 업로드
+            let avatarUrl = formData.avatar;
+            if (formData.avatarFile) {
                 try {
-                    const avatarUrl = await uploadAvatar(profileData.avatarFile);
-                    profileData.avatar = avatarUrl;
+                    avatarUrl = await uploadAvatar(formData.avatarFile);
                 } catch {
                     throw new Error('아바타 업로드에 실패했습니다.');
                 }
-            } else if (!profileData.avatar) {
-                profileData.avatar = '';
             }
 
-            delete profileData.avatarFile;
-            delete profileData.sex;
-            delete profileData.lifestyle;
-            delete profileData.habits;
+            // 백엔드가 요구하는 flat 구조
+            const profileData = {
+                userId: formData.id,
+                name: formData.name,
+                age: age,
+                gender: formData.sex,
+                location: formData.location,
+                job: formData.job,
+                introduction: formData.introduction,
+                idealRoommate: formData.idealRoommate,
+                mbti: formData.mbti,
+                dayNightType: formData.lifestyle?.dayNightPreference || '',
+                wakeUpTime: formData.lifestyle?.wakeUpTime || '',
+                sleepTime: formData.lifestyle?.sleepTime || '',
+                cleanLevel: formData.habits.cleaning?.cleanLevel || '',
+                noise: formData.habits.noiseSensitivity?.sensitivityLevel || '',
+                smoking: formData.smoking,
+                drinking: formData.drinking,
+                avatar: avatarUrl || '',
+            };
 
             await submitProfile(profileData);
             updateUserData(profileData);
             navigate('/mypages');
         } catch (error) {
-            console.error('저장 실패:', {
-                message: error.message,
-                stack: error.stack,
-                userId: currentUser?.id,
-            });
+            console.error('저장 실패:', error);
             alert(`프로필 저장에 실패했습니다: ${error.message}`);
         } finally {
             setIsSaving(false);
         }
     };
-
     const handleToggleMatching = async () => {
         const newMatchingState = !formData.matching;
         const updatedFormData = { ...formData, matching: newMatchingState };
@@ -303,7 +302,7 @@ const MyEditPage = ({ currentUser, setCurrentUser, updateUserData }) => {
 
     return (
         <>
-            <Header currentUser={currentUser} setCurrentUser={setCurrentUser} />
+            {/* <Header currentUser={currentUser} setCurrentUser={setCurrentUser} /> */}
             <div className="meeting-user-detail">
                 <div className="profile-header">
                     <div className="mypageprofile-image-large">

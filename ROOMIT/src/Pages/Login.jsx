@@ -4,7 +4,7 @@ import { User, Lock, Mail } from 'lucide-react';
 import { FaGoogle, FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { login } from '../features/auth/authSlice';
-import { login as loginAPI, registerUser } from '../services/auth'; // registerUser 임포트 추가
+import { loginUser as loginAPI, registerUser } from '../services/auth'; // registerUser 임포트 추가
 import './css/Login.css';
 
 const Login = () => {
@@ -35,7 +35,8 @@ const Login = () => {
             const { username, email, password } = registerData;
 
             // 회원가입 요청 (registerUser 사용)
-            const result = await registerUser(username, email, password); // registerUser 사용
+            const result = await registerUser({ userId: username, email, password });
+
 
             console.log('회원가입 성공:', result);
             alert('회원가입 성공! 로그인 해주세요.');
@@ -49,18 +50,35 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log('로그인 데이터:', { userId: loginUsername, password: loginPassword });  // 데이터 확인
+        console.log('로그인 데이터:', { userId: loginUsername, password: loginPassword });
+
         try {
-            const userData = await loginAPI(loginUsername, loginPassword); // axios 요청
-            dispatch(login(userData)); // Redux 상태 업데이트
-            localStorage.setItem('currentUser', JSON.stringify(userData));
+            const response = await loginAPI({
+                userId: loginUsername,
+                password: loginPassword
+            });
+
+            console.log("✅ loginAPI 응답 확인:", response);
+
+            // 여기를 수정!
+            const { token, user } = await loginAPI({ userId: loginUsername, password: loginPassword });
+
+
+            dispatch(login({ user, token }));
+
+
+            localStorage.setItem('accessToken', token);
+
+            alert('로그인 성공!');
             navigate('/');
         } catch (error) {
-            const errorMessage = error.response?.data?.message || '❌ 로그인에 실패했습니다. 아이디나 비밀번호를 확인해주세요.';
+            const errorMessage =
+                error.response?.data?.message || '❌ 로그인에 실패했습니다. 아이디나 비밀번호를 확인해주세요.';
             alert(errorMessage);
             console.error('로그인 에러:', error);
         }
     };
+
 
 
 

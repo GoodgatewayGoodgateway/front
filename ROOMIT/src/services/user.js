@@ -12,27 +12,36 @@ export const fetchAllProfiles = async () => {
     return response.data;
 };
 
+
+
 export const submitProfile = async (profileData) => {
     try {
         if (!profileData.name || !profileData.age || !profileData.job) {
             throw new Error('필수 데이터가 누락되었습니다.');
         }
 
-        const response = await api.post('/profile', profileData, {
+        console.log("🔍 보낼 프로필 데이터:", profileData);
+
+        const response = await api.post('/secure/profile', profileData, {
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
         });
+
         console.log('✅ 프로필 등록/수정 성공:', response.data);
         return response.data;
     } catch (error) {
         const errorMessage = error.response
             ? `서버 에러: ${error.response.status} - ${error.response.data.message || '알 수 없는 에러'}`
             : error.message || '네트워크 에러가 발생했습니다.';
+
         console.error('❌ 프로필 등록/수정 실패:', errorMessage);
         throw new Error(errorMessage);
     }
 };
+
+
 
 export const fetchProfile = async (userId) => {
     try {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../Components/Header';
+// import Header from '../Components/Header';
 import HeroBanner from '../Components/HeroBanner';
 import FeatureSection from '../Components/FeatureSection';
 import RoommateSection from '../Components/RoommateSection';
@@ -13,7 +13,7 @@ const Main = ({ userData }) => {
 
     return (
         <div>
-            <Header />
+            {/* <Header /> */}
             <HeroBanner />
             <FeatureSection />
             <RoommateSection users={userData} />

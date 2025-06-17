@@ -25,10 +25,10 @@ export const registerUser = async ({ userId, email, password }) => {
 };
 
 // 로그인
-export const login = async ({ userId, password }) => {
+export const loginUser = async ({ userId, password }) => {
     try {
         const response = await api.post('/login', { userId, password });
-        return response.data;
+        return response.data; // { token, user }
     } catch (error) {
         handleApiError(error, '로그인 실패');
     }
