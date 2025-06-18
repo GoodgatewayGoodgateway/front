@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { User, Lock, Mail } from 'lucide-react';
-import { FaGoogle, FaFacebook, FaGithub, FaLinkedin } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
-import { login } from '../features/auth/authSlice';
-import { loginUser as loginAPI, registerUser } from '../services/auth'; // registerUser 임포트 추가
+import { loginUser as loginAPI, registerUser } from '../services/auth';
 import './css/Login.css';
+import { fetchProfile } from '../services/user';  // 추가
 
-const Login = () => {
+const Login = ({ setCurrentUser }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const [isActive, setIsActive] = useState(location.state?.register ?? false);
     const [loginUsername, setLoginUsername] = useState('');
@@ -20,7 +17,7 @@ const Login = () => {
         email: '',
         password: ''
     });
- 
+
     useEffect(() => {
         setIsActive(location.state?.register ?? false);
     }, [location.state]);
@@ -34,9 +31,7 @@ const Login = () => {
         try {
             const { username, email, password } = registerData;
 
-            // 회원가입 요청 (registerUser 사용)
             const result = await registerUser({ userId: username, email, password });
-
 
             console.log('회원가입 성공:', result);
             alert('회원가입 성공! 로그인 해주세요.');
@@ -49,37 +44,38 @@ const Login = () => {
     };
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        console.log('로그인 데이터:', { userId: loginUsername, password: loginPassword });
+    e.preventDefault();
+    console.log('로그인 데이터:', { userId: loginUsername, password: loginPassword });
 
-        try {
-            const response = await loginAPI({
-                userId: loginUsername,
-                password: loginPassword
-            });
+    try {
+        const response = await loginAPI({
+            userId: loginUsername,
+            password: loginPassword
+        });
 
-            console.log("✅ loginAPI 응답 확인:", response);
+        console.log("✅ loginAPI 응답 확인:", response);
 
-            // 여기를 수정!
-            const { token, user } = await loginAPI({ userId: loginUsername, password: loginPassword });
+        const { token, userId, email } = response;
 
+        // ✅ 로그인 성공 후 profile 호출
+        const profile = await fetchProfile(userId);
 
-            dispatch(login({ user, token }));
+        const fullUser = { userId, email, profile };
 
+        localStorage.setItem('accessToken', token);
+        localStorage.setItem('currentUser', JSON.stringify(fullUser));
 
-            localStorage.setItem('accessToken', token);
+        setCurrentUser(fullUser);
 
-            alert('로그인 성공!');
-            navigate('/');
-        } catch (error) {
-            const errorMessage =
-                error.response?.data?.message || '❌ 로그인에 실패했습니다. 아이디나 비밀번호를 확인해주세요.';
-            alert(errorMessage);
-            console.error('로그인 에러:', error);
-        }
-    };
-
-
+        alert('로그인 성공!');
+        navigate('/');
+    } catch (error) {
+        const errorMessage =
+            error.response?.data?.message || '❌ 로그인에 실패했습니다. 아이디나 비밀번호를 확인해주세요.';
+        alert(errorMessage);
+        console.error('로그인 에러:', error);
+    }
+};
 
 
     const handleRegisterChange = (e) => {

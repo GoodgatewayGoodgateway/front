@@ -10,27 +10,29 @@ import { fetchProfile, submitProfile, updateMatching, uploadAvatar } from '../se
 
 const MyEditPage = ({ currentUser, updateUserData }) => {
     const navigate = useNavigate();
+
+    const profileData = currentUser?.profile || {};
     const [formData, setFormData] = useState({
         id: currentUser?.id || '',
         userId: currentUser?.id || '',
-        name: currentUser?.name || '',
-        age: currentUser?.age || '',
-        job: currentUser?.job || '',
-        avatar: currentUser?.avatar || '',
+        name: profileData.name || '',
+        age: profileData.age || '',
+        job: profileData.job || '',
+        avatar: profileData.avatar || '',
         avatarFile: null,
-        sex: currentUser?.gender || '',
-        location: currentUser?.location || '',
-        introduction: currentUser?.introduction || '',
+        sex: profileData.gender || '',
+        location: profileData.location || '',
+        introduction: profileData.introduction || '',
         interests: currentUser?.interests || [],
-        idealRoommate: currentUser?.idealRoommate || '',
-        mbti: currentUser?.mbti || '',
-        smoking: currentUser?.smoking || '',
-        drinking: currentUser?.drinking || '',
+        idealRoommate: profileData.idealRoommate || '',
+        mbti: profileData.mbti || '',
+        smoking: profileData.smoking || '',
+        drinking: profileData.drinking || '',
         matching: currentUser?.matching || false,
         lifestyle: {
-            wakeUpTime: currentUser?.wakeUpTime || '',
-            sleepTime: currentUser?.sleepTime || '',
-            dayNightPreference: currentUser?.dayNightType || '',
+            wakeUpTime: profileData.wakeUpTime || '',
+            sleepTime: profileData.sleepTime || '',
+            dayNightPreference: profileData.dayNightType || '',
         },
         habits: currentUser?.habits || {
             food: { mealTime: '', kitchenUse: '', cookingFrequency: '' },
@@ -39,6 +41,7 @@ const MyEditPage = ({ currentUser, updateUserData }) => {
             petPreferences: { allowed: '', petType: '', allergy: '' },
         },
     });
+
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -52,22 +55,36 @@ const MyEditPage = ({ currentUser, updateUserData }) => {
             try {
                 const data = await fetchProfile(currentUser.id);
                 if (isMounted) {
-                    setFormData((prev) => ({
-                        ...prev,
-                        ...data,
-                        sex: data.gender || prev.sex,
-                        habits: {
-                            food: data.habits?.food || prev.habits.food,
-                            cleaning: data.habits?.cleaning || prev.habits.cleaning,
-                            noiseSensitivity: data.habits?.noiseSensitivity || prev.habits.noiseSensitivity,
-                            petPreferences: data.habits?.petPreferences || prev.habits.petPreferences,
-                        },
+                    const initData = {
+                        id: data.id || currentUser?.id || '',
+                        userId: data.id || currentUser?.id || '',
+                        name: data.name || '',
+                        age: data.age || '',
+                        job: data.job || '',
+                        avatar: data.avatar || '',
+                        avatarFile: null,
+                        sex: data.gender || '',
+                        location: data.location || '',
+                        introduction: data.introduction || '',
+                        interests: data.interests || [],
+                        idealRoommate: data.idealRoommate || '',
+                        mbti: data.mbti || '',
+                        smoking: data.smoking || '',
+                        drinking: data.drinking || '',
+                        matching: data.matching || currentUser?.matching || false,
                         lifestyle: {
-                            wakeUpTime: data.lifestyle?.wakeUpTime || prev.lifestyle.wakeUpTime,
-                            sleepTime: data.lifestyle?.sleepTime || prev.lifestyle.sleepTime,
-                            dayNightPreference: data.lifestyle?.dayNightPreference || prev.lifestyle.dayNightPreference,
+                            wakeUpTime: data.wakeUpTime || '',
+                            sleepTime: data.sleepTime || '',
+                            dayNightPreference: data.dayNightType || '',
                         },
-                    }));
+                        habits: currentUser?.habits || {
+                            food: { mealTime: '', kitchenUse: '', cookingFrequency: '' },
+                            cleaning: { cleanLevel: '', cleaningFrequency: '', sharedSpaceManagement: '' },
+                            noiseSensitivity: { sensitivityLevel: '', sleepNoisePreference: '', musicTVVolume: '' },
+                            petPreferences: { allowed: '', petType: '', allergy: '' },
+                        },
+                    };
+                    setFormData(initData);
                 }
             } catch (error) {
                 console.error('프로필 로딩 실패:', {
@@ -173,17 +190,11 @@ const MyEditPage = ({ currentUser, updateUserData }) => {
 
         setIsSaving(true);
         try {
-            // 아바타 업로드
             let avatarUrl = formData.avatar;
             if (formData.avatarFile) {
-                try {
-                    avatarUrl = await uploadAvatar(formData.avatarFile);
-                } catch {
-                    throw new Error('아바타 업로드에 실패했습니다.');
-                }
+                avatarUrl = await uploadAvatar(formData.avatarFile);
             }
 
-            // 백엔드가 요구하는 flat 구조
             const profileData = {
                 userId: formData.id,
                 name: formData.name,
@@ -214,6 +225,7 @@ const MyEditPage = ({ currentUser, updateUserData }) => {
             setIsSaving(false);
         }
     };
+
     const handleToggleMatching = async () => {
         const newMatchingState = !formData.matching;
         const updatedFormData = { ...formData, matching: newMatchingState };
@@ -235,7 +247,6 @@ const MyEditPage = ({ currentUser, updateUserData }) => {
             updateUserData({ ...formData, matching: !newMatchingState });
         }
     };
-
     const lifestyleCategories = [
         {
             title: '🍽️ 식생활 & 주방 관련',

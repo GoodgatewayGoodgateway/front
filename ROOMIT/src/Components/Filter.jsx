@@ -29,7 +29,7 @@ const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
 
     return (
         <div className="meetcheckbox-group">
-            <strong className="category-title">└ {category}</strong>
+            <strong className="category-title">{category}</strong>
             <ul className="nested-options">
                 {options.map((option, index) => (
                     <li key={option}>
@@ -40,7 +40,7 @@ const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
                                 checked={!!isSelected(option)}
                                 onChange={() => onToggle(category, option)}
                             />
-                            {index === options.length - 1 ? `└ ${option}` : `├ ${option}`}
+                            {index === options.length - 1 ? ` ${option}` : ` ${option}`}
                         </label>
                     </li>
                 ))}
@@ -71,7 +71,8 @@ const FilterPanel = ({ open, setOpen, filters, items, onFilterChange, showFilter
             return;
         }
 
-        const filtered = items.filter(item => {
+        const filtered = items
+        .filter(item => {
             return filters.every(({ category, path, filterFn }) => {
                 const selectedValue = filtersObj[category];
                 if (!selectedValue || selectedValue === '상관없음') return true;

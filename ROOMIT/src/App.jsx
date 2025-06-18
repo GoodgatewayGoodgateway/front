@@ -1,9 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { Provider, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
-import store from './app/store';
-import { login } from './features/auth/authSlice';
+import React from 'react';
+
 
 import Header from './Components/Header';
 import ScrollToTop from './Components/ScrollToTop';
@@ -15,58 +13,46 @@ import Login from './Pages/Login';
 import MeetingDetail from './Pages/MeetingDetail';
 import ChatRoom from './Pages/ChatRoom';
 import MyPages from './Pages/MyPages';
+import Guide from './Pages/Guide.jsx';
 
-// import userData from './Data/UserData';
 import LivingSpaceData from './Data/LivingSpaceData';
 import AuthGuard from './Auth/AuthGuard';
 import GuestGuard from './Auth/GuestGuard';
 
-// App.jsx
 const AppContent = () => {
-  const dispatch = useDispatch();
-  const [isReady, setIsReady] = useState(false);
   const location = useLocation();
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    const storedUser = localStorage.getItem('currentUser');
-
-    if (token && storedUser && storedUser !== 'undefined') {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        dispatch(login({ token, user: parsedUser }));
-        console.log('✅ 로그인 복원:', parsedUser);
-      } catch (e) {
-        console.error('⚠️ 사용자 정보 파싱 오류:', e);
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('currentUser');
-      }
-    } else {
-      console.warn('🚫 로그인 복원 불가: currentUser 없음 또는 잘못됨');
-    }
-
-    setIsReady(true);
-  }, [dispatch]);
-
-  if (!isReady) return null;
-
   const hideHeaderPaths = ['/login', '/logout'];
   const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
+  // ✅ currentUser 상태 추가
+  const [currentUser, setCurrentUser] = React.useState(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
   return (
     <>
-      {isReady && !shouldHideHeader && <Header />} {/* ✅ 수정: isReady 추가 */}
+      {!shouldHideHeader && <Header currentUser={currentUser} />}
       <ScrollToTop />
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
+          <Route path="/login" element={
+            <GuestGuard>
+              <Login setCurrentUser={setCurrentUser} />
+            </GuestGuard>
+          } />
           <Route path="/meeting" element={<Meeting />} />
           <Route path="/meeting/:id" element={<AuthGuard><MeetingDetail /></AuthGuard>} />
           <Route path="/housing" element={<LivingSpace LivingSpaceData={LivingSpaceData} />} />
           <Route path="/chat" element={<AuthGuard><ChatRoom /></AuthGuard>} />
+          <Route path="/Guide" element={<AuthGuard><Guide /></AuthGuard>} />
           <Route path="/chat/:roomId" element={<AuthGuard><ChatRoom /></AuthGuard>} />
-          <Route path="/mypages" element={<AuthGuard><MyPages /></AuthGuard>} />
+          <Route path="/mypages" element={
+            <AuthGuard>
+              <MyPages currentUser={currentUser} setCurrentUser={setCurrentUser} />
+            </AuthGuard>
+          } />
           <Route path="/mypage/:id" element={<div>프로필 페이지</div>} />
           <Route path="*" element={<Notfound />} />
         </Routes>
@@ -76,12 +62,12 @@ const AppContent = () => {
 };
 
 
+
+
 const App = () => (
-  <Provider store={store}>
-    <Router>
-      <AppContent />
-    </Router>
-  </Provider>
+  <Router>
+    <AppContent />
+  </Router>
 );
 
 export default App;

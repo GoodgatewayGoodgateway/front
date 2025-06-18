@@ -9,15 +9,43 @@ import Loading from './Loading';
 import RetryPage from './RetryPage';
 
 const filters = [
-    { category: '나이대', options: ['상관없음', '20-25', '26-30', '31-35'] },
-    { category: '흡연', options: ['상관없음', '비흡연', '흡연'] },
-    { category: '활동시간', options: ['상관없음', '아침형', '저녁형'] },
-    { category: '음주', options: ['상관없음', '음주', '가끔', '비음주'] },
-    { category: '청결 수준', options: ['상관없음', '낮음', '보통', '높음', '매우 높음'] },
-    { category: '소음 민감도', options: ['상관없음', '둔감', '보통', '민감', '매우 민감'] },
-    { category: '반려동물 허용', options: ['상관없음', '허용 안함', '일부 허용', '대부분 허용', '모두 허용'] },
-    { category: '식사 시간', options: ['상관없음', '불규칙적', '아침형', '저녁형', '밤형'] },
+    {
+        category: '나이대',
+        path: 'profile.age',
+        options: ['상관없음', '20-25', '26-30', '31-35'],
+        filterFn: (age, selectedRange) => {
+            if (typeof age !== 'number') return false;
+            const [min, max] = selectedRange.split('-').map(Number);
+            return age >= min && age <= max;
+        }
+    },
+    {
+        category: '흡연',
+        path: 'profile.smoking',
+        options: ['상관없음', '비흡연', '흡연']
+    },
+    {
+        category: '활동시간',
+        path: 'profile.dayNightType',
+        options: ['상관없음', '아침형', '저녁형', '밤']
+    },
+    {
+        category: '음주',
+        path: 'profile.drinking',
+        options: ['상관없음', '음주', '가끔', '비음주', '안 함']
+    },
+    {
+        category: '청결 수준',
+        path: 'profile.cleanLevel',
+        options: ['상관없음', '낮음', '보통', '높음', '매우 높음']
+    },
+    {
+        category: '소음 민감도',
+        path: 'profile.noise',
+        options: ['상관없음', '낮음', '보통', '높음', '매우 민감']
+    }
 ];
+
 
 const Meeting = () => {
     const [users, setUsers] = useState([]);
@@ -75,10 +103,11 @@ const Meeting = () => {
                 open={open}
                 setOpen={setOpen}
                 filters={filters}
-                users={users}
+                items={users}         // ✅ 수정: items 라고 줘야 정상 동작
                 onFilterChange={setFilteredUsers}
                 showFilterButton={false}
             />
+
 
             <div className="roommate-list">
                 {filteredUsers
