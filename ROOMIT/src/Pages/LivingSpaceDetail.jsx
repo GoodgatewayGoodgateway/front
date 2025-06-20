@@ -14,6 +14,11 @@ const LivingSpaceDetail = () => {
     return <div>해당 매물을 찾을 수 없습니다.</div>;
   }
 
+  const dataToSend = { id: id, livingSpace: livingSpace };
+  const handleClick = () => {
+    navigate(`/housing/${id}/map`, { state: dataToSend });
+  };
+
   return (
     <div className="livingSpaceDetail">
       <Header />
@@ -39,7 +44,12 @@ const LivingSpaceDetail = () => {
           </div>
         </div>
 
-        <KakaoMap livingSpace={livingSpace} id={id} />
+        <div className="card livingSpace-map">
+          <KakaoMap livingSpace={livingSpace} id={currentLivingSpaceId} />
+          <button id={id} onClick={handleClick}>
+            크게보기
+          </button>
+        </div>
 
         <div className="card livingSpace-feature">특징(주변 편의시설, 역세권 등등)</div>
       </div>

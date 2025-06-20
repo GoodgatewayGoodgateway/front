@@ -27,7 +27,7 @@
 
 .livingSpaceDetail-item {
   width: 450px;
-  height: 700px;
+  height: 100%;
   font-size: 24px;
   grid-area: card1;
 }
@@ -52,10 +52,32 @@
   font-size: 20px;
 }
 
-#map {
+.livingSpace-map {
+  padding: 0;
+  position: relative;
+}
+.livingSpace-map button {
+  background-color: #4a6cf7;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  width: 90px;
+  padding: 8px 20px;
+  margin-left: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 100;
+}
+.livingSpace-map #map {
   width: 600px;
   height: 400px;
   grid-area: card2;
+  z-index: 0;
+  padding: 20px;
 }
 
 .livingSpace-feature {

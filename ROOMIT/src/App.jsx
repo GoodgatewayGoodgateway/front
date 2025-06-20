@@ -14,6 +14,7 @@ import ChatRoom from "./Pages/ChatRoom";
 import MyPages from "./Pages/MyPages";
 import ScrollToTop from "./Components/ScrollToTop";
 import LivingSpaceDetail from "./Pages/LivingSpaceDetail";
+import IncreaseKakaoMap from "./Pages/IncreaseKakaoMap";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
               path="/housing/:id"
               element={<LivingSpaceDetail LivingSpaceData={LivingSpaceData} />}
             />
+            <Route path="/housing/:id/map" element={<IncreaseKakaoMap />}></Route>
             <Route path="/chat" element={<ChatRoom userData={userData} />} />
             <Route path="/chat/:roomId" element={<ChatRoom userData={userData} />} />
             <Route path="/mypages" element={<MyPages />} />

@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function KakaoMap({ livingSpace }) {
+export default function KakaoMap({ livingSpace, id }) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!livingSpace?.location) return;
 
@@ -55,10 +58,8 @@ export default function KakaoMap({ livingSpace }) {
   return (
     <div
       id="map"
-      className="card"
       style={{
         width: "100%",
-        height: "400px",
         borderRadius: "10px",
         overflow: "hidden",
       }}

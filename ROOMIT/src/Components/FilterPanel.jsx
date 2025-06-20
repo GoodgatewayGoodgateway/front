@@ -64,10 +64,18 @@ const FilterFooter = ({ onReset, onApply }) => (
   </div>
 );
 
+// 💡 filters 배열을 객체로 변환
+const getFilterObject = (filters) => {
+  const result = {};
+  filters.forEach(({ category, value }) => {
+    result[category] = value;
+  });
+  return result;
+};
+
 const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
   const [selectedFilters, setSelectedFilters] = useState([]);
 
-  // Sort filter (등록순) 보장하기
   const sortFilter = useMemo(
     () => ({ category: "등록순", options: ["상관없음", "최신순", "오래된 순"] }),
     []
@@ -82,11 +90,12 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
 
   const filterDatas = useCallback(
     (filtersObj) => {
-      if (!datas || !Array.isArray(datas)) return [];
+      if (!Array.isArray(datas)) return [];
 
-      let filtered = datas.filter((data) => {
-        return filterList.every(({ category }) => {
+      let filtered = datas.filter((data) =>
+        filterList.every(({ category }) => {
           if (category === "등록순") return true;
+
           const selectedValue = filtersObj[category];
           if (!selectedValue || selectedValue === "상관없음") return true;
 
@@ -98,10 +107,9 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
           } else {
             return dataValue === selectedValue;
           }
-        });
-      });
+        })
+      );
 
-      // 등록순 정렬 적용
       const sortValue = filtersObj["등록순"];
       if (sortValue === "최신순") {
         filtered.sort(
@@ -123,13 +131,8 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
   );
 
   useEffect(() => {
-    const filtersObj = {};
-    selectedFilters.forEach(({ category, value }) => {
-      filtersObj[category] = value;
-    });
-
-    const result = filterDatas(filtersObj);
-    onFilterChange(result);
+    const filtersObj = getFilterObject(selectedFilters);
+    onFilterChange(filterDatas(filtersObj));
   }, [selectedFilters, filterDatas, onFilterChange]);
 
   const toggleFilter = (category, value) => {
@@ -150,11 +153,6 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
       }
 
       localStorage.setItem("selectedFilters", JSON.stringify(updated));
-      const result = {};
-      updated.forEach(({ category, value }) => {
-        result[category] = value;
-      });
-      filterDatas(result);
       return updated;
     });
   };
@@ -164,28 +162,24 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
     localStorage.removeItem("selectedFilters");
   };
 
-  const handleApply = () => {
-    togglePanel();
-  };
+  const handleApply = () => togglePanel();
 
   return (
-    <div className="filterPanel">
-      <div className={`filterPanel ${open ? "open" : ""}`}>
-        <FilterHeader onClose={togglePanel} />
-        <SelectedFilters selectedFilters={selectedFilters} onRemove={toggleFilter} />
-        <div className="filterOptions">
-          {filterList.map(({ category, options }) => (
-            <FilterCategory
-              key={category}
-              category={category}
-              options={options}
-              selectedFilters={selectedFilters}
-              onToggle={toggleFilter}
-            />
-          ))}
-        </div>
-        <FilterFooter onReset={clearFilters} onApply={handleApply} />
+    <div className={`filterPanel ${open ? "open" : ""}`}>
+      <FilterHeader onClose={togglePanel} />
+      <SelectedFilters selectedFilters={selectedFilters} onRemove={toggleFilter} />
+      <div className="filterOptions">
+        {filterList.map(({ category, options }) => (
+          <FilterCategory
+            key={category}
+            category={category}
+            options={options}
+            selectedFilters={selectedFilters}
+            onToggle={toggleFilter}
+          />
+        ))}
       </div>
+      <FilterFooter onReset={clearFilters} onApply={handleApply} />
     </div>
   );
 };
