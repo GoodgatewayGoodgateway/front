@@ -46,7 +46,7 @@ const AppContent = () => {
           <Route path="/meeting/:id" element={<AuthGuard><MeetingDetail /></AuthGuard>} />
           <Route path="/housing" element={<LivingSpace LivingSpaceData={LivingSpaceData} />} />
           <Route path="/chat" element={<AuthGuard><ChatRoom /></AuthGuard>} />
-          <Route path="/Guide" element={<AuthGuard><Guide /></AuthGuard>} />
+          <Route path="/Guide" element={<Guide />} />
           <Route path="/chat/:roomId" element={<AuthGuard><ChatRoom /></AuthGuard>} />
           <Route path="/mypages" element={
             <AuthGuard>
