@@ -5,7 +5,9 @@ export default function KakaoMap({ livingSpace, id }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!livingSpace?.location) return;
+    if (!livingSpace?.address) {
+      return;
+    }
 
     const script = document.createElement("script");
     script.src =
@@ -19,7 +21,7 @@ export default function KakaoMap({ livingSpace, id }) {
           if (!container) return;
 
           const geocoder = new window.kakao.maps.services.Geocoder();
-          const address = livingSpace.location;
+          const address = livingSpace.address;
 
           geocoder.addressSearch(address, (result, status) => {
             if (status === window.kakao.maps.services.Status.OK) {
@@ -27,7 +29,7 @@ export default function KakaoMap({ livingSpace, id }) {
 
               const map = new window.kakao.maps.Map(container, {
                 center: coords,
-                level: 3,
+                level: 4,
               });
 
               const marker = new window.kakao.maps.Marker({
@@ -36,7 +38,7 @@ export default function KakaoMap({ livingSpace, id }) {
               });
 
               const infoWindow = new window.kakao.maps.InfoWindow({
-                content: `<div style="padding:6px;font-size:14px;">📍 ${livingSpace.name}</div>`,
+                content: `<div style="padding:6px;font-size:14px;">📍 ${id}</div>`,
               });
               infoWindow.open(map, marker);
             } else {
@@ -64,7 +66,7 @@ export default function KakaoMap({ livingSpace, id }) {
         overflow: "hidden",
       }}
     >
-      {!livingSpace?.location && "지도 정보를 불러오는 중입니다..."}
+      {!livingSpace?.address && "지도 정보를 불러오는 중입니다..."}
     </div>
   );
 }

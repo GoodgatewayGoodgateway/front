@@ -10,15 +10,16 @@ const categoryKeyMap = {
   "AI 추천": "aiRecommendation",
 };
 
-const FilterHeader = () => (
+const FilterHeader = ({ onClose }) => (
   <div className="filterHeader">
     <strong>🔍 필터 설정</strong>
+    <button onClick={onClose}>✕</button>
   </div>
 );
 
-const SelectedFilters = ({ selectedFilters, onRemove }) => (
+const SelectedFilters = ({ selectedFiltersLS, onRemove }) => (
   <div className="selectedFilters">
-    {selectedFilters.map(({ category, value }) => (
+    {selectedFiltersLS.map(({ category, value }) => (
       <div key={`${category}-${value}`} className="filter-tag">
         {category}: {value}
         <span onClick={() => onRemove(category, "상관없음")}> ✕</span>
@@ -27,13 +28,13 @@ const SelectedFilters = ({ selectedFilters, onRemove }) => (
   </div>
 );
 
-const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
+const FilterCategory = ({ category, options, selectedFiltersLS, onToggle }) => {
   const isSelected = (value) =>
-    selectedFilters.find((f) => f.category === category && f.value === value);
+    selectedFiltersLS.find((f) => f.category === category && f.value === value);
 
   return (
     <div className="checkbox-group">
-      <strong className="category-title">└ {category}</strong>
+      <strong className="category-title"> {category}</strong>
       <ul className="nested-options">
         {options.map((option, index) => (
           <li key={option}>
@@ -44,7 +45,7 @@ const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
                 checked={!!isSelected(option)}
                 onChange={() => onToggle(category, option)}
               />
-              {index === options.length - 1 ? `└ ${option}` : `├ ${option}`}
+              {index === options.length - 1 ? ` ${option}` : ` ${option}`}
             </label>
           </li>
         ))}
@@ -74,7 +75,7 @@ const getFilterObject = (filters) => {
 };
 
 const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  const [selectedFiltersLS, setSelectedFiltersLS] = useState([]);
 
   const sortFilter = useMemo(
     () => ({ category: "등록순", options: ["상관없음", "최신순", "오래된 순"] }),
@@ -131,12 +132,12 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
   );
 
   useEffect(() => {
-    const filtersObj = getFilterObject(selectedFilters);
+    const filtersObj = getFilterObject(selectedFiltersLS);
     onFilterChange(filterDatas(filtersObj));
-  }, [selectedFilters, filterDatas, onFilterChange]);
+  }, [selectedFiltersLS, filterDatas, onFilterChange]);
 
   const toggleFilter = (category, value) => {
-    setSelectedFilters((prev) => {
+    setSelectedFiltersLS((prev) => {
       let updated;
       if (value === "상관없음") {
         updated = prev.filter((f) => f.category !== category);
@@ -152,14 +153,14 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
         }
       }
 
-      localStorage.setItem("selectedFilters", JSON.stringify(updated));
+      localStorage.setItem("selectedFiltersLS", JSON.stringify(updated));
       return updated;
     });
   };
 
   const clearFilters = () => {
-    setSelectedFilters([]);
-    localStorage.removeItem("selectedFilters");
+    setsSelectedFiltersLS([]);
+    localStorage.removeItem("selectedFiltersLS");
   };
 
   const handleApply = () => togglePanel();
@@ -167,14 +168,14 @@ const FilterPanel = ({ open, setOpen, filters, datas, onFilterChange }) => {
   return (
     <div className={`filterPanel ${open ? "open" : ""}`}>
       <FilterHeader onClose={togglePanel} />
-      <SelectedFilters selectedFilters={selectedFilters} onRemove={toggleFilter} />
+      <SelectedFilters selectedFiltersLS={selectedFiltersLS} onRemove={toggleFilter} />
       <div className="filterOptions">
         {filterList.map(({ category, options }) => (
           <FilterCategory
             key={category}
             category={category}
             options={options}
-            selectedFilters={selectedFilters}
+            selectedFiltersLS={selectedFiltersLS}
             onToggle={toggleFilter}
           />
         ))}

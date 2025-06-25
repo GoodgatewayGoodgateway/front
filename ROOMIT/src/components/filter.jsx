@@ -1,241 +1,200 @@
-import React, { useState, useEffect, useCallback } from "react"; // useCallback 추가
+import React, { useState, useEffect, useCallback } from "react";
+import { Funnel } from "lucide-react";
 import "./css/Filter.css";
 
-const filters = {
-  나이대: ["상관없음", "20-25", "26-30", "31-35"],
-  흡연: ["상관없음", "비흡연", "흡연"],
-  활동시간: ["상관없음", "아침형", "저녁형"],
-  음주: ["상관없음", "음주", "가끔", "비음주"],
-  "청결 수준": ["상관없음", "낮음", "보통", "높음", "매우 높음"],
-  "소음 민감도": ["상관없음", "둔감", "보통", "민감", "매우 민감"],
-  "반려동물 허용": ["상관없음", "허용 안함", "일부 허용", "대부분 허용", "모두 허용"],
-  "식사 시간": ["상관없음", "불규칙적", "아침형", "저녁형", "밤형"],
-};
+// 필터 헤더 컴포넌트
+const FilterHeader = ({ onClose }) => (
+  <div className="meetfilterHeader">
+    <strong>🔍 필터 설정</strong>
+    <button onClick={onClose}>✕</button>
+  </div>
+);
 
-const getActivityType = (wakeTime) => {
-  if (!wakeTime) return "";
-  let hour = parseInt(wakeTime.replace(/[^0-9]/g, ""), 10);
-  if (wakeTime.includes("오전")) {
-    if (hour === 12) hour = 0; // 오전 12시는 0시로 처리
-  } else if (wakeTime.includes("오후")) {
-    if (hour !== 12) hour += 12;
-  }
-  return hour >= 4 && hour <= 9 ? "morning" : "night";
-};
+// 선택된 필터 태그 컴포넌트
+const SelectedFilters = ({ selectedFilters, onRemove }) => (
+  <div className="meetselectedFilters">
+    {selectedFilters.map(({ category, value }) => (
+      <div key={`${category}-${value}`} className="meetfilter-tag">
+        {category}: {value}
+        <span onClick={() => onRemove(category, "상관없음")}> ✕</span>
+      </div>
+    ))}
+  </div>
+);
 
-const FilterBar = ({ users, onFilterChange }) => {
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const [openDropdown, setOpenDropdown] = useState(null);
-
-  const filterUsers = useCallback(
-    (filters) => {
-      const filtered = users.filter((user) => {
-        const { age, smoking, drinking, lifestyle, habits } = user;
-
-        const isAgeMatch = (() => {
-          const ageFilter = filters["나이대"];
-          if (!ageFilter || ageFilter === "상관없음") return true;
-          const [min, max] = ageFilter.split("-").map(Number);
-          return age >= min && age <= max;
-        })();
-
-        const isSmokingMatch = (() => {
-          const smokingFilter = filters["흡연"];
-          if (!smokingFilter || smokingFilter === "상관없음") return true;
-          return smoking === (smokingFilter === "비흡연" ? "비흡연" : "흡연");
-        })();
-
-        const isDrinkingMatch = (() => {
-          const drinkingFilter = filters["음주"];
-          if (!drinkingFilter || drinkingFilter === "상관없음") return true;
-
-          if (drinkingFilter === "음주") return drinking === "음주";
-          if (drinkingFilter === "가끔") return drinking === "가끔 음주";
-          if (drinkingFilter === "비음주") return drinking === "금주";
-          return false;
-        })();
-
-        const isActivityTimeMatch = (() => {
-          const activityTimeFilter = filters["활동시간"];
-          if (!activityTimeFilter || activityTimeFilter === "상관없음") return true;
-          const userType = getActivityType(lifestyle?.wakeUpTime);
-          if (activityTimeFilter === "아침형") return userType === "morning";
-          if (activityTimeFilter === "저녁형") return userType === "night";
-          return false;
-        })();
-
-        const isCleaningMatch = (userLevel, selectedLevel) => {
-          if (!selectedLevel || selectedLevel === "상관없음") return true;
-          return userLevel === selectedLevel;
-        };
-
-        const isNoiseMatch = (userNoise, selectedNoise) => {
-          if (!selectedNoise || selectedNoise === "상관없음") return true;
-          return userNoise === selectedNoise;
-        };
-
-        const isPetMatch = (userPet, selectedPet) => {
-          if (!selectedPet || selectedPet === "상관없음") return true;
-          return userPet === selectedPet;
-        };
-
-        const isMealTimeMatch = (userMealTime, selectedTime) => {
-          if (!selectedTime || selectedTime === "상관없음") return true;
-          return userMealTime === selectedTime;
-        };
-
-        return (
-          isAgeMatch &&
-          isSmokingMatch &&
-          isDrinkingMatch &&
-          isActivityTimeMatch &&
-          isCleaningMatch(lifestyle?.cleanLevel, filters["청결 수준"]) &&
-          isNoiseMatch(lifestyle?.noise, filters["소음 민감도"]) &&
-          isPetMatch(habits?.petPreferences?.allowed, filters["반려동물 허용"]) &&
-          isMealTimeMatch(habits?.food?.mealTime, filters["식사 시간"])
-        );
-      });
-      onFilterChange(filtered); // 필터링된 결과를 부모 컴포넌트로 전달
-    },
-    [users, onFilterChange]
-  ); // 의존성 배열에 users와 onFilterChange 추가
-
-  useEffect(() => {
-    const savedFilters = localStorage.getItem("selectedFilters");
-    if (savedFilters) {
-      const parsedFilters = JSON.parse(savedFilters);
-      setSelectedFilters(parsedFilters);
-
-      const result = {};
-      parsedFilters.forEach(({ category, value }) => {
-        result[category] = value;
-      });
-      filterUsers(result);
-    }
-  }, [filterUsers]); // filterUsers가 변경될 때마다 실행
-
-  const toggleFilter = (category, value) => {
-    setSelectedFilters((prev) => {
-      let updatedFilters;
-
-      if (value === "상관없음") {
-        updatedFilters = prev.filter((f) => f.category !== category);
-      } else {
-        const existing = prev.find((f) => f.category === category);
-        if (existing) {
-          if (existing.value === value) {
-            updatedFilters = prev.filter((f) => f.category !== category);
-          } else {
-            updatedFilters = prev.map((f) => (f.category === category ? { category, value } : f));
-          }
-        } else {
-          updatedFilters = [...prev, { category, value }];
-        }
-      }
-      localStorage.setItem("selectedFilters", JSON.stringify(updatedFilters));
-
-      const result = {};
-      updatedFilters.forEach(({ category, value }) => {
-        result[category] = value;
-      });
-      filterUsers(result);
-
-      return updatedFilters;
-    });
-  };
-
-  const removeFilter = (category) => {
-    const updated = selectedFilters.filter((f) => f.category !== category);
-    setSelectedFilters(updated);
-    localStorage.setItem("selectedFilters", JSON.stringify(updated));
-
-    const result = {};
-    updated.forEach(({ category, value }) => {
-      result[category] = value;
-    });
-    filterUsers(result);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const result = {};
-    selectedFilters.forEach(({ category, value }) => {
-      result[category] = value;
-    });
-    console.log("🔍 검색된 필터:", result);
-    filterUsers(result);
-  };
-
-  const getFilterDisplayValue = (category) => {
-    const filter = selectedFilters.find((f) => f.category === category);
-    return filter ? filter.value : category;
-  };
+// 필터 카테고리 컴포넌트
+const FilterCategory = ({ category, options, selectedFilters, onToggle }) => {
+  const isSelected = (value) =>
+    selectedFilters.find((f) => f.category === category && f.value === value);
 
   return (
-    <div className="filter-container">
-      <form onSubmit={handleSubmit} className="filter-form">
-        <div className="filter-header">
-          <div className="selected-filters">
-            {selectedFilters.map(({ category, value }) => (
-              <div
-                key={`${category}-${value}`}
-                className="filter-tag"
-                onClick={() => removeFilter(category)}
-              >
-                {category}: {value}
-                <span className="remove-icon">✕</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="filter-dropdowns">
-          {Object.keys(filters).map((category) => (
-            <div key={category} className="dropdown-container">
-              <button
-                type="button"
-                className={`dropdown-button ${openDropdown === category ? "active" : ""} ${
-                  selectedFilters.some((f) => f.category === category) ? "has-selection" : ""
-                }`}
-                onClick={() => setOpenDropdown((prev) => (prev === category ? null : category))}
-              >
-                {getFilterDisplayValue(category)}
-                <span className="dropdown-icon">▼</span>
-              </button>
-
-              {openDropdown === category && (
-                <div className="dropdown-menu">
-                  {filters[category].map((option) => (
-                    <div
-                      key={option}
-                      className={`dropdown-item ${
-                        selectedFilters.some((f) => f.category === category && f.value === option)
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() => toggleFilter(category, option)}
-                    >
-                      {option}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedFilters([]);
-              localStorage.removeItem("selectedFilters");
-              filterUsers({});
-            }}
-            className="clear-button"
-          >
-            초기화
-          </button>
-        </div>
-      </form>
+    <div className="meetcheckbox-group">
+      <strong className="category-title">{category}</strong>
+      <ul className="nested-options">
+        {options.map((option, index) => (
+          <li key={option}>
+            <label className="meetcheckbox-label">
+              <input
+                type="radio"
+                name={category}
+                checked={!!isSelected(option)}
+                onChange={() => onToggle(category, option)}
+              />
+              {index === options.length - 1 ? ` ${option}` : ` ${option}`}
+            </label>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default FilterBar;
+// 필터 푸터 컴포넌트
+const FilterFooter = ({ onReset, onApply }) => (
+  <div className="meetfilterFooter">
+    <button className="meetbtn meetbtn-reset" onClick={onReset}>
+      초기화
+    </button>
+    <button className="meetbtn meetbtn-apply" onClick={onApply}>
+      적용
+    </button>
+  </div>
+);
+
+// 메인 필터 패널 컴포넌트
+const FilterPanel = ({
+  open,
+  setOpen,
+  filters,
+  items,
+  onFilterChange,
+  showFilterButton = true,
+}) => {
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
+  const togglePanel = () => setOpen((prev) => !prev);
+
+  const filterItems = useCallback(
+    (filtersObj) => {
+      // items가 유효하지 않으면 빈 배열 반환
+      if (!items || !Array.isArray(items)) {
+        console.warn("FilterPanel: items is not an array or is undefined", items);
+        onFilterChange([]);
+        return;
+      }
+
+      const filtered = items.filter((item) => {
+        return filters.every(({ category, path, filterFn }) => {
+          const selectedValue = filtersObj[category];
+          if (!selectedValue || selectedValue === "상관없음") return true;
+
+          // 동적 속성 접근
+          const getNestedValue = (obj, path) => {
+            try {
+              return path.split(".").reduce((prev, curr) => {
+                return prev && prev[curr] !== undefined ? prev[curr] : undefined;
+              }, obj);
+            } catch {
+              return undefined;
+            }
+          };
+
+          const itemValue = getNestedValue(item, path);
+
+          // filterFn이 제공된 경우 사용, 아니면 기본적으로 정확한 일치 확인
+          if (filterFn) {
+            return filterFn(itemValue, selectedValue);
+          }
+          return itemValue === selectedValue;
+        });
+      });
+
+      onFilterChange(filtered);
+    },
+    [items, filters, onFilterChange]
+  );
+
+  useEffect(() => {
+    const saved = localStorage.getItem("selectedFilters");
+    if (saved && items && Array.isArray(items)) {
+      const parsed = JSON.parse(saved);
+      setSelectedFilters(parsed);
+      const result = {};
+      parsed.forEach(({ category, value }) => {
+        result[category] = value;
+      });
+      filterItems(result);
+    }
+  }, [filterItems, items]);
+
+  const toggleFilter = (category, value) => {
+    setSelectedFilters((prev) => {
+      let updated;
+      if (value === "상관없음") {
+        updated = prev.filter((f) => f.category !== category);
+      } else {
+        const existing = prev.find((f) => f.category === category);
+        if (existing) {
+          updated =
+            existing.value === value
+              ? prev.filter((f) => f.category !== category)
+              : prev.map((f) => (f.category === category ? { category, value } : f));
+        } else {
+          updated = [...prev, { category, value }];
+        }
+      }
+
+      localStorage.setItem("selectedFilters", JSON.stringify(updated));
+      const result = {};
+      updated.forEach(({ category, value }) => {
+        result[category] = value;
+      });
+      filterItems(result);
+      return updated;
+    });
+  };
+
+  const clearFilters = () => {
+    setSelectedFilters([]);
+    localStorage.removeItem("selectedFilters");
+    filterItems({});
+  };
+
+  const handleApply = () => {
+    const result = {};
+    selectedFilters.forEach(({ category, value }) => {
+      result[category] = value;
+    });
+    filterItems(result);
+    togglePanel();
+  };
+
+  return (
+    <div className="meetfilterPanel">
+      {showFilterButton && (
+        <button className="meetbtn-filter" onClick={togglePanel}>
+          <Funnel size={17} />
+          필터
+        </button>
+      )}
+      <div className={`meetfilterPanel ${open ? "open" : ""}`}>
+        <FilterHeader onClose={togglePanel} />
+        <SelectedFilters selectedFilters={selectedFilters} onRemove={toggleFilter} />
+        <div className="meetfilterOptions">
+          {filters.map(({ category, options }) => (
+            <FilterCategory
+              key={category}
+              category={category}
+              options={options}
+              selectedFilters={selectedFilters}
+              onToggle={toggleFilter}
+            />
+          ))}
+        </div>
+        <FilterFooter onReset={clearFilters} onApply={handleApply} />
+      </div>
+    </div>
+  );
+};
+
+export default FilterPanel;

@@ -1,21 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../features/auth/authSlice"; // 리덕스에서 logout 액션 임포트
 import "./css/Header.css";
 import profileImage from "../Data/profile.png";
 
 function Header() {
-  const dispatch = useDispatch(); // 리덕스 디스패치
-  const currentUser = useSelector((state) => state.auth.currentUser); // 리덕스에서 currentUser 가져오기
-  const isLoggedIn = !!currentUser;
-
-  const chatRooms = []; // chatRooms가 어디에서 오는지에 따라 수정해야 합니다.
-  const unreadUserCount = chatRooms ? chatRooms.filter((room) => room.unread > 0).length : 0;
+  const isLoggedIn = !!localStorage.getItem("accessToken");
 
   const handleLogout = () => {
-    dispatch(logout()); // 로그아웃 액션 디스패치
-    localStorage.removeItem("currentUser"); // 로컬스토리지에서 로그인 정보 제거
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("accessToken");
+    window.location.href = "/";
   };
 
   return (
@@ -24,6 +18,7 @@ function Header() {
         <img src="/ROMMITlogo.svg" alt="로고" className="logo-image" width="40px" />
         ROOMIT
       </div>
+
       <nav className="nav">
         <ul className="nav-menu">
           <li className="nav-item">
@@ -36,10 +31,10 @@ function Header() {
             <Link to="/housing">주거공간</Link>
           </li>
           <li className="nav-item">
-            <Link to="/chat">
-              채팅
-              {unreadUserCount > 0 && <span className="unread-user-badge">{unreadUserCount}</span>}
-            </Link>
+            <Link to="/chat">채팅</Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/Guide">이용 가이드</Link>
           </li>
           <li className="nav-item">
             <Link to="/mypages">마이페이지</Link>
@@ -50,7 +45,7 @@ function Header() {
       <div className="auth-buttons">
         {isLoggedIn ? (
           <div className="header-profile-section">
-            <Link to="/mypage">
+            <Link to="/mypages">
               <img src={profileImage} alt="프로필" className="profile_image" />
             </Link>
             <Link to="/mypages">
@@ -75,4 +70,4 @@ function Header() {
   );
 }
 
-export default React.memo(Header);
+export default Header;

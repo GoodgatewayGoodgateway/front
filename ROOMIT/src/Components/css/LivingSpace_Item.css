@@ -1,10 +1,10 @@
-.livingSpace-item .image-container {
+/* .livingSpace-item .image-container {
   flex-shrink: 0;
   height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .livingSpace-item:nth-child(-1) {
   justify-content: center;

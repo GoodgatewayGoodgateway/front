@@ -1,20 +1,21 @@
 import React from 'react';
-import Header from '../Components/Header';
+// import Header from '../Components/Header';
 import HeroBanner from '../Components/HeroBanner';
 import FeatureSection from '../Components/FeatureSection';
 import RoommateSection from '../Components/RoommateSection';
 import HousingSection from '../Components/HousingSection';
 import Footer from '../Components/Footer';
+import '../Components/ScrollToTop'; // ScrollToTop 컴포넌트 추가
+import '../Pages/css/Main.css'; // CSS 파일 추가
 
-const Main = ({ userData }) => {
-    console.log(userData); // userData가 제대로 전달되고 있는지 확인
+const Main = () => {
 
     return (
         <div>
-            <Header />
+            {/* <Header /> */}
             <HeroBanner />
             <FeatureSection />
-            <RoommateSection users={userData} />
+            <RoommateSection />
             <HousingSection />
             <Footer />
         </div>
