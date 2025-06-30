@@ -9,7 +9,6 @@ import LivingSpace from "./Pages/LivingSpace";
 import Main from "./Pages/Main";
 import Login from "./Pages/Login";
 import MeetingDetail from "./Pages/MeetingDetail";
-import LivingSpaceData from "./Data/LivingSpaceData"; // 주거공간 데이터 import
 import LivingSpaceDetail from "./Pages/LivingSpaceDetail.jsx";
 // import LivingSpaceListing from "./Pages/LivingSpaceListing";
 import ChatRoom from "./Pages/ChatRoom";
@@ -89,7 +88,7 @@ const AppContent = () => {
           <Route path="/mypage/:id" element={<div>프로필 페이지</div>} />
           <Route path="*" element={<Notfound />} />
           {/* 핑 여러개 찍는거 테스트 용 */}
-          {/* <Route path="/map" element={<Map />} /> */}
+          <Route path="/map" element={<Map />} />
         </Routes>
       </div>
     </>

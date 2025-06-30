@@ -1,40 +1,37 @@
 import "./css/LivingSpaceDetail.css";
-// import Header from "../Components/Header";
 import KakaoMap from "../Components/Kakaomap";
 import Loading from "./Loading";
 import RetryPage from "./RetryPage";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchLivingSpace, deleteLivingSpace, fetchFacilities } from "../services/livingSpace";
+import { fetchListingById, fetchAiSummary } from "../services/livingSpace"; // ✅ 새로운 fetch 함수 사용
 
 const LivingSpaceDetail = () => {
-  const { id } = useParams();
-  console.log("🔥 useParams()로 받은 id:", id);
+  const { id } = useParams(); // 문자열로 들어옴
   const navigate = useNavigate();
 
   const [livingSpace, setLivingSpace] = useState(null);
-  const [AiRecommend, setAiRecommend] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [aiSummary, setAiSummary] = useState("");
 
-  // 데이터 불러오기
   useEffect(() => {
-    const loadLivingSpace = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchLivingSpace(id);
+        const data = await fetchListingById(id); // ✅ 백엔드에서 ID로 직접 요청
         setLivingSpace(data);
 
-        const AiRecommendData = await fetchFacilities(id); // 편의시설 불러오기
-        setAiRecommend(AiRecommendData);
+        const aiResult = await fetchAiSummary(data); // AI 요약도 요청
+        setAiSummary(aiResult ?? ""); // summary 키만 저장
       } catch (err) {
-        setError(err.message || "데이터 불러오기 실패");
+        setError(err.message || "에러 발생");
       } finally {
         setLoading(false);
       }
     };
 
-    loadLivingSpace();
+    fetchData();
   }, [id]);
 
   const handleMapClick = () => {
@@ -43,70 +40,32 @@ const LivingSpaceDetail = () => {
     });
   };
 
-  const handleDeleteClick = async () => {
-    try {
-      if (window.confirm("정말 이 매물을 삭제하시겠습니까?")) {
-        await deleteLivingSpace(livingSpace.id);
-        alert("매물이 삭제되었습니다.");
-        navigate("/housing");
-      }
-      // 삭제 후 목록 갱신 등 처리
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
   if (loading) return <Loading />;
-  if (error) return <RetryPage />;
+  if (error) return <RetryPage errorMessage={error} />;
 
   return (
     <div className="livingSpaceDetail">
-      {/* <Header /> */}
-
       <div className="livingSpaceDetail-content">
         <div className="card livingSpaceDetail-item">
-          {/* <div className="image-container">
-            <img
-              src="https://img.khan.co.kr/news/r/1100xX/2024/07/21/news-p.v1.20240719.96f020c1776f4ef69692b7b6825fb827.webp"
-              alt={livingSpace.id}
-            />
-          </div> */}
-
           <div className="info">
-            <h3>{livingSpace.id}</h3>
-            <p>임대 유형: {livingSpace.type}</p>
+            <h3>{livingSpace.name}</h3>
+            <p>가구 유형: {livingSpace.type}</p>
+            <p>보증금: {livingSpace.deposit}</p>
+            {livingSpace.type !== "아파트" && <p>월세: {livingSpace.monthly}</p>}
             <p>임대료: {livingSpace.price}</p>
             <p>위치: {livingSpace.address}</p>
             <p>전용면적: {livingSpace.area}평</p>
-            <p>등록일: {new Date(livingSpace.createdAt).toLocaleDateString()}</p>
-            <p>수정일: {new Date(livingSpace.updatedAt).toLocaleDateString()}</p>
-
-            <button className="btn-delete" onClick={handleDeleteClick}>
-              🗑 매물 삭제하기
-            </button>
           </div>
         </div>
 
         <div className="card livingSpace-map">
-          <KakaoMap livingSpace={livingSpace} id={id} />
-          <button id={id} onClick={handleMapClick}>
-            크게보기
-          </button>
+          <KakaoMap livingSpace={livingSpace} />
+          <button onClick={handleMapClick}>크게보기</button>
         </div>
 
         <div className="card livingSpace-feature">
-          <h1>AI 추천</h1>
-          {AiRecommend.length === 0 ? (
-            <p>등록된 AI추천 정보가 없습니다.</p>
-          ) : (
-            <ul>
-              {AiRecommend.map((item) => (
-                <li key={item.id}>
-                  <strong>{item.name}</strong> ({item.category}) - 위치: {item.lat}, {item.lng}
-                </li>
-              ))}
-            </ul>
-          )}
+          <h1>AI 추천 요약</h1>
+          <p>{aiSummary || "추천 문장을 불러오는 중이거나 없습니다."}</p>
         </div>
       </div>
     </div>

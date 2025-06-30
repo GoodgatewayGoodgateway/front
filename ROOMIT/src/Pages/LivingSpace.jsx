@@ -11,7 +11,7 @@ import { fetchAllLivingSpace } from "../services/livingSpace"; // ✅ API 함수
 
 const filterOptions = [
   { category: "등록순", options: ["상관없음", "최신순", "오래된 순"] },
-  { category: "임대 유형", options: ["상관없음", "월세", "전세"] },
+  { category: "가구 유형", options: ["상관없음", "아파트", "원룸", "단독/다가구"] },
   {
     category: "지역",
     options: // prettier-ignore
@@ -37,13 +37,11 @@ const LivingSpace = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await fetchAllLivingSpace();
-      // console.log("✅ 서버에서 받은 전체 매물 리스트:", data);
+      const data = await fetchAllLivingSpace("상인동");
       setLivingSpaces(data);
       setFilteredLivingSpaces(data);
     } catch (err) {
-      // console.error("❌ 데이터를 가져오는 데 실패했습니다:", err);
-      setError("데이터를 불러오는 데 실패했습니다.");
+      setError("데이터 불러오기 실패");
     } finally {
       setIsLoading(false);
     }
@@ -88,11 +86,12 @@ const LivingSpace = () => {
       />
 
       <div className="livingSpace-list">
-        {filteredLivingSpaces
-          .filter((item) => item && item.id)
-          .map((item, index) => (
-            <LivingSpaceItem key={index} data={item} />
-          ))}
+        {console.log("📊 filteredLivingSpaces 상태:", filteredLivingSpaces)}
+
+        {Array.isArray(filteredLivingSpaces) &&
+          filteredLivingSpaces
+            .filter((item) => item && item.name && item.address)
+            .map((item, index) => <LivingSpaceItem key={index} data={item} index={index} />)}
       </div>
     </div>
   );
