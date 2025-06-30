@@ -17,6 +17,7 @@ import MyPages from "./Pages/MyPages";
 import IncreaseKakaoMap from "./Pages/IncreaseKakaoMap.jsx";
 import ScrollToTop from "./Components/ScrollToTop";
 import Guide from "./Pages/Guide.jsx";
+import Map from "./Components/Map";
 
 import AuthGuard from "./Auth/AuthGuard";
 import GuestGuard from "./Auth/GuestGuard";
@@ -59,10 +60,7 @@ const AppContent = () => {
           <Route path="/housing" element={<LivingSpace />} />
           <Route path="/housing/:id" element={<LivingSpaceDetail />} />
           {/* <Route path="/housing/listing" element={<LivingSpaceListing />} /> */}
-          <Route
-            path="/housing/:id/map"
-            element={<IncreaseKakaoMap LivingSpaceData={LivingSpaceData} />}
-          />
+          <Route path="/housing/:id/map" element={<IncreaseKakaoMap />} />
           <Route
             path="/chat"
             element={
@@ -90,6 +88,8 @@ const AppContent = () => {
           />
           <Route path="/mypage/:id" element={<div>프로필 페이지</div>} />
           <Route path="*" element={<Notfound />} />
+          {/* 핑 여러개 찍는거 테스트 용 */}
+          {/* <Route path="/map" element={<Map />} /> */}
         </Routes>
       </div>
     </>

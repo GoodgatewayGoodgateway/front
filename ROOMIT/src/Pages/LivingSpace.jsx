@@ -38,11 +38,11 @@ const LivingSpace = () => {
     setError(null);
     try {
       const data = await fetchAllLivingSpace();
-      console.log("✅ 서버에서 받은 전체 매물 리스트:", data);
+      // console.log("✅ 서버에서 받은 전체 매물 리스트:", data);
       setLivingSpaces(data);
       setFilteredLivingSpaces(data);
     } catch (err) {
-      console.error("❌ 데이터를 가져오는 데 실패했습니다:", err);
+      // console.error("❌ 데이터를 가져오는 데 실패했습니다:", err);
       setError("데이터를 불러오는 데 실패했습니다.");
     } finally {
       setIsLoading(false);
@@ -55,7 +55,6 @@ const LivingSpace = () => {
 
   const togglePanel = () => {
     setOpen((prev) => !prev);
-    console.log("📂 패널 토글 상태:", !open);
   };
 
   if (isLoading) {

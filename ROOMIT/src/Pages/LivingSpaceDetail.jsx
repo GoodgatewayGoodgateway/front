@@ -14,7 +14,7 @@ const LivingSpaceDetail = () => {
   const navigate = useNavigate();
 
   const [livingSpace, setLivingSpace] = useState(null);
-  const [facilities, setFacilities] = useState([]);
+  const [AiRecommend, setAiRecommend] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,8 +25,8 @@ const LivingSpaceDetail = () => {
         const data = await fetchLivingSpace(id);
         setLivingSpace(data);
 
-        const facilityData = await fetchFacilities(id); // 편의시설 불러오기
-        setFacilities(facilityData);
+        const AiRecommendData = await fetchFacilities(id); // 편의시설 불러오기
+        setAiRecommend(AiRecommendData);
       } catch (err) {
         setError(err.message || "데이터 불러오기 실패");
       } finally {
@@ -43,13 +43,6 @@ const LivingSpaceDetail = () => {
     });
   };
 
-  // const handleDeleteClick = () => {
-  //   if (window.confirm("정말 이 매물을 삭제하시겠습니까?")) {
-  //     alert("매물이 삭제되었습니다.");
-  //     navigate("/housing");
-  //     // TODO: 삭제 API 호출 필요
-  //   }
-  // };
   const handleDeleteClick = async () => {
     try {
       if (window.confirm("정말 이 매물을 삭제하시겠습니까?")) {
@@ -72,12 +65,12 @@ const LivingSpaceDetail = () => {
 
       <div className="livingSpaceDetail-content">
         <div className="card livingSpaceDetail-item">
-          <div className="image-container">
+          {/* <div className="image-container">
             <img
               src="https://img.khan.co.kr/news/r/1100xX/2024/07/21/news-p.v1.20240719.96f020c1776f4ef69692b7b6825fb827.webp"
               alt={livingSpace.id}
             />
-          </div>
+          </div> */}
 
           <div className="info">
             <h3>{livingSpace.id}</h3>
@@ -102,15 +95,14 @@ const LivingSpaceDetail = () => {
         </div>
 
         <div className="card livingSpace-feature">
-          <h3>주변 편의시설</h3>
-          {facilities.length === 0 ? (
-            <p>등록된 편의시설 정보가 없습니다.</p>
+          <h1>AI 추천</h1>
+          {AiRecommend.length === 0 ? (
+            <p>등록된 AI추천 정보가 없습니다.</p>
           ) : (
             <ul>
-              {facilities.map((facility) => (
-                <li key={facility.id}>
-                  <strong>{facility.name}</strong> ({facility.category}) - 위치: {facility.lat},{" "}
-                  {facility.lng}
+              {AiRecommend.map((item) => (
+                <li key={item.id}>
+                  <strong>{item.name}</strong> ({item.category}) - 위치: {item.lat}, {item.lng}
                 </li>
               ))}
             </ul>
