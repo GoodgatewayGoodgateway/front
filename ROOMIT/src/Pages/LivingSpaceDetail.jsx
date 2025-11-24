@@ -44,31 +44,42 @@ const LivingSpaceDetail = () => {
   if (error) return <RetryPage errorMessage={error} />;
 
   return (
-    <div className="livingSpaceDetail">
-      <div className="livingSpaceDetail-content">
-        <div className="card livingSpaceDetail-item">
-          <div className="info">
-            <h3>{livingSpace.name}</h3>
-            <p>가구 유형: {livingSpace.type}</p>
-            <p>보증금: {livingSpace.deposit}</p>
-            {livingSpace.type !== "아파트" && <p>월세: {livingSpace.monthly}</p>}
-            <p>임대료: {livingSpace.price}</p>
-            <p>위치: {livingSpace.address}</p>
-            <p>전용면적: {livingSpace.area}평</p>
+    <div className="detail-container">
+
+      <div className="detail-top">
+        {/* 왼쪽 정보 카드 */}
+        <div className="detail-card info-card">
+          <h2>{livingSpace.name}</h2>
+
+          <div className="info-list">
+            <p><strong>가구 유형</strong> {livingSpace.type}</p>
+            <p><strong>보증금</strong> {livingSpace.deposit}</p>
+            {livingSpace.type !== "아파트" && (
+              <p><strong>월세</strong> {livingSpace.monthly}</p>
+            )}
+            <p><strong>임대료</strong> {livingSpace.price}</p>
+            <p><strong>위치</strong> {livingSpace.address}</p>
+            <p><strong>전용면적</strong> {livingSpace.area}평</p>
           </div>
         </div>
 
-        <div className="card livingSpace-map">
+        {/* 오른쪽 지도 */}
+        <div className="detail-card map-card">
           <KakaoMap livingSpace={livingSpace} />
-          <button onClick={handleMapClick}>크게보기</button>
-        </div>
-
-        <div className="card livingSpace-feature">
-          <h1>AI 추천 요약</h1>
-          <p>{aiSummary || "추천 문장을 불러오는 중이거나 없습니다."}</p>
+          <button className="map-open-btn" onClick={handleMapClick}>
+            크게보기
+          </button>
         </div>
       </div>
+
+      {/* AI 요약 칸 */}
+      <div className="detail-card ai-card">
+        <h3>AI 추천 요약</h3>
+        <p>{aiSummary || "추천 문장을 불러오는 중..."}</p>
+      </div>
+
     </div>
+
   );
 };
 
