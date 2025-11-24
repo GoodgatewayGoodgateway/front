@@ -16,7 +16,7 @@ import MyPages from "./Pages/MyPages";
 import IncreaseKakaoMap from "./Pages/IncreaseKakaoMap.jsx";
 import ScrollToTop from "./Components/ScrollToTop";
 import Guide from "./Pages/Guide.jsx";
-import Map from "./Components/Map";
+import Map from "./Components/Kakaomap.jsx";
 
 import AuthGuard from "./Auth/AuthGuard";
 import GuestGuard from "./Auth/GuestGuard";
@@ -26,7 +26,7 @@ const AppContent = () => {
   const hideHeaderPaths = ["/login", "/logout"];
   const shouldHideHeader = hideHeaderPaths.includes(location.pathname);
 
-  // ✅ currentUser 상태 추가
+  //  currentUser 상태 추가
   const [currentUser, setCurrentUser] = React.useState(() => {
     const savedUser = localStorage.getItem("currentUser");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -46,7 +46,7 @@ const AppContent = () => {
                 <Login setCurrentUser={setCurrentUser} />
               </GuestGuard>
             }
-          />
+          />  
           <Route path="/meeting" element={<Meeting />} />
           <Route
             path="/meeting/:id"
