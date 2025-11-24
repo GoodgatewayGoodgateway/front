@@ -1,56 +1,53 @@
-
 // HousingSection.jsx
-import React from 'react';
-import './css/HousingSection.css';
-import HousingCard from './HousingCard';
+import React, { useEffect, useState } from "react";
+import "./css/HousingSection.css";
+import HousingCard from "./HousingCard";
+import { fetchAllLivingSpace } from "../services/livingSpace"; // ✅ 백엔드 연동 함수 import
 
-function  HousingSection() {
-    const houses = [
-        {
-            id: 1,
-            name: '강남 쉐어하우스 A',
-            icon: '🏢',
-            type: '2인실',
-            price: '월 55만원',
-            features: '지하철 5분거리 • 즉시 입주'
-        },
-        {
-            id: 2,
-            name: '마포 쉐어하우스 B',
-            icon: '🏠',
-            type: '3인실',
-            price: '월 48만원',
-            features: '대학가 인접 • 5월 입주'
-        },
-        {
-            id: 3,
-            name: '홍대 쉐어하우스 C',
-            icon: '🏘️',
-            type: '2인실',
-            price: '월 60만원',
-            features: '역세권 • 즉시 입주 가능'
-        }
-    ];
+function HousingSection() {
+  const [livingSpaces, setLivingSpaces] = useState([]);
 
-    return (
-        <section className="housing-section container">
-            <h2 className="section-title">추천 공유 주거 공간</h2>
-            <div className='housing-section-content'>
-                <div className="housing-grid">
-                    {houses.map(house => (
-                        <HousingCard
-                            key={house.id}
-                            name={house.name}
-                            icon={house.icon}
-                            type={house.type}
-                            price={house.price}
-                            features={house.features}
-                        />
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchAllLivingSpace();
+        // console.log("✅ 주거공간 목록:", data);
+
+        // 예: name이나 price 같은 필드가 있는 유효한 항목만 필터링
+        const filteredLivingSpaces = data.filter((item) => item.id && item.price);
+
+        setLivingSpaces(filteredLivingSpaces);
+      } catch (err) {
+        // console.error("❌ 주거공간 가져오기 실패:", err.message);
+        setError(err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const safeLivingSpaces =
+    Array.isArray(livingSpaces) && livingSpaces.length > 0 ? livingSpaces : [];
+
+  return (
+    <section className="housing-section container">
+      <h2 className="section-title">추천 공유 주거 공간</h2>
+      <div className="housing-section-content">
+        <div className="housing-grid">
+          {safeLivingSpaces.slice(0, 5).map((item, index) => (
+            <HousingCard
+              key={item.id || index}
+              name={item.address || index} // 주소가 없을 경우 기본값 설정
+              icon={item.icon || "🏠"} // 기본 아이콘
+              type={item.roomType || "정보없음"}
+              price={`월 ${item.price}만원`}
+              features={item.features || "정보 없음"}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default HousingSection;

@@ -1,29 +1,38 @@
 import "./css/LivingSpace_Item.css";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const LivingSpace_item = ({ LivingSpaceData }) => {
-//   const {
-//     id,
-//     name = "이름 없음",
-//     type = "월세/전세",
-//     location = "상세위치 없음",
-//     maxPersons = 0,
-//     presentPersons = 0,
-//   } = LivingSpaceData;
+const LivingSpaceItem = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (data?.id != null) {
+      navigate(`/housing/${data.id}`, {
+        state: {
+          data,
+        },
+      });
+    } else {
+      console.warn("❗ 매물 ID가 없습니다. 상세 페이지로 이동할 수 없습니다.");
+    }
+  };
 
   return (
-    <div className="livingSpace-item">
-      <div className="image-container">
-        <img src="/images/room.jpg" alt="Room" />
-      </div>
+    <div className="livingSpace-item" onClick={handleClick}>
       <div className="info">
-        <h3>건물명</h3>
-        <p>월세/전세</p>
-        <p>상세위치</p>
-        <p>최대인원</p>
-        <p>현재인원</p>
+        <b>{data.name}</b>
+        <p>가구 유형: {data.type}</p>
+        <p>보증금: {data.deposit}</p>
+        {data.type !== "아파트" && <p>월세: {data.monthly}</p>}
+        <p>가격: {data.price}</p>
+        <p>면적: {data.area}평</p>
+        <p>위치: {data.address}</p>
+      </div>
+      <div className="btn-container">
+        <button className="btn-detail">매물 상세보기</button>
       </div>
     </div>
   );
 };
 
-export default LivingSpace_item;
+export default React.memo(LivingSpaceItem);
